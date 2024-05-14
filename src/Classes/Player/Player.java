@@ -7,16 +7,17 @@ import javafx.scene.layout.GridPane;
 
 //TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
-    //Player's attributes
+    //region Player's attributes
     private double LP;
     private String name;
     private double money;
     private double strength;
     private double defense;
     private String status;
-    //private ItemInterface[] inventory;
+    private Item[] inventory;
+    //endregion
 
-    //Constructor with all parameters
+    //region Constructor with all parameters
     public Player(GridPane g, double LP, String name, double money, double strength, double defense, int x, int y) {
         super(g,x,y);
         this.LP = LP;
@@ -24,17 +25,19 @@ public class Player extends GameObject {
         this.money = money;
         this.strength = strength;
         this.defense = defense;
-        this.status = "";                            //No status at first
-        //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
+        this.status = "";                   //No status at first
+        this.inventory = new Item[9];       //Inventory size is 9 slots max
     }
+    //endregion
 
-    //Default constructor
+    //region Default constructor
     public Player(){
         this(null, 10,"Player",0,5,2,0,0);
-        //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
+        this.inventory = new Item[9];      //Inventory size is 9 slots max
     }
+    //endregion
 
-    //Getters and Setters
+    //region Getters and Setters
     public double getLP() {return this.LP;}
     public void setLP(double LP) {this.LP = LP;}
 
@@ -53,36 +56,23 @@ public class Player extends GameObject {
     public String getStatus() {return this.status;}
     public void setStatus(String status) {this.status = status;}
 
-    //public ItemInterface[] getInventory() {return this.inventory;}
-    //public void setInventory(ItemInterface[] inventory) {this.inventory = inventory;}
+    public Item[] getInventory() {return this.inventory;}
+    public void setInventory(Item[] inventory) {this.inventory = inventory;}
+    //endregion
 
-    //Equals function
-    //TO DO : add inventory part
-    public boolean equals(Object o){
-        if(o instanceof Player){
-            Player p = (Player)o;
-            //TO DO : verification for the inventory -> with a for ?????
-            if(p.getName().equals(this.getName()) && p.getMoney() == this.getMoney() && p.getStrength() == this.getStrength() && p.getDefense() == this.getDefense() && p.getPosition().equals(this.getPosition()) && p.getStatus().equals(this.getStatus())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //ToString function to print
-    //TO DO : add inventory part
+    //region ToString function to print
     public String toString(){
-        return "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + this.getStatus() + "\nPosition : " + this.getPosition() + "\n\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + this.getStatus() + "\nPosition : " + this.getPosition() + "\n\n";
+        for(int i = 0; i < inventory.length; i++){
+            tmp += inventory[i].toString() + "\n";
+        }
+        return tmp;
     }
+    //endregion
 
     //Victory condition
-    //TO DO : implement inventory, decomment and test
-    public boolean victory(){       //TO DO
-        //    if(this.getInventory(-1) == "Hedgehog"){     //if the last picked-up item is Hedgehog -> victory
-        //        return true;
-        //    }else{
-        return false;                           //else we continue the game
-        //    }
+    public boolean victory(){
+        return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
     }
 
     //Failure condition
@@ -161,8 +151,25 @@ public class Player extends GameObject {
     //TO DO
     //to pick up items on the floor ? Need to walk on the cell that has an item in it
     //updates the inventory with adding the new item
-    public void pickItem(){
+    public void pickItem(Item item){
+        //verifier si inventaire pas full
+        if(item.getName().equals("Hedgehog")){
+            //calls front
+        }
+    }
 
+    //TO DO
+    public void throwItem(Item item){
+
+    }
+
+    public boolean contains(String item){
+        for(int i = 0; i < inventory.length; i++){
+            if(inventory[i].getName().equals(item)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {
