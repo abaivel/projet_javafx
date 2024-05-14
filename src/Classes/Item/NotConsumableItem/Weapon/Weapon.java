@@ -1,5 +1,6 @@
 package Classes.Item.NotConsumableItem.Weapon;
 
+import javafx.scene.layout.GridPane;
 import Classes.Item.Item;
 
 public abstract class Weapon extends Item {
