@@ -13,5 +13,6 @@ public class Looter extends Monster{
     @Override
     public void chooseAttack(int numRound) {
         //TODO Determiner quelle stratégie ce type de monstres va adopter
+        //every 3 rounds they can steal an item
     }
 }

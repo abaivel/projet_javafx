@@ -1,9 +1,21 @@
 package Classes.Player;
 
 import Classes.GameObject;
+import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
+import Classes.Item.NotConsumableItem.Buoy;
+import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.World.Position;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import static java.lang.Math.random;
+
+//TODO faire un dico pour le status key : status et sa valeur un int qui décrémente à chaque tour
 
 //TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
@@ -13,7 +25,7 @@ public class Player extends GameObject {
     private double money;
     private double strength;
     private double defense;
-    private String status;
+    private Map<String, Integer> status;
     private Item[] inventory;
     //endregion
 
@@ -25,14 +37,15 @@ public class Player extends GameObject {
         this.money = money;
         this.strength = strength;
         this.defense = defense;
-        this.status = "";                   //No status at first
-        this.inventory = new Item[9];       //Inventory size is 9 slots max
+        this.status = new HashMap<String, Integer>();                  //No status at first
+        this.inventory = new Item[9];                                   //Inventory size is 9 slots max
     }
     //endregion
 
     //region Default constructor
     public Player(){
         this(null, 10,"Player",0,5,2,0,0);
+        this.status = new HashMap<String, Integer>();                  //No status at first
         this.inventory = new Item[9];      //Inventory size is 9 slots max
     }
     //endregion
@@ -53,18 +66,18 @@ public class Player extends GameObject {
     public double getDefense() {return this.defense;}
     public void setDefense(double defense) {this.defense = defense;}
 
-    public String getStatus() {return this.status;}
-    public void setStatus(String status) {this.status = status;}
-
     public Item[] getInventory() {return this.inventory;}
     public void setInventory(Item[] inventory) {this.inventory = inventory;}
     //endregion
 
     //region ToString function to print
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + this.getStatus() + "\nPosition : " + this.getPosition() + "\n\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + "\nPosition : " + this.getPosition() + "\nInventory :";
         for(int i = 0; i < inventory.length; i++){
-            tmp += inventory[i].toString() + "\n";
+            tmp += inventory[i].toString() + " ; ";
+        }
+        for(String s : this.status.keySet()){
+            tmp+= s + " : " + this.status.get(s) + "\n";
         }
         return tmp;
     }
@@ -85,14 +98,15 @@ public class Player extends GameObject {
         }
     }
 
-    //Attack function for combat -> return the amount of damage done to the ennemy
+    //Attack function for combat -> return the amount of damage done to the ennemy with his weapon and status (buff, debuff)
     public double attack(){
+        double weaponDamage = this.containsWeapon();
         if(this.getStatus().contains("ST+")){
-            return this.getStrength()*(1 + (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
+            return (this.getStrength() + weaponDamage)*(1 + (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
         }else if(this.getStatus().contains("ST-")){
-            return this.getStrength()*(1 - (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
+            return (this.getStrength() + weaponDamage)*(1 - (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
         }else{
-            return this.getStrength();                                                                                          //attack with the flat value of strength
+            return this.getStrength() + weaponDamage;                                                                                          //attack with the flat value of strength
         }
     }
 
@@ -104,6 +118,25 @@ public class Player extends GameObject {
             this.setLP(this.getLP() - (ennemyAttack - ((this.getDefense()) * (1 - (Double.parseDouble(this.getStatus().substring(3))/100)))));    //we had a bonus of strength related to the player's status
         }else{
             this.setLP(this.getLP()-(ennemyAttack - this.getDefense()));                                                                                          //attack with the flat value of strength
+        }
+    }
+
+    public boolean dodge(){
+        double d;
+        if(this.getStatus().contains("DE+")){       //if the player is under a potion that boost his defense
+            d = (this.getDefense()) * 100 + (1 + (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
+        }else if(this.getStatus().contains("DE-")){ //if the player is under a potion that decreases this defense
+            d = (this.getDefense()) * 100 + (1 - (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status
+        }else{
+            d= this.getDefense();                                                                                          //attack with the flat value of strength
+        }
+        Random rand = new Random();
+        int num = rand.nextInt(100 - 0 + 1) + 0;              //(max - min + 1) + min
+        if(num < d){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -134,24 +167,33 @@ public class Player extends GameObject {
         }
     }
 
-    //TO DO
-    public void useItem(){
-
+    //Set the new status of the player depending of the potion used
+    public void usePotion(Potion potion){
+        this.setStatus(potion.getEffect());
     }
 
     //TO DO
     //Use item named buoy to not drown into rivers
-    public void swim(){
-        //search for the item
-        //instant use of the item
-        //displays message ?
-
+    //returns false if the player dies
+    public boolean swim(){
+        boolean swim = false;
+        for(int i = 0; i < inventory.length; i++){
+            if(inventory[i] instanceof Buoy){
+                swim = true;                            //Search for buoy
+            }
+        }
+        if(swim == false){
+            this.setLP(0);
+            return false;
+        }
+        return true;
     }
 
     //TO DO
     //to pick up items on the floor ? Need to walk on the cell that has an item in it
     //updates the inventory with adding the new item
     public void pickItem(Item item){
+        //faire ajouter à arraylise TO DO
         //verifier si inventaire pas full
         if(item.getName().equals("Hedgehog")){
             //calls front
@@ -171,6 +213,29 @@ public class Player extends GameObject {
         }
         return false;
     }
+
+    //Look for all the Weapons in the player's inventory and chooses the best one
+    public double containsWeapon(){
+        ArrayList<Weapon> w = new ArrayList<Weapon>();     //list of weapons to fill
+        for(int i = 0; i < inventory.length; i++){
+            if(inventory[i] instanceof Weapon){
+                w.add((Weapon) this.getInventory()[i]);                 //Adding the weapons to the list
+            }
+        }
+        if(w.isEmpty()){
+            return 0;
+        }
+        int max=0;
+        double value=0;
+        for(int i = 0; i < w.size(); i++){
+            if(w.get(i).getDamage() > value){
+                value = w.get(i).getDamage();
+                max = i;
+            }
+        }
+        return w.get(max).getDamage();
+    }
+
 
     public static void main(String[] args) {
         Player p = new Player();
