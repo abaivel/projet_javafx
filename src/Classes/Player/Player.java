@@ -70,6 +70,7 @@ public class Player extends GameObject {
     }
     //endregion
 
+    //TO DO : savoir ce qu'on en fait
     //Victory condition
     public boolean victory(){
         return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
@@ -85,7 +86,6 @@ public class Player extends GameObject {
     }
 
     //Attack function for combat -> return the amount of damage done to the ennemy
-    //Do we need to add if(!this.failure)) at the beginning ???????
     public double attack(){
         if(this.getStatus().contains("ST+")){
             return this.getStrength()*(1 + (Double.parseDouble(this.getStatus().substring(3))/100));    //we had a bonus of strength related to the player's status

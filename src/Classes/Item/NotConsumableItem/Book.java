@@ -5,8 +5,7 @@ import javafx.scene.layout.GridPane;
 
 public class Book extends Item {
     private String text;
-    private String name;
-    private boolean dropped;
+
 
     public Book(GridPane g, String title, String name, boolean dropped, String text, int x, int y) {
         super(g,x, y, name, dropped);
