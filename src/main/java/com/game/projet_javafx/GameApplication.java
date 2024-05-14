@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Game extends Application {
+public class GameApplication extends Application {
     private static final int HEIGHT = 675;
     private static final int WIDTH = 1500;
     private static final int ROWS = 18;
@@ -56,11 +56,11 @@ public class Game extends Application {
                     GridPane.setColumnIndex(perso, GridPane.getColumnIndex(perso) + 1);
                 }
             }else if (e.getCode() == KeyCode.LEFT) {
-                if (IsThereWall(gridObjects, GridPane.getColumnIndex(perso) - 1, GridPane.getRowIndex(perso))) {
+                if (GridPane.getColumnIndex(perso)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso) - 1, GridPane.getRowIndex(perso))) {
                     GridPane.setColumnIndex(perso, GridPane.getColumnIndex(perso) - 1);
                 }
             }else if (e.getCode() == KeyCode.UP) {
-                if (IsThereWall(gridObjects, GridPane.getColumnIndex(perso), GridPane.getRowIndex(perso) - 1)) {
+                if (GridPane.getRowIndex(perso)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso), GridPane.getRowIndex(perso) - 1)) {
                     GridPane.setRowIndex(perso, GridPane.getRowIndex(perso) - 1);
                 }
             }else if (e.getCode() == KeyCode.DOWN) {

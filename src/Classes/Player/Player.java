@@ -1,10 +1,12 @@
 package Classes.Player;
 
+import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
+import javafx.scene.layout.GridPane;
 
 //TO DO : ItemInterface implementation to use the inventory here
-public class Player {
+public class Player extends GameObject {
     //Player's attributes
     private double LP;
     private String name;
@@ -12,24 +14,23 @@ public class Player {
     private double strength;
     private double defense;
     private String status;
-    private Position position;
     //private ItemInterface[] inventory;
 
     //Constructor with all parameters
-    public Player(double LP, String name, double money, double strength, double defense, Position position) {
+    public Player(GridPane g, double LP, String name, double money, double strength, double defense, int x, int y) {
+        super(g,x,y);
         this.LP = LP;
         this.name = name;
         this.money = money;
         this.strength = strength;
         this.defense = defense;
         this.status = "";                            //No status at first
-        this.position = position;
         //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
     }
 
     //Default constructor
     public Player(){
-        this(10,"Player",0,5,2,new Position(0,0));
+        this(null, 10,"Player",0,5,2,0,0);
         //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
     }
 
@@ -51,9 +52,6 @@ public class Player {
 
     public String getStatus() {return this.status;}
     public void setStatus(String status) {this.status = status;}
-
-    public Position getPosition() {return this.position;}
-    public void setPosition(Position position) {this.position = position;}
 
     //public ItemInterface[] getInventory() {return this.inventory;}
     //public void setInventory(ItemInterface[] inventory) {this.inventory = inventory;}
@@ -131,17 +129,17 @@ public class Player {
     public void move(String direction, int jump){
         switch(direction){
             case "-x":
-                this.setPosition(new Position(this.position.getX()-1-jump,this.position.getY()));
+                this.setPosition(this.position.getX()-1-jump,this.position.getY());
                 break;
             case "+x":
-                this.setPosition(new Position(this.position.getX()+1+jump,this.position.getY()));
+                this.setPosition(this.position.getX()+1+jump,this.position.getY());
                 System.out.println("test");
                 break;
             case "-y":
-                this.setPosition(new Position(this.position.getX(),this.position.getY()-1-jump));
+                this.setPosition(this.position.getX(),this.position.getY()-1-jump);
                 break;
             case "+y":
-                this.setPosition(new Position(this.position.getX(),this.position.getY()+1+jump));
+                this.setPosition(this.position.getX(),this.position.getY()+1+jump);
                 break;
         }
     }

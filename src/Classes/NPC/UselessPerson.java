@@ -1,16 +1,17 @@
 package Classes.NPC;
 
 import Classes.World.Position;
+import javafx.scene.layout.GridPane;
 
 public class UselessPerson extends NPC{
     //Constructor with all parameters
-    public UselessPerson(String name, double money, Position position) {
-        super(name, money, position);
+    public UselessPerson(GridPane g,String name, double money, int x, int y) {
+        super(g,name, money, x,y);
     }
 
     //Default constructor
     public UselessPerson() {
-        this("Aurélien",100,new Position(0,0));      //Because Aurelien is useless :p
+        this(null,"Aurélien",100,0,0);      //Because Aurelien is useless :p
     }
 
     //He welcomes, he doesn't do much more since he's useless

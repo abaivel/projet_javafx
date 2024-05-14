@@ -2,6 +2,7 @@ package Classes.NPC;
 
 import Classes.NPC.NPC;
 import Classes.World.Position;
+import javafx.scene.layout.GridPane;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,8 @@ public class Fouras extends NPC {
     private Map<String, String> enigma;
 
     //Constructor with all parameters
-    public Fouras(String name, double money, Position position) {
-        super(name, money, position);
+    public Fouras(GridPane g, String name, double money,int x, int y) {
+        super(g,name, money, x, y);
         this.enigma = new HashMap<String, String>();
         this.enigma.put("I travel the world without moving an inch,\nConnecting continents with a mere blink.\nI'm not alive, but I can grow,\nWho am I, do you know?\n","Internet");
         this.enigma.put("I have a tail and two flat ears. I move with no feet. What am I ?","mouse");
@@ -23,7 +24,7 @@ public class Fouras extends NPC {
 
     //Default constructor
     public Fouras(String name) {
-        this(name,100,new Position(0,0));
+        this(null, name,100,0,0);
     }
 
     //Getters and Setters
@@ -59,7 +60,7 @@ public class Fouras extends NPC {
     }
 
     public static void main(String[] args) {
-        Fouras f=new Fouras("Fouras",100,new Position(0,0));
+        Fouras f=new Fouras(null,"Fouras",100,0,0);
         System.out.println(f);
         f.tellEnigma();
 
