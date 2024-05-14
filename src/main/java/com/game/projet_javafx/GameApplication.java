@@ -22,7 +22,7 @@ public class GameApplication extends Application {
     public void start(Stage stage) throws IOException {
         /*ArrayList<ArrayList<GameObject>> gridObject = new ArrayList<>();
         gridObject.set(2,new ArrayList<GameObject>())*/
-        GameObject[][] gridObjects = new GameObject[40][20];
+        GameObject[][] gridObjects = new GameObject[40][18];
         GridPane pane = new GridPane();
         pane.setPrefHeight(HEIGHT);
         pane.setPrefWidth(WIDTH);
