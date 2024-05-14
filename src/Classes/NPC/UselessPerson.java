@@ -15,12 +15,12 @@ public class UselessPerson extends NPC{
     }
 
     //He welcomes, he doesn't do much more since he's useless
-    public void welcome(){
-        System.out.println("Welcome eheh !");
+    public String welcome(){
+        return "Welcome eheh !";
     }
 
     //He can also say goodbye ! Average man experience
-    public void goodbye(){
-        System.out.println("Goodbye eheh !");
+    public String goodbye(){
+        return "Goodbye eheh !";
     }
 }

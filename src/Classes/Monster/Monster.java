@@ -5,6 +5,7 @@ import Classes.Item.Item;
 import Classes.World.Position;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Monster extends GameObject {
@@ -15,7 +16,7 @@ public abstract class Monster extends GameObject {
     private int defense;
 
     private Position position;
-    private List<Item> inventory;
+    private ArrayList<Item> inventory;
     private boolean alive;
     private String status;
     //endregion
@@ -40,7 +41,7 @@ public abstract class Monster extends GameObject {
         return position;
     }
 
-    public List<Item> getInventory() {
+    public ArrayList<Item> getInventory() {
         return inventory;
     }
 
@@ -78,7 +79,7 @@ public abstract class Monster extends GameObject {
     }
     //endregion
 
-    public Monster(GridPane g, String name, int lifePoints, int force, int defense, List<Item> inventory, int x, int y) {
+    public Monster(GridPane g, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
         super(g,x,y);
         this.name = name;
         this.lifePoints = lifePoints;

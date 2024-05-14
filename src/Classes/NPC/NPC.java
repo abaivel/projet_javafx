@@ -4,11 +4,13 @@ import Classes.Item.Item;
 import Classes.World.Position;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+
 public abstract class NPC extends GameObject {
     //region NPC's attributes
     private String name;
     private double money;
-    private Item[] inventory;
+    private ArrayList<Item> inventory;
     //endregion
 
     //region Constructor with all parameters
@@ -16,7 +18,7 @@ public abstract class NPC extends GameObject {
         super(g,x,y);
         this.name = name;
         this.money = money;
-        this.inventory = new Item[9];
+        this.inventory = new ArrayList<>();
     }
     //endregion
 
@@ -33,15 +35,21 @@ public abstract class NPC extends GameObject {
     public double getMoney() {return money;}
     public void setMoney(double money) {this.money = money;}
 
-    public Item[] getInventory() {return this.inventory;}
-    public void setInventory(Item[] inventory) {this.inventory = inventory;}
+    public ArrayList<Item> getInventory() {return this.inventory;}
+    public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
     //endregion
+    public void addToInventory(Item item){
+        this.inventory.add(item);
+    }
+    public void removeFromInventory(Item item){
+        this.inventory.remove(item);
+    }
 
     //region ToString function to print
     public String toString() {
         String tmp = "Name :" + this.getName() + "\nMoney :" + this.getMoney() + "\nPosition :" + this.getPosition();
-        for(int i = 0; i < inventory.length; i++){
-            tmp += inventory[i].toString() + "\n";
+        for(int i = 0; i < inventory.size(); i++){
+            tmp += inventory.get(i).toString() + "\n";
         }
         return tmp;
     }

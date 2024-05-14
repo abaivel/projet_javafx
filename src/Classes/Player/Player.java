@@ -5,6 +5,8 @@ import Classes.Item.Item;
 import Classes.World.Position;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+
 //TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
     //region Player's attributes
@@ -14,7 +16,7 @@ public class Player extends GameObject {
     private double strength;
     private double defense;
     private String status;
-    private Item[] inventory;
+    private ArrayList<Item> inventory;
     //endregion
 
     //region Constructor with all parameters
@@ -26,14 +28,14 @@ public class Player extends GameObject {
         this.strength = strength;
         this.defense = defense;
         this.status = "";                   //No status at first
-        this.inventory = new Item[9];       //Inventory size is 9 slots max
+        this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
     }
     //endregion
 
     //region Default constructor
     public Player(){
         this(null, 10,"Player",0,5,2,0,0);
-        this.inventory = new Item[9];      //Inventory size is 9 slots max
+        this.inventory = new ArrayList<>();      //Inventory size is 9 slots max
     }
     //endregion
 
@@ -56,15 +58,21 @@ public class Player extends GameObject {
     public String getStatus() {return this.status;}
     public void setStatus(String status) {this.status = status;}
 
-    public Item[] getInventory() {return this.inventory;}
-    public void setInventory(Item[] inventory) {this.inventory = inventory;}
+    public ArrayList<Item> getInventory() {return this.inventory;}
+    public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
     //endregion
+    public void addToInventory(Item item){
+        this.inventory.add(item);
+    }
+    public void removeFromInventory(Item item){
+        this.inventory.remove(item);
+    }
 
     //region ToString function to print
     public String toString(){
         String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + this.getStatus() + "\nPosition : " + this.getPosition() + "\n\n";
-        for(int i = 0; i < inventory.length; i++){
-            tmp += inventory[i].toString() + "\n";
+        for(int i = 0; i < inventory.size(); i++){
+            tmp += inventory.get(i).toString() + "\n";
         }
         return tmp;
     }
@@ -164,8 +172,8 @@ public class Player extends GameObject {
     }
 
     public boolean contains(String item){
-        for(int i = 0; i < inventory.length; i++){
-            if(inventory[i].getName().equals(item)){
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i).getName().equals(item)){
                 return true;
             }
         }

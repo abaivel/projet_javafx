@@ -7,13 +7,9 @@ public class Book extends Item {
     private String text;
 
 
-    public Book(GridPane g, String name, boolean dropped, String text, int x, int y) {
-        super(g,x, y, name, dropped);
+    public Book(GridPane g, String name, boolean dropped, String text, int price, int x, int y) {
+        super(g,x, y, name, dropped, price);
         this.text = text;
-    }
-
-    public void read(){
-        //faire apparaitre le livre et le texte avec getText
     }
 
     public String getText() {

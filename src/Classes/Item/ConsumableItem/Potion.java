@@ -2,6 +2,7 @@ package Classes.Item.ConsumableItem;
 
 import Classes.World.Position;
 import Classes.Item.Item;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 //For potions :
@@ -9,18 +10,13 @@ import javafx.scene.layout.GridPane;
 //  ST+20 --> means strength +20%
 //  DE-40 --> means defense -40%
 public class Potion extends Item{
-    public Position getPosition() {
-        return position;
+
+    String effect;
+    public Potion(GridPane g, int x, int y, String name, boolean dropped, String effect, int price) {
+        super(g,x, y, name, dropped, price);
+        this.effect=effect;
     }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    Position position;
-
-    public Potion(GridPane g, Position position, int x, int y) {
-        super(g,x, y);
-        this.position = position;
+    public String getEffect() {
+        return effect;
     }
 }
