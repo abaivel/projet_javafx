@@ -7,7 +7,7 @@ public class Book extends Item {
     private String text;
 
 
-    public Book(GridPane g, String title, String name, boolean dropped, String text, int x, int y) {
+    public Book(GridPane g, String name, boolean dropped, String text, int x, int y) {
         super(g,x, y, name, dropped);
         this.text = text;
     }
