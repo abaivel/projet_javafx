@@ -1,19 +1,19 @@
 package Classes.NPC;
 
+import Classes.NPC.NPC;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 
-public class Fouras extends NPC{
+public class Fouras extends NPC {
     private Map<String, String> enigma;
 
     //Constructor with all parameters
-    public Fouras(GridPane g, String name, double money, int x, int y) {
-        super(g,name, money, x, y);
+    public Fouras(String name, double money, Position position) {
+        super(name, money, position);
         this.enigma = new HashMap<String, String>();
         this.enigma.put("I travel the world without moving an inch,\nConnecting continents with a mere blink.\nI'm not alive, but I can grow,\nWho am I, do you know?\n","Internet");
         this.enigma.put("I have a tail and two flat ears. I move with no feet. What am I ?","mouse");
@@ -23,14 +23,14 @@ public class Fouras extends NPC{
 
     //Default constructor
     public Fouras(String name) {
-        this(null,name,100,0,0);
+        this(name,100,new Position(0,0));
     }
 
     //Getters and Setters
     public Map<String, String> getEnigma() {return enigma;}
     public void setEnigma(Map<String, String> enigma) {this.enigma = enigma;}
 
-    //TO DO : add a reward ?
+    //TO DO : add a reward ? Give some of his money ? Example he gives off 10% of his total money
     //Function to tell an enigma to the player
     public boolean tellEnigma(){
         String[] keys = this.getEnigma().keySet().toArray(new String[0]);   //Puts the keySet into a List of Strings
@@ -38,7 +38,7 @@ public class Fouras extends NPC{
         String randomKey = keys[i];                                         //Random key in the keySet
         System.out.println(randomKey);
         String answer = this.answerEnigma().toLowerCase();                  //Calls other function to get the player's answer
-                                                                            //Use of toLowerCase to get same case
+        //Use of toLowerCase to get same case
         if(answer.equals(this.getEnigma().get(randomKey))){
             System.out.println("Good answer");
             return true;
@@ -59,7 +59,7 @@ public class Fouras extends NPC{
     }
 
     public static void main(String[] args) {
-        Fouras f=new Fouras(null,"Fouras",100,0,0);
+        Fouras f=new Fouras("Fouras",100,new Position(0,0));
         System.out.println(f);
         f.tellEnigma();
 

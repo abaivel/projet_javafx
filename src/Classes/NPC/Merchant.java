@@ -1,15 +1,15 @@
 package Classes.NPC;
 
+import Classes.NPC.NPC;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
 
-public class Merchant extends NPC{
+public class Merchant extends NPC {
     private String[] dialogues;
 
     //Constructor with all parameters
-    public Merchant(GridPane g, String name, double money, int x, int y) {
-        super(g,name, money, x, y);
+    public Merchant(String name, double money, Position position) {
+        super(name, money, position);
         this.dialogues = new String[5];
         this.dialogues[0] = "Would you like to see my wares ?\n";
         this.dialogues[1] = "Would you like to sell me something ?\n";
@@ -18,7 +18,7 @@ public class Merchant extends NPC{
 
     //Default constructor
     public Merchant(String name) {
-        this(null,name,100,0,0);
+        this(name,100,new Position(0,0));
     }
 
     //Getters and Setters
@@ -30,8 +30,13 @@ public class Merchant extends NPC{
 
     }
 
-    //For a merchant to buy stuff from the player   -> merchant loose money
+    //For a merchant to buy stuff from the player   -> merchant looses money
     public void buy(Item item){
+
+    }
+
+    //A function to do troc with the player ? Item against item
+    public void troc(Item item){
 
     }
 

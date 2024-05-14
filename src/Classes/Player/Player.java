@@ -1,12 +1,10 @@
 package Classes.Player;
 
-import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
 
 //TO DO : ItemInterface implementation to use the inventory here
-public class Player extends GameObject {
+public class Player {
     //Player's attributes
     private double LP;
     private String name;
@@ -14,23 +12,24 @@ public class Player extends GameObject {
     private double strength;
     private double defense;
     private String status;
+    private Position position;
     //private ItemInterface[] inventory;
 
     //Constructor with all parameters
-    public Player(GridPane g, double LP, String name, double money, double strength, double defense, int x, int y) {
-        super(g,x,y);
+    public Player(double LP, String name, double money, double strength, double defense, Position position) {
         this.LP = LP;
         this.name = name;
         this.money = money;
         this.strength = strength;
         this.defense = defense;
         this.status = "";                            //No status at first
+        this.position = position;
         //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
     }
 
     //Default constructor
     public Player(){
-        this(null,10,"Player",0,5,2,0,0);
+        this(10,"Player",0,5,2,new Position(0,0));
         //this.inventory = new ItemInterface[27];      //Inventory size is 27 slots max
     }
 
@@ -53,6 +52,8 @@ public class Player extends GameObject {
     public String getStatus() {return this.status;}
     public void setStatus(String status) {this.status = status;}
 
+    public Position getPosition() {return this.position;}
+    public void setPosition(Position position) {this.position = position;}
 
     //public ItemInterface[] getInventory() {return this.inventory;}
     //public void setInventory(ItemInterface[] inventory) {this.inventory = inventory;}
@@ -79,11 +80,11 @@ public class Player extends GameObject {
     //Victory condition
     //TO DO : implement inventory, decomment and test
     public boolean victory(){       //TO DO
-    //    if(this.getInventory(-1) == "Hedgehog"){     //if the last picked-up item is Hedgehog -> victory
-    //        return true;
-    //    }else{
-            return false;                           //else we continue the game
-    //    }
+        //    if(this.getInventory(-1) == "Hedgehog"){     //if the last picked-up item is Hedgehog -> victory
+        //        return true;
+        //    }else{
+        return false;                           //else we continue the game
+        //    }
     }
 
     //Failure condition
@@ -128,21 +129,21 @@ public class Player extends GameObject {
     // (0,0) top left corner
     //TO DO : if obstacle, player cannot move there
     public void move(String direction, int jump){
-            switch(direction){
-                case "-x":
-                    this.setPosition(this.position.getX()-1-jump,this.position.getY());
-                    break;
-                case "+x":
-                    this.setPosition(this.position.getX()+1+jump,this.position.getY());
-                    System.out.println("test");
-                    break;
-                case "-y":
-                    this.setPosition(this.position.getX(),this.position.getY()-1-jump);
-                    break;
-                case "+y":
-                    this.setPosition(this.position.getX(),this.position.getY()+1+jump);
-                    break;
-            }
+        switch(direction){
+            case "-x":
+                this.setPosition(new Position(this.position.getX()-1-jump,this.position.getY()));
+                break;
+            case "+x":
+                this.setPosition(new Position(this.position.getX()+1+jump,this.position.getY()));
+                System.out.println("test");
+                break;
+            case "-y":
+                this.setPosition(new Position(this.position.getX(),this.position.getY()-1-jump));
+                break;
+            case "+y":
+                this.setPosition(new Position(this.position.getX(),this.position.getY()+1+jump));
+                break;
+        }
     }
 
     //TO DO
@@ -159,7 +160,12 @@ public class Player extends GameObject {
 
     }
 
+    //TO DO
+    //to pick up items on the floor ? Need to walk on the cell that has an item in it
+    //updates the inventory with adding the new item
+    public void pickItem(){
 
+    }
 
     public static void main(String[] args) {
         Player p = new Player();

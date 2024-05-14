@@ -1,26 +1,25 @@
 package Classes.NPC;
-import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
 
-public abstract class NPC extends GameObject {
+public abstract class NPC {
     //NPC's attributes
     private String name;
     private double money;
+    private Position position;
     //private ItemInterface[] inventory;
 
     //Constructor with all parameters
-    public NPC(GridPane g, String name, double money, int x, int y) {
-        super(g,x,y);
+    public NPC(String name, double money, Position position) {
         this.name = name;
         this.money = money;
+        this.position = position;
         //this.inventory = inventory;
     }
 
     //Default constructor
     public NPC(String name) {
-        this(null,"NPC",100,0,0);
+        this("NPC",100,new Position(0,0));
     }
 
     //Getters and Setters
@@ -29,6 +28,9 @@ public abstract class NPC extends GameObject {
 
     public double getMoney() {return money;}
     public void setMoney(double money) {this.money = money;}
+
+    public Position getPosition() {return position;}
+    public void setPosition(Position position) {this.position = position;}
 
     //public ItemInterface[] getInventory() {return this.inventory;}
     //public void setInventory(ItemInterface[] inventory) {this.inventory = inventory;}
