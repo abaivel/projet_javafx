@@ -6,9 +6,11 @@ import Classes.World.Position;
 import javafx.scene.layout.GridPane;
 
 public class Merchant extends NPC {
+    //region Merchant's attributes
     private String[] dialogues;
+    //endregion
 
-    //Constructor with all parameters
+    //region Constructor with all parameters
     public Merchant(GridPane g,String name, double money, int x, int y) {
         super(g,name, money, x,y);
         this.dialogues = new String[5];
@@ -16,30 +18,36 @@ public class Merchant extends NPC {
         this.dialogues[1] = "Would you like to sell me something ?\n";
         this.dialogues[2] = "Goodbye !\n";
     }
+    //endregion
 
-    //Default constructor
+    //region Default constructor
     public Merchant(String name) {
         this(null,name,100,0,0);
     }
+    //endregion
 
-    //Getters and Setters
+    //region Getters and Setters
     public void setDialogues(String[] dialogues) {this.dialogues = dialogues;}
     public String[] getDialogues() {return this.dialogues;}
+    //endregion
 
-    //For a merchant to sell stuff to the player -> merchant gains money
+    //region For a merchant to sell stuff to the player -> merchant gains money
     public void sell(Item item){
 
     }
+    //endregion
 
-    //For a merchant to buy stuff from the player   -> merchant looses money
+    //region For a merchant to buy stuff from the player   -> merchant looses money
     public void buy(Item item){
 
     }
+    //endregion
 
-    //A function to do troc with the player ? Item against item
+    //region A function to do troc with the player ? Item against item
     public void troc(Item item){
 
     }
+    //endregion
 
     public static void main(String[] args) {
         Merchant merchant = new Merchant("Bob The Merchant");
