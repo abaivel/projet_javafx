@@ -2,7 +2,7 @@ package Classes.NPC;
 import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ public abstract class NPC extends GameObject {
     //endregion
 
     //region Constructor with all parameters
-    public NPC(GridPane g, String name, double money, int x, int y) {
-        super(g,x,y);
+    public NPC(World w, String name, double money, int x, int y) {
+        super(w,x,y);
         this.name = name;
         this.money = money;
         this.inventory = new ArrayList<>();

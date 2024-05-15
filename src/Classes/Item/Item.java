@@ -2,7 +2,7 @@ package Classes.Item;
 
 import Classes.GameObject;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public abstract class Item extends GameObject {
     private String name;
@@ -13,8 +13,8 @@ public abstract class Item extends GameObject {
     private boolean used;       //true if used
 
     //region Constructor
-    public Item(GridPane g, int x, int y, String name, boolean dropped, int price) {
-        super(g, x, y);
+    public Item(World w, int x, int y, String name, boolean dropped, int price) {
+        super(w, x, y);
         this.name = name;
         this.used = false;
         this.dropped = dropped;

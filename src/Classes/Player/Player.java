@@ -3,12 +3,17 @@ package Classes.Player;
 import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.ImageView;
+import Classes.World.World;
 
 import java.util.ArrayList;
 
 //TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
+    private static final int HEIGHT = 675;
+    private static final int WIDTH = 1500;
+    private static final int ROWS = 18;
+    private static final int COLUMNS=40;
     //region Player's attributes
     private double LP;
     private String name;
@@ -17,11 +22,12 @@ public class Player extends GameObject {
     private double defense;
     private String status;
     private ArrayList<Item> inventory;
+    public ImageView image;
     //endregion
 
     //region Constructor with all parameters
-    public Player(GridPane g, double LP, String name, double money, double strength, double defense, int x, int y) {
-        super(g,x,y);
+    public Player(World w, double LP, String name, double money, double strength, double defense, int x, int y) {
+        super(w,x,y);
         this.LP = LP;
         this.name = name;
         this.money = money;
@@ -29,6 +35,10 @@ public class Player extends GameObject {
         this.defense = defense;
         this.status = "";                   //No status at first
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
+        image=new ImageView("H:\\Documents\\école\\ING1\\POO Java\\projet_javafx\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
+        image.setFitHeight((double) HEIGHT /ROWS);
+        image.setFitWidth((double) WIDTH/COLUMNS);
+        /*g.add(image,x,y);*/
     }
     //endregion
 

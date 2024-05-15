@@ -1,11 +1,11 @@
 package Classes.World.DecorItem;
 
 import Classes.GameObject;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public abstract class DecorItem extends GameObject {
 
-    public DecorItem(GridPane g, int x, int y) {
-        super(g,x, y);
+    public DecorItem(World w, int x, int y) {
+        super(w,x, y);
     }
 }

@@ -3,7 +3,7 @@ package Classes.Monster;
 import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +79,8 @@ public abstract class Monster extends GameObject {
     }
     //endregion
 
-    public Monster(GridPane g, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
-        super(g,x,y);
+    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
+        super(w,x,y);
         this.name = name;
         this.lifePoints = lifePoints;
         this.strength = force;

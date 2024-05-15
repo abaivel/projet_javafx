@@ -1,14 +1,18 @@
 package Classes;
 
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
+import javafx.scene.Node;
+import Classes.World.World;
 
 public abstract class GameObject {
     public Position position;
-    public GridPane gridPane;
+    public World world;
 
-    public GameObject(GridPane g,int x, int y) {
-        this.gridPane = g;
+    public Node node;
+
+    public GameObject(World w,int x, int y) {
+        this.world = w;
         this.position = new Position(x,y);
     }
 
@@ -19,5 +23,8 @@ public abstract class GameObject {
     public void setPosition(int x, int y) {
         this.position.setX(x);
         this.position.setY(y);
+    }
+    public Node getNode() {
+        return node;
     }
 }

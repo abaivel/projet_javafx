@@ -1,15 +1,15 @@
 package Classes.World.DecorItem.WalkThroughDecorItem;
 
 import Classes.Item.ConsumableItem.Key;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Door extends WalkThroughDecorItem{
 
     private Key key;
     private String color;
     private boolean open;
-    public Door(GridPane g, int x, int y, String color) {
-        super(g,x, y);
+    public Door(World w, int x, int y, String color) {
+        super(w,x, y);
         this.color=color;
         open=false;
     }

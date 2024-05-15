@@ -1,7 +1,7 @@
 package Classes.NPC;
 
 import Classes.Player.Player;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +12,8 @@ public class Fouras extends NPC {
     private Map<String, String> enigma;
 
     //Constructor with all parameters
-    public Fouras(GridPane g, String name, double money,int x, int y) {
-        super(g,name, money, x, y);
+    public Fouras(World w, String name, double money, int x, int y) {
+        super(w,name, money, x, y);
         this.enigma = new HashMap<>();
         this.enigma.put("I travel the world without moving an inch,\nConnecting continents with a mere blink.\nI'm not alive, but I can grow,\nWho am I, do you know?\n","Internet");
         this.enigma.put("I have a tail and two flat ears. I move with no feet. What am I ?","mouse");

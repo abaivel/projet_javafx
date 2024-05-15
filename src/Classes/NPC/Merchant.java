@@ -4,14 +4,14 @@ import Classes.NPC.NPC;
 import Classes.Item.Item;
 import Classes.Player.Player;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Merchant extends NPC {
     private String[] dialogues;
 
     //Constructor with all parameters
-    public Merchant(GridPane g,String name, double money, int x, int y) {
-        super(g,name, money, x,y);
+    public Merchant(World w,String name, double money, int x, int y) {
+        super(w,name, money, x,y);
         this.dialogues = new String[5];
         this.dialogues[0] = "Would you like to see my wares ?\n";
         this.dialogues[1] = "Would you like to sell me something ?\n";

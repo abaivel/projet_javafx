@@ -2,14 +2,14 @@ package Classes.Item.ConsumableItem;
 
 import Classes.World.Position;
 import Classes.Item.Item;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 import java.util.Objects;
 
 public class Key extends Item {
     String color;
-    public Key(GridPane g, int x, int y, String name, boolean dropped, String color, int price) {
-        super(g,x,y, name, dropped, price);
+    public Key(World w, int x, int y, String name, boolean dropped, String color, int price) {
+        super(w,x,y, name, dropped, price);
         this.color=color;
     }
     public String getColor() {

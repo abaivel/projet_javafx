@@ -1,9 +1,9 @@
 package Classes.World.DecorItem.WalkThroughDecorItem;
 
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Hedge extends WalkThroughDecorItem{
-    public Hedge(GridPane g, int x, int y) {
-        super(g,x, y);
+    public Hedge(World w, int x, int y) {
+        super(w,x, y);
     }
 }

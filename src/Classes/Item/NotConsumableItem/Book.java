@@ -1,14 +1,14 @@
 package Classes.Item.NotConsumableItem;
 
 import Classes.Item.Item;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Book extends Item {
     private String text;
 
 
-    public Book(GridPane g, String name, boolean dropped, String text, int price, int x, int y) {
-        super(g,x, y, name, dropped, price);
+    public Book(World w, String name, boolean dropped, String text, int price, int x, int y) {
+        super(w,x, y, name, dropped, price);
         this.text = text;
     }
 

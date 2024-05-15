@@ -1,6 +1,6 @@
 package Classes.Item.NotConsumableItem.Weapon;
 
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 import Classes.Item.Item;
 
 public abstract class Weapon extends Item {
@@ -9,8 +9,8 @@ public abstract class Weapon extends Item {
     //endregion
 
     //region Constructor
-    public Weapon(GridPane g, String name, boolean dropped, int x, int y, double damage, int price) {
-        super(g,x,y,name,dropped, price);
+    public Weapon(World w, String name, boolean dropped, int x, int y, double damage, int price) {
+        super(w,x,y,name,dropped, price);
         this.damage = damage;
     }
     //endregion

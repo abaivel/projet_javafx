@@ -1,10 +1,10 @@
 package Classes.World.DecorItem.NotWalkThroughDecorItem;
 
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Trap extends NotWalkThroughDecorItem {
 
-    public Trap(GridPane g, int x, int y) {
-        super(g,x, y);
+    public Trap(World w, int x, int y) {
+        super(w,x, y);
     }
 }
