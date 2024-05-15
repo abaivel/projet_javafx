@@ -10,9 +10,11 @@ import java.util.Scanner;
 
 
 public class Fouras extends NPC {
+    //region Fouras's attributes
     private Map<String, String> enigma;
+    //endregion
 
-    //Constructor with all parameters
+    //region Constructor with all parameters
     public Fouras(GridPane g, String name, double money,int x, int y) {
         super(g,name, money, x, y);
         this.enigma = new HashMap<String, String>();
@@ -21,18 +23,21 @@ public class Fouras extends NPC {
         this.enigma.put("A box to anywhere. Just watch for my glare. What am I ?","monitor");
         this.enigma.put("25 years old, but only turned 10. What am I ?","windows");
     }
+    //endregion
 
-    //Default constructor
+    //region Default constructor
     public Fouras(String name) {
         this(null, name,100,0,0);
     }
+    //endregion
 
-    //Getters and Setters
+    //region Getters and Setters
     public Map<String, String> getEnigma() {return enigma;}
     public void setEnigma(Map<String, String> enigma) {this.enigma = enigma;}
+    //endregion
 
-    //TO DO : add a reward ? Give some of his money ? Example he gives off 10% of his total money
-    //Function to tell an enigma to the player
+    //TODO : add a reward ? Give some of his money ? Example he gives off 10% of his total money
+    //region Function to tell an enigma to the player
     public boolean tellEnigma(){
         String[] keys = this.getEnigma().keySet().toArray(new String[0]);   //Puts the keySet into a List of Strings
         int i = (int) (Math.random() * keys.length);                        //Generates a random int between 0 and the list's length
@@ -49,8 +54,9 @@ public class Fouras extends NPC {
         }
 
     }
+    //endregion
 
-    //Function called in TellEnigma() to get the answer via input
+    //region Function called in TellEnigma() to get the answer via input
     public String answerEnigma(){
         Scanner input = new Scanner(System.in);                         //Create a Scanner object for the player's input
         System.out.println("Enter your answer to the enigma");
@@ -58,6 +64,7 @@ public class Fouras extends NPC {
         System.out.println("Your answer is: " + answer);                //Output user input
         return answer;
     }
+    //endregion
 
     public static void main(String[] args) {
         Fouras f=new Fouras(null,"Fouras",100,0,0);

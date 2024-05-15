@@ -8,17 +8,17 @@ import javafx.scene.layout.GridPane;
 import java.util.List;
 
 public abstract class Monster extends GameObject {
-    //region Attributes
+    //region Monster's Attributes
     private String name;
     private int lifePoints;
     private int strength;
     private int defense;
 
-    private Position position;
     private List<Item> inventory;
     private boolean alive;
     private String status;
     //endregion
+
     //region Getters
     public String getName() {
         return name;
@@ -52,6 +52,7 @@ public abstract class Monster extends GameObject {
         return status;
     }
     //endregion
+
     //region Setters
     public void setName(String name) {
         this.name = name;
@@ -78,6 +79,7 @@ public abstract class Monster extends GameObject {
     }
     //endregion
 
+    //region Constructor
     public Monster(GridPane g, String name, int lifePoints, int force, int defense, List<Item> inventory, int x, int y) {
         super(g,x,y);
         this.name = name;
@@ -87,6 +89,7 @@ public abstract class Monster extends GameObject {
         this.inventory = inventory;
         this.alive=true;
     }
+    //endregion
 
     public abstract void chooseAttack(int numRound);
 
@@ -104,7 +107,7 @@ public abstract class Monster extends GameObject {
     }
 
     public void die(){
-        alive=false;
+        this.setAlive(false);
         //TODO Faire disparaitre le monstre en le faisant clignoter par exemple
     }
 
