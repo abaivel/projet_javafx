@@ -1,15 +1,15 @@
 package Classes.Monster;
 
 import Classes.Item.Item;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Slime extends Monster{
-
     //region Constructor
-    public Slime(GridPane g, String name, int lifePoints, int force, int defense, List<Item> inventory, int x, int y) {
-        super(g, name, lifePoints, force, defense, inventory, x, y);
+    public Slime(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
+        super(w, name, lifePoints, force, defense, inventory, x, y);
     }
     //endregion
 

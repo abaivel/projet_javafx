@@ -1,10 +1,10 @@
 package Classes.World.DecorItem.WalkThroughDecorItem;
 
 
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class River extends WalkThroughDecorItem {
-    public River(GridPane g, int x, int y) {
-        super(g, x, y);
+    public River(World w, int x, int y) {
+        super(w, x, y);
     }
 }

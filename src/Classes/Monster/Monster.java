@@ -3,8 +3,9 @@ package Classes.Monster;
 import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Monster extends GameObject {
@@ -14,7 +15,7 @@ public abstract class Monster extends GameObject {
     private int strength;
     private int defense;
 
-    private List<Item> inventory;
+    private ArrayList<Item> inventory;
     private boolean alive;
     private String status;
     //endregion
@@ -36,11 +37,7 @@ public abstract class Monster extends GameObject {
         return defense;
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
-    public List<Item> getInventory() {
+    public ArrayList<Item> getInventory() {
         return inventory;
     }
 
@@ -52,7 +49,6 @@ public abstract class Monster extends GameObject {
         return status;
     }
     //endregion
-
     //region Setters
     public void setName(String name) {
         this.name = name;
@@ -78,10 +74,9 @@ public abstract class Monster extends GameObject {
         this.status = status;
     }
     //endregion
-
-    //region Constructor
-    public Monster(GridPane g, String name, int lifePoints, int force, int defense, List<Item> inventory, int x, int y) {
-        super(g,x,y);
+    //region Constructeur
+    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
+        super(w,x,y);
         this.name = name;
         this.lifePoints = lifePoints;
         this.strength = force;

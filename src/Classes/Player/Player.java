@@ -6,7 +6,12 @@ import Classes.Item.Item;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.ImageView;
+import Classes.World.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +24,10 @@ import static java.lang.Math.random;
 
 //TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
+    private static final int HEIGHT = 675;
+    private static final int WIDTH = 1500;
+    private static final int ROWS = 18;
+    private static final int COLUMNS=40;
     //region Player's attributes
     private double LP;
     private String name;
@@ -26,27 +35,32 @@ public class Player extends GameObject {
     private double strength;
     private double defense;
     private Map<String, Integer> status;
-    private Item[] inventory;
+    private ArrayList<Item> inventory;
+    public ImageView image;
     //endregion
 
     //region Constructor with all parameters
-    public Player(GridPane g, double LP, String name, double money, double strength, double defense, int x, int y) {
-        super(g,x,y);
+    public Player(World w, double LP, String name, double money, double strength, double defense, int x, int y) {
+        super(w,x,y);
         this.LP = LP;
         this.name = name;
         this.money = money;
         this.strength = strength;
         this.defense = defense;
-        this.status = new HashMap<String, Integer>();                  //No status at first
-        this.inventory = new Item[9];                                   //Inventory size is 9 slots max
+        this.status = new HashMap<String, Integer>();;                   //No status at first
+        this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
+        image=new ImageView("H:\\Documents\\école\\ING1\\POO Java\\projet_javafx\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
+        image.setFitHeight((double) HEIGHT /ROWS);
+        image.setFitWidth((double) WIDTH/COLUMNS);
+        /*g.add(image,x,y);*/
     }
     //endregion
 
     //region Default constructor
     public Player(){
         this(null, 10,"Player",0,5,2,0,0);
-        this.status = new HashMap<String, Integer>();                  //No status at first
-        this.inventory = new Item[9];      //Inventory size is 9 slots max
+        this.status = new HashMap<String, Integer>();                  //No status at first//Inventory size is 9 slots max
+        this.inventory = new ArrayList<>();      //Inventory size is 9 slots max
     }
     //endregion
 
@@ -66,18 +80,21 @@ public class Player extends GameObject {
     public double getDefense() {return this.defense;}
     public void setDefense(double defense) {this.defense = defense;}
 
-    public Item[] getInventory() {return this.inventory;}
-    public void setInventory(Item[] inventory) {this.inventory = inventory;}
+    public ArrayList<Item> getInventory() {return this.inventory;}
+    public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
     //endregion
+    public void addToInventory(Item item){
+        this.inventory.add(item);
+    }
+    public void removeFromInventory(Item item){
+        this.inventory.remove(item);
+    }
 
     //region ToString function to print
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nStatus : " + "\nPosition : " + this.getPosition() + "\nInventory :";
-        for(int i = 0; i < inventory.length; i++){
-            tmp += inventory[i].toString() + " ; ";
-        }
-        for(String s : this.status.keySet()){
-            tmp+= s + " : " + this.status.get(s) + "\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n\n";
+        for(int i = 0; i < inventory.size(); i++){
+            tmp += inventory.get(i).toString() + "\n";
         }
         return tmp;
     }
@@ -97,10 +114,9 @@ public class Player extends GameObject {
             return false;                           //else we continue the game
         }
     }
-
     //TODO potion de vie
 
-    //Attack function for combat -> return the amount of damage done to the ennemy with his weapon and status (buff, debuff)
+    //Attack function for combat -> return the amount of damage done to the ennemy
     public double attack(){
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
@@ -195,8 +211,8 @@ public class Player extends GameObject {
     //returns false if the player dies
     public boolean swim(){
         boolean swim = false;
-        for(int i = 0; i < inventory.length; i++){
-            if(inventory[i] instanceof Buoy){
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) instanceof Buoy){
                 swim = true;                            //Search for buoy
             }
         }
@@ -223,9 +239,9 @@ public class Player extends GameObject {
 
     }
 
-    public boolean contains(String name){
-        for(int i = 0; i < inventory.length; i++){
-            if(inventory[i].getName().equals(name)){
+    public boolean contains(String item){
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i).getName().equals(item)){
                 return true;
             }
         }
@@ -235,9 +251,9 @@ public class Player extends GameObject {
     //Look for all the Weapons in the player's inventory and chooses the best one
     public double containsWeapon(){
         ArrayList<Weapon> w = new ArrayList<Weapon>();     //list of weapons to fill
-        for(int i = 0; i < inventory.length; i++){
-            if(inventory[i] instanceof Weapon){
-                w.add((Weapon) this.getInventory()[i]);                 //Adding the weapons to the list
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) instanceof Weapon){
+                w.add((Weapon) this.getInventory().get(i));                 //Adding the weapons to the list
             }
         }
         if(w.isEmpty()){

@@ -1,10 +1,13 @@
 package com.game.projet_javafx;
 
 import Classes.GameObject;
+import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
+import Classes.World.World;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import Classes.World.World;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -23,24 +26,13 @@ public class GameApplication extends Application {
         /*ArrayList<ArrayList<GameObject>> gridObject = new ArrayList<>();
         gridObject.set(2,new ArrayList<GameObject>())*/
         GameObject[][] gridObjects = new GameObject[40][18];
-        GridPane pane = new GridPane();
-        pane.setPrefHeight(HEIGHT);
-        pane.setPrefWidth(WIDTH);
-        pane.setStyle("-fx-background-color: white;");
-        pane.setVgap(-1);
-        pane.setHgap(-1);
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-            Rectangle cell = new Rectangle((double) WIDTH/COLUMNS, (double) HEIGHT /ROWS );
-                cell.setStyle("-fx-stroke: black;-fx-fill: green;");
-                pane.add(cell, col, row);
-            }
-        }
-        Wall w = new Wall(pane,2,2);
-        gridObjects[2][2]=w;
-        Rectangle perso = new Rectangle((double) WIDTH/COLUMNS, (double) HEIGHT /ROWS);
-        perso.setStyle("-fx-fill: red;");
-        pane.add(perso,5,5);
+        World world = new World("#444444");
+        GridPane pane = world.getPane();
+        Wall w = new Wall(world,2,2);
+        Player p = new Player(world,10,"Truc",25,8,2,5,5);
+        /*Rectangle p.image = new Rectangle((double) WIDTH/COLUMNS, (double) HEIGHT /ROWS);
+        p.image.setStyle("-fx-fill: red;");
+        pane.add(p.image,5,5);*/
         ArrayList<Rectangle> listWalls = new ArrayList<Rectangle>();
         /*listWalls.add(new Rectangle((double) WIDTH/COLUMNS, (double) HEIGHT /ROWS));
         listWalls.add(new Rectangle((double) WIDTH/COLUMNS, (double) HEIGHT /ROWS));
@@ -52,20 +44,20 @@ public class GameApplication extends Application {
         stage.show();
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.RIGHT) {
-                if (GridPane.getColumnIndex(perso)<COLUMNS-1 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso) + 1, GridPane.getRowIndex(perso))) {
-                    GridPane.setColumnIndex(perso, GridPane.getColumnIndex(perso) + 1);
+                if (GridPane.getColumnIndex(p.image)<COLUMNS-1 && IsThereWall(gridObjects, GridPane.getColumnIndex(p.image) + 1, GridPane.getRowIndex(p.image))) {
+                    GridPane.setColumnIndex(p.image, GridPane.getColumnIndex(p.image) + 1);
                 }
             }else if (e.getCode() == KeyCode.LEFT) {
-                if (GridPane.getColumnIndex(perso)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso) - 1, GridPane.getRowIndex(perso))) {
-                    GridPane.setColumnIndex(perso, GridPane.getColumnIndex(perso) - 1);
+                if (GridPane.getColumnIndex(p.image)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(p.image) - 1, GridPane.getRowIndex(p.image))) {
+                    GridPane.setColumnIndex(p.image, GridPane.getColumnIndex(p.image) - 1);
                 }
             }else if (e.getCode() == KeyCode.UP) {
-                if (GridPane.getRowIndex(perso)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso), GridPane.getRowIndex(perso) - 1)) {
-                    GridPane.setRowIndex(perso, GridPane.getRowIndex(perso) - 1);
+                if (GridPane.getRowIndex(p.image)>0 && IsThereWall(gridObjects, GridPane.getColumnIndex(p.image), GridPane.getRowIndex(p.image) - 1)) {
+                    GridPane.setRowIndex(p.image, GridPane.getRowIndex(p.image) - 1);
                 }
             }else if (e.getCode() == KeyCode.DOWN) {
-                if (GridPane.getRowIndex(perso)<ROWS-1 && IsThereWall(gridObjects, GridPane.getColumnIndex(perso), GridPane.getRowIndex(perso) + 1)) {
-                    GridPane.setRowIndex(perso, GridPane.getRowIndex(perso) + 1);
+                if (GridPane.getRowIndex(p.image)<ROWS-1 && IsThereWall(gridObjects, GridPane.getColumnIndex(p.image), GridPane.getRowIndex(p.image) + 1)) {
+                    GridPane.setRowIndex(p.image, GridPane.getRowIndex(p.image) + 1);
                 }
             }
         });

@@ -1,12 +1,12 @@
 package Classes.NPC;
 
 import Classes.World.Position;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class UselessPerson extends NPC{
     //Constructor with all parameters
-    public UselessPerson(GridPane g,String name, double money, int x, int y) {
-        super(g,name, money, x,y);
+    public UselessPerson(World w,String name, double money, int x, int y) {
+        super(w,name, money, x,y);
     }
 
     //Default constructor
@@ -15,12 +15,12 @@ public class UselessPerson extends NPC{
     }
 
     //He welcomes, he doesn't do much more since he's useless
-    public void welcome(){
-        System.out.println("Welcome eheh !");
+    public String welcome(){
+        return "Welcome eheh !";
     }
 
     //He can also say goodbye ! Average man experience
-    public void goodbye(){
-        System.out.println("Goodbye eheh !");
+    public String goodbye(){
+        return "Goodbye eheh !";
     }
 }

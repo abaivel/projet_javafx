@@ -1,11 +1,11 @@
 package Classes.World.DecorItem.WalkThroughDecorItem;
 
 import Classes.World.DecorItem.DecorItem;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public abstract class WalkThroughDecorItem extends DecorItem {
 
-    public WalkThroughDecorItem(GridPane g, int x, int y) {
-        super(g,x, y);
+    public WalkThroughDecorItem(World w, int x, int y) {
+        super(w,x, y);
     }
 }

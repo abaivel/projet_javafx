@@ -1,7 +1,7 @@
 package Classes.Item.NotConsumableItem;
 
 import Classes.Item.Item;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Book extends Item {
     //region Book's attribute
@@ -9,20 +9,17 @@ public class Book extends Item {
     //endregion
 
     //region Constructor
-    public Book(GridPane g, String name, boolean dropped, String text, int x, int y) {
-        super(g,x, y, name, dropped);
+    public Book(World w, String name, boolean dropped, String text, int x, int y, int price) {
+        super(w,x, y, name, dropped, price);
         this.text = text;
     }
     //endregion
-
-    public void read(){
-        //faire apparaitre le livre et le texte avec getText
-    }
 
     //region Getters and Setters
     public String getText() {
         return text;
     }
+
     public void setText(String text) {
         this.text = text;
     }
