@@ -1,13 +1,13 @@
 package Classes.Item.NotConsumableItem;
 
 import Classes.Item.Item;
-import javafx.scene.layout.GridPane;
+import Classes.World.World;
 
 public class Buoy extends Item {
 
     //region Constructor
-    public Buoy(GridPane g, int x, int y, String name, boolean dropped) {
-        super(g, x, y, name, dropped);
+    public Buoy(World w, int x, int y, String name, boolean dropped, int price) {
+        super(w, x, y, name, dropped, price);
     }
     //endregion
 }
