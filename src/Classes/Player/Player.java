@@ -28,6 +28,7 @@ public class Player extends GameObject {
     private static final int WIDTH = 1500;
     private static final int ROWS = 18;
     private static final int COLUMNS=40;
+
     //region Player's attributes
     private double LP;
     private String name;
@@ -47,9 +48,9 @@ public class Player extends GameObject {
         this.money = money;
         this.strength = strength;
         this.defense = defense;
-        this.status = new HashMap<String, Integer>();;                   //No status at first
+        this.status = new HashMap<String, Integer>();                   //No status at first
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
-        image=new ImageView("H:\\Documents\\école\\ING1\\POO Java\\projet_javafx\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
+        image=new ImageView("H:\\Desktop\\CY TECH\\S2\\Java\\PROJET-FX\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
         image.setFitHeight((double) HEIGHT /ROWS);
         image.setFitWidth((double) WIDTH/COLUMNS);
         /*g.add(image,x,y);*/
@@ -82,12 +83,34 @@ public class Player extends GameObject {
 
     public ArrayList<Item> getInventory() {return this.inventory;}
     public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
+
+    public HashMap<String, Integer> getStatus() {
+        return (HashMap<String, Integer>) this.status;
+    }
+
+
     //endregion
+    public void addStatus(String key, int value) {
+        this.getStatus().put(key, value);
+    }
     public void addToInventory(Item item){
         this.inventory.add(item);
     }
-    public void removeFromInventory(Item item){
-        this.inventory.remove(item);
+
+    //Need to get the item for the Looter so return an item
+    public Item removeFromInventory(Item item){
+        int index = this.inventory.indexOf(item);
+        if(index != -1){
+            Item removed = this.inventory.remove(index);        //get the removed item
+            return removed;
+        }else{
+            return null;                                        //if item not in inventory
+        }
+    }
+
+    public Item randomItemFromInvetory(){
+        int index = new Random().nextInt(this.inventory.size());        //randomize an index
+        return this.getInventory().get(index);                          //return the item linked to the random index
     }
 
     //region ToString function to print
