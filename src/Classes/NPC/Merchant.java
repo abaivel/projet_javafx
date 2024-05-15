@@ -7,9 +7,11 @@ import Classes.World.Position;
 import Classes.World.World;
 
 public class Merchant extends NPC {
+    //region Merchant's attributes
     private String[] dialogues;
+    //endregion
 
-    //Constructor with all parameters
+    //region Constructor with all parameters
     public Merchant(World w,String name, double money, int x, int y) {
         super(w,name, money, x,y);
         this.dialogues = new String[5];
@@ -18,16 +20,19 @@ public class Merchant extends NPC {
         this.dialogues[2] = "Would you like to swap one of your item for one of mine ?\n";
         this.dialogues[3] = "Goodbye !\n";
     }
+    //endregion
 
-    //Default constructor
+    //region Default constructor
     public Merchant(String name) {
         this(null,name,100,0,0);
     }
 
-    //Getters and Setters
+    //region Getters and Setters
+    public void setDialogues(String[] dialogues) {this.dialogues = dialogues;}
     public String[] getDialogues() {return this.dialogues;}
+    //endregion
 
-    //For a merchant to sell stuff to the player -> merchant gains money
+    //region For a merchant to sell stuff to the player -> merchant gains money
     public boolean sell(Player p,Item item){
         if (item.getPrice()<p.getMoney()){ //if the player has enough money to buy the item, the merchant can sell the item to them
             p.addToInventory(item);
@@ -37,8 +42,9 @@ public class Merchant extends NPC {
             return false;
         }
     }
+    //endregion
 
-    //For a merchant to buy stuff from the player   -> merchant looses money
+    //region For a merchant to buy stuff from the player   -> merchant looses money
     public boolean buy(Player p, Item item){
         if (item.getPrice()<this.getMoney()){  //if the merchant has enough money to buy the item, the merchant can buy the item
             p.removeFromInventory(item);
@@ -48,8 +54,9 @@ public class Merchant extends NPC {
             return false;
         }
     }
+    //endregion
 
-    //For a merchant and a player to swap items
+    //region For a merchant and a player to swap items
     public boolean troc(Player p,Item itemMerchant, Item itemPlayer){
         if (itemMerchant.getPrice()-5<itemPlayer.getPrice() && itemMerchant.getPrice()+5>itemPlayer.getPrice()){ //if the player's item is more or less than 5 coins than the item of the merchant
             p.removeFromInventory(itemPlayer);
@@ -61,6 +68,7 @@ public class Merchant extends NPC {
             return false;
         }
     }
+    //endregion
 
     public static void main(String[] args) {
         Merchant merchant = new Merchant("Bob The Merchant");

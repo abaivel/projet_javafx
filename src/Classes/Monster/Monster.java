@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Monster extends GameObject {
-    //region Attributes
+    //region Monster's Attributes
     private String name;
     private int lifePoints;
     private int strength;
     private int defense;
 
-    private Position position;
     private ArrayList<Item> inventory;
     private boolean alive;
     private String status;
     //endregion
+
     //region Getters
     public String getName() {
         return name;
@@ -35,10 +35,6 @@ public abstract class Monster extends GameObject {
 
     public int getDefense() {
         return defense;
-    }
-
-    public Position getPosition() {
-        return position;
     }
 
     public ArrayList<Item> getInventory() {
@@ -78,7 +74,7 @@ public abstract class Monster extends GameObject {
         this.status = status;
     }
     //endregion
-
+    //region Constructeur
     public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
         super(w,x,y);
         this.name = name;
@@ -88,6 +84,7 @@ public abstract class Monster extends GameObject {
         this.inventory = inventory;
         this.alive=true;
     }
+    //endregion
 
     public abstract void chooseAttack(int numRound);
 
@@ -105,7 +102,7 @@ public abstract class Monster extends GameObject {
     }
 
     public void die(){
-        alive=false;
+        this.setAlive(false);
         //TODO Faire disparaitre le monstre en le faisant clignoter par exemple
     }
 

@@ -7,17 +7,26 @@ import javafx.scene.image.ImageView;
 import Classes.World.World;
 
 //For potions :
-//  code is 2 letters for the attribute ; + (positive) or - (negative) ; value from 10 to 100 (scale 10 in 10)
+//  code is 2 letters for the effect attribute ; + (positive) or - (negative) ; value from 10 to 100 (scale 10 in 10)
 //  ST+20 --> means strength +20%
 //  DE-40 --> means defense -40%
 public class Potion extends Item{
 
-    String effect;
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price) {
-        super(w,x, y, name, dropped, price);
-        this.effect=effect;
-    }
+    private String effect;
+    private int duration;
+
+    //region Getters and Setters
+    public int getDuration() {return duration;}
+    public void setDuration(int duration) {this.duration = duration;}
+
     public String getEffect() {
         return effect;
+    }
+    //endregion
+    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price) {
+        super(w,x, y, name, dropped, price);
+        this.position = position;
+        this.effect = effect;
+        this.duration = duration;
     }
 }
