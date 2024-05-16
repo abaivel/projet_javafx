@@ -55,6 +55,7 @@ public class Looter extends Monster{
 
     //Use a potion from the Looter's inventory
     public void usePotion(Player player, Potion potion){
+        this.getInventory().remove(potion);
         if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect() == "LIFE") {

@@ -298,6 +298,7 @@ public class Player extends GameObject {
     //Set the new status of the player depending on the potion used
     public void usePotion(Monster monster, Potion potion){
         System.out.println(this.getName() + " uses a potion");
+        this.getInventory().remove(potion);
         if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect() == "LIFE"){
