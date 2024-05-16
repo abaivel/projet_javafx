@@ -21,10 +21,11 @@ public class Slime extends Monster{
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack() == true){
             System.out.println(this.getName() + " poisons " + player.getName());
-            player.addStatus("poisoned",3);             //adding poisoned status to player
+            player.addStatus("poisoned",2);             //adding poisoned status to player
             this.setCooldown(3);                        //reset cooldown
             return 0;                                   //returns 0 because only affects status
         }else{
+            this.setCooldown(this.getCooldown()-1);
             System.out.println(this.getName() + " attacks " + player.getName() + "\n");
             return 1;                                   //returns 1 to do the calculus in attack function : normal attack
         }

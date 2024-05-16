@@ -47,7 +47,7 @@ public class Fight {
             System.out.println(this.getPlayer() +""+ this.getMonster());
             //Player acts
             Scanner sc = new Scanner(System.in);
-            System.out.println("Select your action between 0 and 2 :");
+            System.out.println("Select your action between 0 and 2 :\n0->uses potion\n1->dodges\n2->attacks\n");
             int action = sc.nextInt();
             this.setPlayerAttack(this.getPlayer().attack(action,this.getMonster()));    //stocking the attack done by the player
 
@@ -61,6 +61,8 @@ public class Fight {
             this.getPlayer().defend(this.getMonsterAttack());
         }
     }
+
+    //TODO : pv monstre baisse pas ; sort pas du while ; revoir cooldown monstre
 
     public static void main(String[] args) {
         ArrayList<Item> items = new ArrayList<>();

@@ -94,6 +94,23 @@ public class Player extends GameObject {
 
     //endregion
 
+    //region ToString function to print
+    public String toString(){
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
+        if(!inventory.isEmpty()){
+            tmp += "Inventory : ";
+        }
+        for(int i = 0; i < inventory.size(); i++){
+            tmp += "Item n°" + i + " : " + inventory.get(i).toString() + "\n";
+        }
+        tmp += "Status :\n";
+        for(String s : this.status.keySet()){
+            tmp += s + ":" + this.status.get(s) + "rounds left";
+        }
+        return tmp;
+    }
+    //endregion
+
     //region Inventory functions
     public void addToInventory(Item item){
         this.inventory.add(item);
@@ -147,60 +164,55 @@ public class Player extends GameObject {
     }
     //endregion
 
+    //region Status functions
     public void addStatus(String key, int value) {
         this.getStatus().put(key, value);
     }
 
-    //region ToString function to print
-    public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
-        if(!inventory.isEmpty()){
-            tmp += "Inventory : ";
+    //Removes status from the map when they reach count 0
+    public void statusWornOff(){
+        for(String s : this.status.keySet()){       //loop on the keyset
+            if(this.status.get(s) == 0){            //verification if value is 0
+                this.status.remove(s);              //removes the status
+            }
         }
-        for(int i = 0; i < inventory.size(); i++){
-            tmp += "Item n°" + i + " : " + inventory.get(i).toString() + "\n";
+    }
+
+    //Returns the defense status (in percentage) depending on all the potions : buff and debuff
+    public int defenseStatus(){
+        int defense = 0;                                     //a percentage
+        if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
+            this.status.put("DE+",this.status.get("DE+")-1);
+            defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
+        } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
+            this.status.put("DE-",this.status.get("DE-")-1);
+            defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
         }
-        tmp += "Status :\n";
-        for(String s : this.status.keySet()){
-            tmp += s + ":" + this.status.get(s) + "rounds left";
+        return defense;
+    }
+
+    //Returns the strength status (in percentage) depending on all the potions : buff and debuff
+    public int strengthStatus(){
+        int strength = 0;                                                       //a percentage
+        if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
+            this.status.put("ST+",this.status.get("ST+")-1);
+            strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
+        } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
+            this.status.put("ST-",this.status.get("ST-")-1);
+            strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
         }
-        return tmp;
+        return strength;
+    }
+
+    public void isPoisonned(){
+        if(this.status.containsKey("poisoned")){                              //if poisoned take one make damage per turn
+            this.setLP(this.getLP()- 2);                                      //received poison damage
+            this.status.put("poisoned",this.status.get("poisoned")-1);
+        }
     }
     //endregion
 
-    //TODO : savoir ce qu'on en fait
-    //Victory condition
-    public boolean victory(){
-        return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
-    }
-
-    //Failure condition
-    public boolean failure(){
-        if(this.getLP() <= 0){                      //if LP fall to 0 -> death of the player
-            return true;
-        }else{
-            return false;                           //else we continue the game
-        }
-    }
-
-    //TODO potion de vie -> restore life
-
-    //region Fight
-    //Attack function for combat -> return the amount of damage done to the ennemy
-    public double attack(int i, Monster monster){                                //i is for the action the player wants : refer to chooseAction()
-        System.out.println(this.getName() + " acts !\n");
-        double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
-        this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
-        int STStatus = strengthStatus();
-        if(STStatus > 0){                                       //If Strengh+ status -> add it to damage done
-            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
-        }else if(STStatus < 0){                                 //If Strengh- status -> remove it to damage done
-            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
-        }else{
-            return this.chooseAction(i, monster) * this.getStrength() + weaponDamage;                         //no buff or debuff                                                                    //attack with the flat value of strength
-        }
-    }
-
+    //region Fight -> Attack, Defense, Dodge, Use potion
     //Chooses the action done in fight
     public double chooseAction(int action, Monster monster){        //returns if deal damage or not
         if (action == 0 && this.canUsePotion()) {   //use potion
@@ -218,16 +230,22 @@ public class Player extends GameObject {
         return 0;
     }
 
-    //Removes status from the map when they reach count 0
-    public void statusWornOff(){
-        for(String s : this.status.keySet()){       //loop on the keyset
-            if(this.status.get(s) == 0){            //verification if value is 0
-                this.status.remove(s);              //removes the status
-            }
+    //Attack function for combat -> return the amount of damage done to the ennemy
+    public double attack(int i, Monster monster){                                //i is for the action the player wants : refer to chooseAction()
+        System.out.println(this.getName() + " acts !\n");
+        double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
+        this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
+        int STStatus = strengthStatus();
+        if(STStatus > 0){                                       //If Strengh+ status -> add it to damage done
+            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
+        }else if(STStatus < 0){                                 //If Strengh- status -> remove it to damage done
+            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
+        }else{
+            return this.chooseAction(i, monster) * this.getStrength() + weaponDamage;                         //no buff or debuff                                                                    //attack with the flat value of strength
         }
     }
 
-    //TODO destroy potions when used in figth
+    //TODO destroy potions when used in fights -> is done correctly ?
     //Defense function for combat -> removes LF to the player
     public void defend(double ennemyAttack){
         System.out.println(this.getName() + " defends!\n");
@@ -267,8 +285,23 @@ public class Player extends GameObject {
             return false;
         }
     }
+
+    //Set the new status of the player depending on the potion used
+    public void usePotion(Monster monster, Potion potion){
+        System.out.println(this.getName() + " uses a potion");
+        this.getInventory().remove(potion);
+        if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
+            this.addStatus(potion.getEffect(), potion.getDuration());
+        }else if(potion.getEffect() == "LIFE"){
+            this.setLP(this.getLP() + Integer.getInteger(potion.getEffect().substring(3)));
+
+        }else if(potion.getEffect().substring(3) == ("-")){     //if the potion is a malus, looter applies it to the player
+            monster.addStatus(potion.getEffect(), potion.getDuration());
+        }
+    }
     //endregion
 
+    //region Move
     //If jump is to 1 it means the player jumps --> moves 2 cases
     //If jump is to 0 the player only moves of 1 case
     //Direction :   -x means we go to the left on the x axis
@@ -294,52 +327,7 @@ public class Player extends GameObject {
                 break;
         }
     }
-
-    //Set the new status of the player depending on the potion used
-    public void usePotion(Monster monster, Potion potion){
-        System.out.println(this.getName() + " uses a potion");
-        this.getInventory().remove(potion);
-        if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
-            this.addStatus(potion.getEffect(), potion.getDuration());
-        }else if(potion.getEffect() == "LIFE"){
-            this.setLP(this.getLP() + Integer.getInteger(potion.getEffect().substring(3)));
-
-        }else if(potion.getEffect().substring(3) == ("-")){     //if the potion is a malus, looter applies it to the player
-            monster.addStatus(potion.getEffect(), potion.getDuration());
-        }
-    }
-
-    public void isPoisonned(){
-        if(this.status.containsKey("poisoned")){                              //if poisoned take one make damage per turn
-            this.setLP(this.getLP()- 2);                                      //received poison damage
-        }
-    }
-
-    //Returns the defense status (in percentage) depending on all the potions : buff and debuff
-    public int defenseStatus(){
-        int defense = 0;                                     //a percentage
-        if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
-            this.status.put("DE+",this.status.get("DE+")-1);
-            defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
-        } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
-            this.status.put("DE-",this.status.get("DE-")-1);
-            defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
-        }
-        return defense;
-    }
-
-    //Returns the strength status (in percentage) depending on all the potions : buff and debuff
-    public int strengthStatus(){
-        int strength = 0;                                                       //a percentage
-        if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
-            this.status.put("ST+",this.status.get("ST+")-1);
-            strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
-        } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
-            this.status.put("ST-",this.status.get("ST-")-1);
-            strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
-        }
-        return strength;
-    }
+    //endregion
 
     //region Automatic use of item
     //Use item named buoy to not drown into rivers
@@ -360,6 +348,7 @@ public class Player extends GameObject {
     //endregion
 
     //TODO
+    //region Item functions
     //to pick up items on the floor ? Need to walk on the cell that has an item in it
     //updates the inventory with adding the new item
     public void pickItem(Item item){
@@ -374,6 +363,7 @@ public class Player extends GameObject {
     public void throwItem(Item item){
 
     }
+
 
     public boolean canUsePotion(){
         if(!this.getInventory().isEmpty()){
@@ -391,13 +381,23 @@ public class Player extends GameObject {
         Potion potion = null;
         return potion;
     }
+    //endregion
 
-
-
-
-    public static void main(String[] args) {
-
-
+    //TODO : savoir ce qu'on en fait
+    //Victory condition
+    public boolean victory(){
+        return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
     }
+
+    //Failure condition
+    public boolean failure(){
+        if(this.getLP() <= 0){                      //if LP fall to 0 -> death of the player
+            return true;
+        }else{
+            return false;                           //else we continue the game
+        }
+    }
+
+
 
 }

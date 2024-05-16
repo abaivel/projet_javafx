@@ -6,12 +6,13 @@ import Classes.World.World;
 
 //TODO destroy potion when used in fights
 public abstract class Item extends GameObject {
+    //region Item's attributes
     private String name;
     private int price;
-
     private boolean dropped;    //true : on the ground
                                 //false : in an inventory
     private boolean used;       //true if used
+    //endregion
 
     //region Constructor
     public Item(World w, int x, int y, String name, boolean dropped, int price) {
@@ -43,6 +44,12 @@ public abstract class Item extends GameObject {
     }
     //endregion
 
+    //region toString
+    public String toString(){
+        return "Name " + getName() + ", Price " + getPrice();
+    }
+    //endregion
+
     //When an item is picked up by the player
     public void pickedUp(){
         setDropped(false);
@@ -53,7 +60,5 @@ public abstract class Item extends GameObject {
         setDropped(true);
     }
 
-    public String toString(){
-        return "Name " + getName() + ", Price " + getPrice();
-    }
+
 }
