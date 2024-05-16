@@ -14,6 +14,10 @@ public class Looter extends Monster{
     public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown) {
         super(w, name, lifePoints, force, defense, inventory, x, y, cooldown);
     }
+
+    public Looter(ArrayList<Item> inventory){
+        super(inventory);
+    }
     //endregion
 
     @Override

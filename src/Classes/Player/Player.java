@@ -3,10 +3,12 @@ package Classes.Player;
 import Classes.GameObject;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
+import Classes.Monster.Looter;
 import Classes.Monster.Monster;
 import Classes.Monster.Slime;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Weapon.Weapon;
+import Classes.Monster.Wolf;
 import Classes.World.Position;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
@@ -51,9 +53,9 @@ public class Player extends GameObject {
         this.defense = defense;
         this.status = new HashMap<String, Integer>();                   //No status at first
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
-        image=new ImageView("H:\\Desktop\\CY TECH\\S2\\Java\\PROJET-FX\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
-        image.setFitHeight((double) HEIGHT /ROWS);
-        image.setFitWidth((double) WIDTH/COLUMNS);
+        //image=new ImageView("H:\\Desktop\\CY TECH\\S2\\Java\\PROJET-FX\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
+        //image.setFitHeight((double) HEIGHT /ROWS);
+        //image.setFitWidth((double) WIDTH/COLUMNS);
         /*g.add(image,x,y);*/
     }
     //endregion
@@ -151,9 +153,16 @@ public class Player extends GameObject {
 
     //region ToString function to print
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
+        if(!inventory.isEmpty()){
+            tmp += "Inventory : ";
+        }
         for(int i = 0; i < inventory.size(); i++){
-            tmp += inventory.get(i).toString() + "\n";
+            tmp += "Item n°" + i + " : " + inventory.get(i).toString() + "\n";
+        }
+        tmp += "Status :\n";
+        for(String s : this.status.keySet()){
+            tmp += s + ":" + this.status.get(s) + "rounds left";
         }
         return tmp;
     }
@@ -202,7 +211,7 @@ public class Player extends GameObject {
     }
 
     //Defense function for combat -> removes LF to the player
-    public void takeDamage(double ennemyAttack){
+    public void defend(double ennemyAttack){
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         if(this.status.containsKey("DE+")){       //if the player is under a potion that boost his defense
             this.status.put("DE+",this.status.get("DE+")-1);
@@ -211,7 +220,7 @@ public class Player extends GameObject {
             this.status.put("DE-",this.status.get("DE-")-1);
             this.setLP(this.getLP() - (ennemyAttack - ((this.getDefense()) * (1 - (Double.parseDouble("DE-".substring(3))/100)))));    //we had a bonus of strength related to the player's status
         }else if(this.status.containsKey("poisoned")){                              //if poisoned take one make damage per turn
-            this.setLP(this.getLP()-(ennemyAttack + 1 - this.getDefense()));                                                                    //attack with the flat value of strength
+            this.setLP(this.getLP()-((ennemyAttack + 3) - this.getDefense()));                                                                    //attack with the flat value of strength
         }else{
             this.setLP(this.getLP()-(ennemyAttack - this.getDefense()));
         }
@@ -308,8 +317,27 @@ public class Player extends GameObject {
 
     public static void main(String[] args) {
         Player p = new Player();
+        ArrayList<Item> list = new ArrayList<>();
+        Looter slime = new Looter(list);
+        Potion potion = new Potion(null,0,0,"potionno",false,"ST+20",10,3);
+        p.addToInventory(potion);
         System.out.println(p);
+        System.out.println(slime);
+
+        //fight
+        double playerAttack;
+        double monsterAttack;
+
+        playerAttack = p.attack();
+        slime.defend(playerAttack);
+        System.out.println(slime);
+
+        monsterAttack = slime.attack(p);
+        p.defend(monsterAttack);
+        System.out.println(p);
+        System.out.println(slime);
 
     }
+    //TODO : do not make player gain life when receiving small attacks x))) -> def stat adds life -> redo calculus another way
 
 }

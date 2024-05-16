@@ -94,6 +94,11 @@ public abstract class Monster extends GameObject {
         this.cooldown = cooldown;
         this.status = new HashMap<String, Integer>();
     }
+
+    public Monster(ArrayList<Item> inventory){
+        this(null, "Monster",5,4,3,inventory,0,0,0);
+        this.status = new HashMap<String, Integer>();                  //No status at first
+    }
     //endregion
 
 
@@ -194,6 +199,14 @@ public abstract class Monster extends GameObject {
         for (Item item : getInventory()) {
             //TODO: Appeler la fonction faisant apparaitre un item dans la classe de l'item
         }
+    }
+
+    public String toString(){
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLifePoints() + "\nMoney : " + this.getCooldown() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\n\n";
+        for(int i = 0; i < inventory.size(); i++){
+            tmp += inventory.get(i).toString() + "\n";
+        }
+        return tmp;
     }
 
 }

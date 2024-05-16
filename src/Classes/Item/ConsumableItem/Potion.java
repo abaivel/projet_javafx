@@ -25,10 +25,16 @@ public class Potion extends Item{
         return effect;
     }
     //endregion
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price) {
+    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price, int duration) {
         super(w,x, y, name, dropped, price);
         this.position = position;
         this.effect = effect;
         this.duration = duration;
+    }
+
+    public String toString(){
+        String tmp = super.toString();
+        tmp += ", Effect " + effect + ", Duration " + duration;
+        return tmp;
     }
 }

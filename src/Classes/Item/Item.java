@@ -4,6 +4,7 @@ import Classes.GameObject;
 import Classes.World.Position;
 import Classes.World.World;
 
+//TODO destroy potion when used in fights
 public abstract class Item extends GameObject {
     private String name;
     private int price;
@@ -50,5 +51,9 @@ public abstract class Item extends GameObject {
 
     public void appear(){
         setDropped(true);
+    }
+
+    public String toString(){
+        return "Name " + getName() + ", Price " + getPrice();
     }
 }
