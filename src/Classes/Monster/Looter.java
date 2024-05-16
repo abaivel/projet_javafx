@@ -21,19 +21,20 @@ public class Looter extends Monster{
         if(super.specialAttack() == true) {
             this.addToInventory(player.removeFromInventory(player.randomItemFromInvetory()));   //steals a random object from the player's inventory
             return 0;                                   //returns 0 because steals an object instead of attacking
-        } else if(this.canUseObject() == true &&){
-            Item randomItem = this.randomItemFromInvetory();        //gets a random item from the looter's inventory
+        } else if(this.canUseObject() == true){
+            Item randomItem = this.randomItemFromInventory();        //gets a random item from the looter's inventory
             if(randomItem instanceof Potion){
                 Potion potion = (Potion) randomItem;
                 this.usePotion(player, potion);
                 return 0;                                           //if it's not a potion does nothing in damage
             }
         } else{
-            return 1;                                   //returns 1 to do the calculus in attack function
+            return 1;                                               //returns 1 to do the calculus in attack function
         }
+        return 1;                                                   //because the IDE is stupid, THERE IS A RETURN STATEMENT IN THE ELSE BRO
     }
 
-    //To know if looter can use an object
+    //To know if looter can use an object : meaning inventory not empty
     public boolean canUseObject(){
         if(!this.getInventory().isEmpty()){
             return true;
@@ -42,7 +43,7 @@ public class Looter extends Monster{
     }
 
     //returns a random item from the looter's inventory
-    public Item randomItemFromInvetory(){
+    public Item randomItemFromInventory(){
         int index = new Random().nextInt(this.getInventory().size());        //randomize an index
         return this.getInventory().get(index);                          //return the item linked to the random index
     }

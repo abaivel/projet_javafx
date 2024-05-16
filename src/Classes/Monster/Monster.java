@@ -15,7 +15,7 @@ import java.util.Map;
 public abstract class Monster extends GameObject {
     //region Monster's Attributes
     private String name;
-    private int lifePoints;
+    private double lifePoints;
     private int strength;
     private int defense;
     private int cooldown;       //number of rounds until special attack ; 3 by default
@@ -30,7 +30,7 @@ public abstract class Monster extends GameObject {
         return name;
     }
 
-    public int getLifePoints() {
+    public double getLifePoints() {
         return lifePoints;
     }
 
@@ -61,7 +61,7 @@ public abstract class Monster extends GameObject {
         this.name = name;
     }
 
-    public void setLifePoints(int lifePoints) {
+    public void setLifePoints(double lifePoints) {
         this.lifePoints = lifePoints;
     }
 
@@ -171,17 +171,27 @@ public abstract class Monster extends GameObject {
         return w.get(max).getDamage();
     }
 
-    public void defend(){
+    public void defend(double ennemyAttack){
+        this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
+        if(this.status.containsKey("DE+")){                     //if the monster is under a potion that boost his defense
+            this.status.put("DE+",this.status.get("DE+")-1);
+            this.setLifePoints((this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 + (Double.parseDouble("DE+".substring(3))/100))))));    //we had a bonus of strength related to the player's status
+        }else if(this.status.containsKey("DE-")){               //if the monster is under a potion that decreases this defense
+            this.status.put("DE-",this.status.get("DE-")-1);
+            this.setLifePoints(this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 - (Double.parseDouble("DE-".substring(3))/100)))));    //we had a bonus of strength related to the player's status
 
+        }else{
+            this.setLifePoints(this.getLifePoints()-(ennemyAttack - this.getDefense()));    //attack with the flat value of strength
+        }
     }
 
     public void die(){
         this.setAlive(false);
-        //TODO Faire disparaitre le monstre en le faisant clignoter par exemple
+        //TODO Faire disparaitre le monstre en le faisant clignoter par exemple -> front
     }
 
     public void dropItem(){
-        for (Item item: getInventory()) {
+        for (Item item : getInventory()) {
             //TODO: Appeler la fonction faisant apparaitre un item dans la classe de l'item
         }
     }

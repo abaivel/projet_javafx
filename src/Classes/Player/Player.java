@@ -3,6 +3,8 @@ package Classes.Player;
 import Classes.GameObject;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
+import Classes.Monster.Monster;
+import Classes.Monster.Slime;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.World.Position;
@@ -20,14 +22,13 @@ import java.util.Random;
 
 import static java.lang.Math.random;
 
-//TODO faire un dico pour le status key : status et sa valeur un int qui décrémente à chaque tour
-
-//TO DO : ItemInterface implementation to use the inventory here
 public class Player extends GameObject {
+    //region Constants
     private static final int HEIGHT = 675;
     private static final int WIDTH = 1500;
     private static final int ROWS = 18;
     private static final int COLUMNS=40;
+    //endregion
 
     //region Player's attributes
     private double LP;
@@ -90,9 +91,8 @@ public class Player extends GameObject {
 
 
     //endregion
-    public void addStatus(String key, int value) {
-        this.getStatus().put(key, value);
-    }
+
+    //region Inventory functions
     public void addToInventory(Item item){
         this.inventory.add(item);
     }
@@ -113,6 +113,42 @@ public class Player extends GameObject {
         return this.getInventory().get(index);                          //return the item linked to the random index
     }
 
+    public boolean contains(String item){
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i).getName().equals(item)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Look for all the Weapons in the player's inventory and chooses the best one
+    public double containsWeapon(){
+        ArrayList<Weapon> w = new ArrayList<>();     //list of weapons to fill
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) instanceof Weapon){
+                w.add((Weapon) this.getInventory().get(i));                 //Adding the weapons to the list
+            }
+        }
+        if(w.isEmpty()){
+            return 0;
+        }
+        int max=0;
+        double value=0;
+        for(int i = 0; i < w.size(); i++){
+            if(w.get(i).getDamage() > value){
+                value = w.get(i).getDamage();
+                max = i;
+            }
+        }
+        return w.get(max).getDamage();
+    }
+    //endregion
+
+    public void addStatus(String key, int value) {
+        this.getStatus().put(key, value);
+    }
+
     //region ToString function to print
     public String toString(){
         String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n\n";
@@ -123,7 +159,7 @@ public class Player extends GameObject {
     }
     //endregion
 
-    //TO DO : savoir ce qu'on en fait
+    //TODO : savoir ce qu'on en fait
     //Victory condition
     public boolean victory(){
         return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
@@ -137,8 +173,10 @@ public class Player extends GameObject {
             return false;                           //else we continue the game
         }
     }
-    //TODO potion de vie
 
+    //TODO potion de vie -> restore life
+
+    //region Fight
     //Attack function for combat -> return the amount of damage done to the ennemy
     public double attack(){
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
@@ -197,7 +235,7 @@ public class Player extends GameObject {
             return false;
         }
     }
-
+    //endregion
 
     //If jump is to 1 it means the player jumps --> moves 2 cases
     //If jump is to 0 the player only moves of 1 case
@@ -225,11 +263,12 @@ public class Player extends GameObject {
         }
     }
 
-    //Set the new status of the player depending of the potion used
+    //Set the new status of the player depending on the potion used
     public void usePotion(Potion potion){
         this.status.put(potion.getEffect(),potion.getDuration());
     }
 
+    //region Automatic use of item
     //Use item named buoy to not drown into rivers
     //returns false if the player dies
     public boolean swim(){
@@ -245,6 +284,7 @@ public class Player extends GameObject {
         }
         return true;
     }
+    //endregion
 
     //TODO
     //to pick up items on the floor ? Need to walk on the cell that has an item in it
@@ -262,41 +302,12 @@ public class Player extends GameObject {
 
     }
 
-    public boolean contains(String item){
-        for(int i = 0; i < inventory.size(); i++){
-            if(inventory.get(i).getName().equals(item)){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    //Look for all the Weapons in the player's inventory and chooses the best one
-    public double containsWeapon(){
-        ArrayList<Weapon> w = new ArrayList<Weapon>();     //list of weapons to fill
-        for(int i = 0; i < inventory.size(); i++){
-            if(inventory.get(i) instanceof Weapon){
-                w.add((Weapon) this.getInventory().get(i));                 //Adding the weapons to the list
-            }
-        }
-        if(w.isEmpty()){
-            return 0;
-        }
-        int max=0;
-        double value=0;
-        for(int i = 0; i < w.size(); i++){
-            if(w.get(i).getDamage() > value){
-                value = w.get(i).getDamage();
-                max = i;
-            }
-        }
-        return w.get(max).getDamage();
-    }
+
 
 
     public static void main(String[] args) {
         Player p = new Player();
-        p.move("+y",0);
         System.out.println(p);
 
     }
