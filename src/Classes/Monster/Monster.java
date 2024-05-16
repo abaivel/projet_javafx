@@ -124,14 +124,14 @@ public abstract class Monster extends GameObject {
 
     //Monster attack function
     public double attack(Player player){
+        System.out.println(this.getName() + " attacks !\n");
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
-        if(this.status.containsKey("ST+")){                     //If Strengh+ status -> add it to damage done
-            this.status.put("ST+",this.status.get("ST+")-1);
-            return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 + (Double.parseDouble("ST+".substring(3))/100));    //we had a bonus of strength related to the player's status
-        }else if(this.status.containsKey("ST-")){             //If Strengh- status -> remove it to damage done
-            this.status.put("ST+",this.status.get("ST-")-1);
-            return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 - (Double.parseDouble("ST-".substring(3))/100));    //we had a bonus of strength related to the player's status
+        int STStatus = strengthStatus();
+        if(STStatus > 0){                     //If Strengh+ status -> add it to damage done
+            return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 + STStatus/100);    //we had a bonus of strength related to the player's status
+        }else if(STStatus < 0){             //If Strengh- status -> remove it to damage done
+            return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 - (STStatus/100));    //we had a bonus of strength related to the player's status
         }else{
             return this.chooseAttack(player) * (this.getStrength() + weaponDamage);                                                                                          //attack with the flat value of strength
         }
@@ -177,16 +177,18 @@ public abstract class Monster extends GameObject {
     }
 
     public void defend(double ennemyAttack){
+        System.out.println(this.getName() + " defends !\n");
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
-        if(this.status.containsKey("DE+")){                     //if the monster is under a potion that boost his defense
-            this.status.put("DE+",this.status.get("DE+")-1);
-            this.setLifePoints((this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 + (Double.parseDouble("DE+".substring(3))/100))))));    //we had a bonus of strength related to the player's status
-        }else if(this.status.containsKey("DE-")){               //if the monster is under a potion that decreases this defense
-            this.status.put("DE-",this.status.get("DE-")-1);
-            this.setLifePoints(this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 - (Double.parseDouble("DE-".substring(3))/100)))));    //we had a bonus of strength related to the player's status
-
+        int DEStatus = defenseStatus();
+        if(DEStatus > 0){                     //if the monster is under a potion that boost his defense
+            this.setLifePoints((this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 + DEStatus/100)))));    //we had a bonus of strength related to the player's status
+        }else if(DEStatus < 0){               //if the monster is under a potion that decreases this defense
+            this.setLifePoints(this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 - DEStatus/100))));    //we had a bonus of strength related to the player's status
         }else{
-            this.setLifePoints(this.getLifePoints()-(ennemyAttack - this.getDefense()));    //attack with the flat value of strength
+            if(ennemyAttack > this.getDefense()){
+                this.setLifePoints(this.getLifePoints()-(ennemyAttack - this.getDefense()));    //attack with the flat value of strength ; only deal damage if attack superior to def
+            }
+
         }
     }
 
@@ -207,6 +209,32 @@ public abstract class Monster extends GameObject {
             tmp += inventory.get(i).toString() + "\n";
         }
         return tmp;
+    }
+
+    //Returns the defense status (in percentage) depending on all the potions : buff and debuff
+    public int defenseStatus(){
+        int defense = 0;                                     //a percentage
+        if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
+            this.status.put("DE+",this.status.get("DE+")-1);
+            defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
+        } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
+            this.status.put("DE-",this.status.get("DE-")-1);
+            defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
+        }
+        return defense;
+    }
+
+    //Returns the strength status (in percentage) depending on all the potions : buff and debuff
+    public int strengthStatus(){
+        int strength = 0;                                                       //a percentage
+        if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
+            this.status.put("ST+",this.status.get("ST+")-1);
+            strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
+        } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
+            this.status.put("ST-",this.status.get("ST-")-1);
+            strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
+        }
+        return strength;
     }
 
 }

@@ -22,6 +22,7 @@ public class Wolf extends Monster{
     @Override
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack() == true){
+            this.setCooldown(3);                        //reset cooldown
             return 2;                                   //does double damage to player
         }else{
             return 1;                                   //returns 1 to do the calculus in attack function : normal attack

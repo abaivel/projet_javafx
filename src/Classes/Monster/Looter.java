@@ -23,6 +23,7 @@ public class Looter extends Monster{
     @Override
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack() == true) {
+            this.setCooldown(3);                        //reset cooldown
             this.addToInventory(player.removeFromInventory(player.randomItemFromInvetory()));   //steals a random object from the player's inventory
             return 0;                                   //returns 0 because steals an object instead of attacking
         } else if(this.canUseObject() == true){
@@ -55,9 +56,11 @@ public class Looter extends Monster{
     //Use a potion from the Looter's inventory
     public void usePotion(Player player, Potion potion){
         if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
-            this.addStatus(potion.getEffect(), 3);
+            this.addStatus(potion.getEffect(), potion.getDuration());
+        }else if(potion.getEffect() == "LIFE") {
+            this.setLifePoints(this.getLifePoints() + Integer.getInteger(potion.getEffect().substring(3)));
         }else if(potion.getEffect().substring(3) == ("-")){     //if the potion is a malus, looter applies it to the player
-            player.addStatus(potion.getEffect(), 3);
+            player.addStatus(potion.getEffect(), potion.getDuration());
         }
     }
 }

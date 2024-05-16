@@ -5,13 +5,13 @@ import Classes.Item.Item;
 import Classes.World.World;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
-
+//todo destroy the potions in the inventory after use
 //For potions :
 //  code is 2 letters for the effect attribute ; + (positive) or - (negative) ; value from 10 to 100 (scale 10 in 10)
 //  ST+20 --> means strength +20%
 //  DE-40 --> means defense -40%
 
-//  LP+20 --> regenerate 20% of life per turn
+//  LIFE10 --> regenerate 10 life points -> duration = 0
 public class Potion extends Item{
 
     private String effect;
