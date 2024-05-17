@@ -13,14 +13,11 @@ import Classes.World.Position;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import static java.lang.Math.random;
 
@@ -215,12 +212,12 @@ public class Player extends GameObject {
     //region Fight -> Attack, Defense, Dodge, Use potion
     //Chooses the action done in fight
     public double chooseAction(int action, Monster monster){        //returns if deal damage or not
-        if (action == 0 && this.canUsePotion()) {   //use potion
+        if (action == 0 && this.canUsePotion()) {                   //use potion
             Potion potion = this.choosePotion();
             this.usePotion(monster, potion);
             return 0;                                               //doesn't do any damage
         }else if(action == 1){                                      //attack
-            System.out.println(this.getName() + " attacks !\n");
+            System.out.println(this.getName() + " attacks !");
             return 1;                                               //1 meaning damage done
         }else if(action == 2){                                      //dodge
             System.out.println(this.getName() + " tries to dodge : ");
@@ -231,8 +228,8 @@ public class Player extends GameObject {
     }
 
     //Attack function for combat -> return the amount of damage done to the ennemy
-    public double attack(int i, Monster monster){                                //i is for the action the player wants : refer to chooseAction()
-        System.out.println(this.getName() + " acts !\n");
+    public double attack(int i, Monster monster){               //i is for the action the player wants : refer to chooseAction()
+        System.out.println(this.getName() + " acts !");
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int STStatus = strengthStatus();
@@ -248,7 +245,7 @@ public class Player extends GameObject {
     //TODO destroy potions when used in fights -> is done correctly ?
     //Defense function for combat -> removes LF to the player
     public void defend(double ennemyAttack){
-        System.out.println(this.getName() + " defends!\n");
+        System.out.println(this.getName() + " defends!");
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         this.isPoisonned();                                     //Takes damage from poison if is poisoned
         int DEStatus = defenseStatus();
@@ -277,19 +274,21 @@ public class Player extends GameObject {
         Random rand = new Random();
         int num = rand.nextInt(100 - 0 + 1) + 0;              //(max - min + 1) + min
         if(num < d){
-            System.out.println("dodge successful from the player !\n");
+            System.out.println("dodge successful from the player !");
             return true;
         }
         else{
-            System.out.println("failed to dodge from the player !\n");
+            System.out.println("failed to dodge from the player !");
             return false;
         }
     }
 
+    //TODO : how to select the potion
     //Set the new status of the player depending on the potion used
     public void usePotion(Monster monster, Potion potion){
-        System.out.println(this.getName() + " uses a potion");
-        this.getInventory().remove(potion);
+        System.out.println(this.getName() + " uses the potion" + potion);
+        potion.setUsed(true);                                           //set used to true because potions are single use
+        this.getInventory().remove(potion);                             //removing the potion from the inventory
         if(potion.getEffect().substring(3) == ("+")){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect() == "LIFE"){
@@ -378,13 +377,30 @@ public class Player extends GameObject {
 
     //TODO how to get the potion the player wants ?????
     public Potion choosePotion(){
-        Potion potion = null;
+        int i=0;
+        ArrayList<Potion> potionlist = new ArrayList<>();
+        for(Item item : this.getInventory().toArray(new Item[0])){
+            if(item instanceof Potion){                                 //Gets all the potion from the player's inventory
+                potionlist.add((Potion) item);
+            }
+        }
+        //Printing potions to choose the one the player wants
+        for(Potion potion : potionlist){
+            System.out.println(i +" : " + potion);
+            i++;
+        }
+
+        Scanner sc = new Scanner(System.in);                            //Use of scanner to get the player's answer for now
+        System.out.println("Select your potion between 0 and " + i);
+        int action = sc.nextInt();
+        Potion potion = potionlist.get(action);
+        System.out.println("The selected potion is " + potion);
         return potion;
     }
     //endregion
 
     //TODO : savoir ce qu'on en fait
-    //Victory condition
+    //region Victory and failure condition
     public boolean victory(){
         return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory
     }
@@ -397,6 +413,7 @@ public class Player extends GameObject {
             return false;                           //else we continue the game
         }
     }
+    //endregion
 
 
 

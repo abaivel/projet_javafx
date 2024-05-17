@@ -33,6 +33,7 @@ public class Potion extends Item{
     public String getEffect() {
         return effect;
     }
+
     //endregion
 
     //region toString

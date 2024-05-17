@@ -25,6 +25,7 @@ public class Wolf extends Monster{
             this.setCooldown(3);                        //reset cooldown
             return 2;                                   //does double damage to player
         }else{
+            this.setCooldown(this.getCooldown()-1);
             return 1;                                   //returns 1 to do the calculus in attack function : normal attack
         }
     }

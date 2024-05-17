@@ -202,7 +202,7 @@ public abstract class Monster extends GameObject {
 
     //Monster attack function
     public double attack(Player player){
-        System.out.println(this.getName() + " attacks !\n");
+        System.out.println(this.getName() + " attacks !");
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int STStatus = strengthStatus();
@@ -216,7 +216,7 @@ public abstract class Monster extends GameObject {
     }
 
     public void defend(double ennemyAttack){
-        System.out.println(this.getName() + " defends !\n");
+        System.out.println(this.getName() + " defends !");
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int DEStatus = defenseStatus();
         if(DEStatus > 0){                     //if the monster is under a potion that boost his defense
