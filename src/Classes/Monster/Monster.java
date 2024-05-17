@@ -103,7 +103,7 @@ public abstract class Monster extends GameObject {
 
     //region toString Function
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLifePoints() + "\nMoney : " + this.getCooldown() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\n\n";
+        String tmp = "\nName : " + this.getName() + "\nLP : " + this.getLifePoints() + "\nMoney : " + this.getCooldown() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\n";
         for(int i = 0; i < inventory.size(); i++){
             tmp += inventory.get(i).toString() + "\n";
         }
