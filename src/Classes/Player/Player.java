@@ -289,13 +289,13 @@ public class Player extends GameObject {
         System.out.println(this.getName() + " uses the potion" + potion);
         potion.setUsed(true);                                           //set used to true because potions are single use
         System.out.println(potion.getEffect().substring(2,3));
-        if(potion.getEffect().substring(2,3) == ("+")){           //if the potion is a bonus, looter applies to himself
+        if(potion.getEffect().substring(2, 3).equals("+")){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
             System.out.println("TEST+");
-        }else if(potion.getEffect() == "LIFE"){
+        }else if(potion.getEffect().substring(4).equals("LIFE")){
             this.setLP(this.getLP() + Integer.getInteger(potion.getEffect().substring(3)));
 
-        }else if(potion.getEffect().substring(2,3) == ("-")){     //if the potion is a malus, looter applies it to the player
+        }else if(potion.getEffect().substring(2, 3).equals("-")){     //if the potion is a malus, looter applies it to the player
             monster.addStatus(potion.getEffect(), potion.getDuration());
             System.out.println("TEST-");
         }
@@ -417,7 +417,6 @@ public class Player extends GameObject {
         }
     }
     //endregion
-
 
 
 }
