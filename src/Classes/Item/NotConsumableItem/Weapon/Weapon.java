@@ -9,8 +9,8 @@ public abstract class Weapon extends Item {
     //endregion
 
     //region Constructor
-    public Weapon(World w, String name, boolean dropped, int x, int y, double damage, int price) {
-        super(w,x,y,name,dropped, price);
+    public Weapon(World w, String name, boolean dropped, int x, int y, double damage, int price, String urlImage) {
+        super(w,x,y,name,dropped, price,urlImage);
         this.damage = damage;
     }
     //endregion

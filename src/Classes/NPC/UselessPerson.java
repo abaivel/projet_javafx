@@ -5,13 +5,13 @@ import Classes.World.World;
 
 public class UselessPerson extends NPC{
     //Constructor with all parameters
-    public UselessPerson(World w,String name, double money, int x, int y) {
-        super(w,name, money, x,y);
+    public UselessPerson(World w,String name, double money, int x, int y, String urlImage) {
+        super(w,name, money, x,y, urlImage);
     }
 
     //Default constructor
     public UselessPerson() {
-        this(null,"Aurélien",100,0,0);      //Because Aurelien is useless :p
+        this(null,"Aurélien",100,0,0,"");      //Because Aurelien is useless :p
     }
 
     //He welcomes, he doesn't do much more since he's useless

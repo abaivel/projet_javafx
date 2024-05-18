@@ -23,8 +23,8 @@ public class Potion extends Item{
         return effect;
     }
     //endregion
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price) {
-        super(w,x, y, name, dropped, price);
+    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price, String urlImage) {
+        super(w,x, y, name, dropped, price,urlImage);
         this.position = position;
         this.effect = effect;
         this.duration = duration;

@@ -6,7 +6,7 @@ import Classes.World.World;
 
 public class Trinket extends Item{
 
-    public Trinket(World w, int price, int x, int y, String name, boolean dropped) {
-        super(w,x,y,name,dropped, price);
+    public Trinket(World w, int price, int x, int y, String name, boolean dropped, String urlImage) {
+        super(w,x,y,name,dropped, price,urlImage);
     }
 }

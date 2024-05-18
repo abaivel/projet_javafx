@@ -3,6 +3,9 @@ package Classes.Item;
 import Classes.GameObject;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.event.EventHandler;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 public abstract class Item extends GameObject {
     private String name;
@@ -13,12 +16,15 @@ public abstract class Item extends GameObject {
     private boolean used;       //true if used
 
     //region Constructor
-    public Item(World w, int x, int y, String name, boolean dropped, int price) {
+    public Item(World w, int x, int y, String name, boolean dropped, int price, String urlImage) {
         super(w, x, y);
         this.name = name;
         this.used = false;
         this.dropped = dropped;
         this.price = price;
+        this.node = new ImageView(urlImage);
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
     }
     //endregion
 

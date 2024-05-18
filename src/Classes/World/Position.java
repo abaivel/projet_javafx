@@ -2,6 +2,10 @@ package Classes.World;
 
 public class Position {
     //Position on the map is a grid from y:0 to 20 * x : 0 to 50
+    public static final Integer HEIGHT = 675;
+    public static final Integer WIDTH = 1500;
+    public static final Integer ROWS = 18;
+    public static final Integer COLUMNS=40;
     private int x;
     private int y;
 

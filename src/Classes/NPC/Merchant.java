@@ -12,8 +12,8 @@ public class Merchant extends NPC {
     //endregion
 
     //region Constructor with all parameters
-    public Merchant(World w,String name, double money, int x, int y) {
-        super(w,name, money, x,y);
+    public Merchant(World w,String name, double money, int x, int y, String urlImage) {
+        super(w,name, money, x,y,urlImage);
         this.dialogues = new String[5];
         this.dialogues[0] = "Would you like to see my wares ?\n";
         this.dialogues[1] = "Would you like to sell me something ?\n";
@@ -24,7 +24,7 @@ public class Merchant extends NPC {
 
     //region Default constructor
     public Merchant(String name) {
-        this(null,name,100,0,0);
+        this(null,name,100,0,0,"");
     }
 
     //region Getters and Setters

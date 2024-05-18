@@ -14,8 +14,8 @@ public class Fouras extends NPC {
     //endregion
 
     //Constructor with all parameters
-    public Fouras(World w, String name, double money, int x, int y) {
-        super(w,name, money, x, y);
+    public Fouras(World w, String name, double money, int x, int y, String urlImage) {
+        super(w,name, money, x, y, urlImage);
         this.enigma = new HashMap<>();
         this.enigma.put("I travel the world without moving an inch,\nConnecting continents with a mere blink.\nI'm not alive, but I can grow,\nWho am I, do you know?\n","Internet");
         this.enigma.put("I have a tail and two flat ears. I move with no feet. What am I ?","mouse");
@@ -26,7 +26,7 @@ public class Fouras extends NPC {
 
     //region Default constructor
     public Fouras(String name) {
-        this(null, name,100,0,0);
+        this(null, name,100,0,0,"");
     }
     //endregion
 
@@ -64,7 +64,7 @@ public class Fouras extends NPC {
     //endregion
 
     public static void main(String[] args) {
-        Fouras f=new Fouras(null,"Fouras",100,0,0);
+        Fouras f=new Fouras(null,"Fouras",100,0,0,"");
         System.out.println(f);
         f.tellEnigma();
 

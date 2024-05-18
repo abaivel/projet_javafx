@@ -4,6 +4,7 @@ import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public abstract class Monster extends GameObject {
     }
     //endregion
     //region Constructeur
-    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y) {
+    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y,String urlImage) {
         super(w,x,y);
         this.name = name;
         this.lifePoints = lifePoints;
@@ -83,6 +84,9 @@ public abstract class Monster extends GameObject {
         this.defense = defense;
         this.inventory = inventory;
         this.alive=true;
+        this.node = new ImageView(urlImage);
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
     }
     //endregion
 
