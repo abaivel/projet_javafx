@@ -76,7 +76,7 @@ public class GameApplication extends Application {
         }
         Rectangle lifes = new Rectangle();
         lifes.setHeight(20);
-        lifes.setWidth(p.getLPDouble()*15);
+        lifes.setWidth(p.getLP()*15);
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
         infosPerso.getChildren().add(lifeBar);
@@ -177,10 +177,10 @@ public class GameApplication extends Application {
             }
         });
         //endregion
-        p.getLP().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
+        p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (p.getLPDouble()<=0){
+                if (p.getLP()<=0){
                     DefeatApplication defeat = new DefeatApplication();
                     try {
                         defeat.start(new Stage());
@@ -189,7 +189,7 @@ public class GameApplication extends Application {
                     }
                     stage.close();
                 }
-                lifes.setWidth(p.getLPDouble()*15);
+                lifes.setWidth(p.getLP()*15);
             }
         });
         p.sizeInventoryProperty().addListener(new ChangeListener<Number>() { //listener of the size of the player's inventory
@@ -229,7 +229,7 @@ public class GameApplication extends Application {
         w.addToWorld(wall);
         Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
         w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Sword",true,"ST+20",10,"potion1.png");
+        Potion potion = new Potion(w,30,2,"Sword",true,"ST+20",10,3,"potion1.png");
         w.addToWorld(potion);
         Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
         w.addToWorld(buoy);
@@ -241,7 +241,7 @@ public class GameApplication extends Application {
         w.addToWorld(book);
         Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
         w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 2, 1, new ArrayList<>(),25,13,"slime.png");
+        Slime slime = new Slime(w, "Slime", 5, 2, 1, new ArrayList<>(),25,13,2,"slime.png");
         w.addToWorld(slime);
         Tree tree = new Tree(w,5,17,"tree.png");
         w.addToWorld(tree);

@@ -6,6 +6,7 @@ import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Player.Player;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public abstract class Monster extends GameObject {
     //endregion
 
     //region Constructor
-    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown) {
+    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown,String urlImage) {
         super(w,x,y);
         this.name = name;
         this.lifePoints = lifePoints;
@@ -36,12 +37,16 @@ public abstract class Monster extends GameObject {
         this.alive=true;
         this.cooldown = cooldown;
         this.status = new HashMap<String, Integer>();
+        this.node = new ImageView(urlImage);
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
     }
 
     public Monster(ArrayList<Item> inventory){
-        this(null, "Monster",5,4,3,inventory,0,0,0);
+        this(null, "Monster",5,4,3,inventory,0,0,0,"");
         this.status = new HashMap<String, Integer>();                  //No status at first
     }
+
     //endregion
 
     //region Getters

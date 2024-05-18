@@ -25,7 +25,7 @@ public class Potion extends Item{
     }
 
     //endregion
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price, String urlImage) {
+    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price,int duration, String urlImage) {
         super(w,x, y, name, dropped, price,urlImage);
         this.position = position;
         this.effect = effect;

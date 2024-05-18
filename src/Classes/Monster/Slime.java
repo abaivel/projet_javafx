@@ -1,6 +1,7 @@
 package Classes.Monster;
 
 import Classes.Item.Item;
+import Classes.Player.Player;
 import Classes.World.World;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Slime extends Monster{
 
     @Override
     public int chooseAttack(Player player) {            //returns damage done
-        if(super.specialAttack() == true){
+        if(super.specialAttack()){
             System.out.println(this.getName() + " poisons " + player.getName());
             player.addStatus("poisoned",2);             //adding poisoned status to player
             this.setCooldown(3);                        //reset cooldown

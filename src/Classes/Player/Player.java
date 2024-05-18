@@ -10,8 +10,13 @@ import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Monster.Wolf;
 import Classes.World.Position;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
+import javafx.scene.input.MouseButton;
 
 import java.util.*;
 
@@ -30,30 +35,31 @@ public class Player extends GameObject {
     //endregion
 
     //region Player's attributes
-    private double LP;
+    private final DoubleProperty LP;
     private String name;
     private double money;
     private double strength;
     private double defense;                 //between 0 and 10
     private Map<String, Integer> status;
     private ArrayList<Item> inventory;
-    public ImageView image;
+    private final IntegerProperty sizeInventory;
     //endregion
 
     //region Constructor with all parameters
     public Player(World w, double LP, String name, double money, double strength, double defense, int x, int y) {
         super(w,x,y);
-        this.LP = LP;
+        this.LP = new SimpleDoubleProperty(LP);
         this.name = name;
         this.money = money;
         this.strength = strength;
         this.defense = defense;
         this.status = new HashMap<String, Integer>();                   //No status at first
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
-        //image=new ImageView("H:\\Desktop\\CY TECH\\S2\\Java\\PROJET-FX\\projet_javafx\\src\\main\\resources\\image_pinguin.png");
-        //image.setFitHeight((double) HEIGHT /ROWS);
-        //image.setFitWidth((double) WIDTH/COLUMNS);
-        /*g.add(image,x,y);*/
+        this.sizeInventory = new SimpleIntegerProperty(0);
+        node=new ImageView("image_pinguin.png");
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
+
     }
     //endregion
 
@@ -66,8 +72,15 @@ public class Player extends GameObject {
     //endregion
 
     //region Getters and Setters
-    public double getLP() {return this.LP;}
-    public void setLP(double LP) {this.LP = LP;}
+    public DoubleProperty getLPProperty() {return this.LP;}
+    public double getLP() {return this.LP.getValue();}
+    public void setLP(double LP) {
+        if (LP>=0) {
+            this.LP.set(LP);
+        }else{
+            this.LP.set(0);
+        }
+    }
 
     public String getName() {return this.name;}
     public void setName(String name) {this.name = name;}
@@ -110,18 +123,34 @@ public class Player extends GameObject {
 
     //region Inventory functions
     public void addToInventory(Item item){
-        this.inventory.add(item);
+        if (inventory.size()<10) {
+            this.inventory.add(item);
+            item.setDropped(false);
+            this.sizeInventory.set(sizeInventory.getValue() + 1);
+            Player p = this;
+            item.node.setOnMouseClicked(mouseEvent -> {
+                System.out.println(mouseEvent.getButton() == MouseButton.SECONDARY);
+                if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
+                    System.out.println("ici");
+                    p.removeFromInventory(item);
+                }
+            });
+        }
     }
 
     //Need to get the item for the Looter so return an item
     public Item removeFromInventory(Item item){
         int index = this.inventory.indexOf(item);
         if(index != -1){
+            this.sizeInventory.set(sizeInventory.getValue()-1);
             Item removed = this.inventory.remove(index);        //get the removed item
             return removed;
         }else{
             return null;                                        //if item not in inventory
         }
+    }
+    public IntegerProperty sizeInventoryProperty() {
+        return sizeInventory;
     }
 
     public Item randomItemFromInvetory(){
@@ -312,7 +341,7 @@ public class Player extends GameObject {
     //              +y means we go to the bottom of the y axis
     // (0,0) top left corner
     //TO DO : if obstacle, player cannot move there
-    public void move(String direction, int jump){
+    public void moveold(String direction, int jump){
         switch(direction){
             case "-x":
                 this.setPosition(this.position.getX()-1-jump,this.position.getY());
@@ -330,18 +359,54 @@ public class Player extends GameObject {
         }
     }
     //endregion
+    public void move(int x, int y) {
+        int x_start = getPosition().getX();
+        int y_start = getPosition().getY();
+        if (x>=0 && x<=39 && y>=0 && y<=17 && world.CanGoThere(x,y)) {
+            ArrayList<Item> listItems = world.IsThereItem(x,y);
+            for (Item i : listItems){
+                this.addToInventory(i);
+                world.removeFromWorld(i);
+            }
+            this.setPosition(x, y);
+            if (world.IsThereNPC(x,y)){
+                System.out.println("There are a NPC here !");
+            }
+            if (world.IsThereMonster(x,y)){
+                System.out.println("There are a Monster here !");
+            }
+            if (world.IsThereRiver(x,y)){
+                swim(); //you die
+            }
+            if (world.IsThereTrap(x,y)){
+                this.setLP(this.getLP()-2);
+            }
+        }
+    }
 
+    public void jump(int x, int y) {
+        System.out.println("function jump");
+        if (x>=0 && x<=39 && y>=0 && y<=17 && world.CanGoThere(x,y)) {
+            System.out.println("function jump");
+            if (world.CanJumpThere(this.getPosition().getX(),this.getPosition().getY(),x,y)){
+                System.out.println("function jump");
+                move(x,y);
+            }
+        }
+    }
     //region Automatic use of item
     //Use item named buoy to not drown into rivers
     //returns false if the player dies
     public boolean swim(){
         boolean swim = false;
-        for(int i = 0; i < inventory.size(); i++){
-            if(inventory.get(i) instanceof Buoy){
+        for (Item item : inventory) {
+            if (item instanceof Buoy) {
                 swim = true;                            //Search for buoy
+                break;
             }
         }
-        if(swim == false){
+        System.out.println(swim);
+        if(!swim){
             this.setLP(0);
             return false;
         }
