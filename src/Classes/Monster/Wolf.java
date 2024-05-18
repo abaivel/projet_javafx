@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Wolf extends Monster{
     //region Constructor
-    public Wolf(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown) {
-        super(w, name, lifePoints, force, defense, inventory, x, y, cooldown);
+    public Wolf(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown, String urlImage) {
+        super(w, name, lifePoints, force, defense, inventory, x, y, cooldown, urlImage);
     }
 
     public Wolf(ArrayList<Item> inventory){
@@ -21,7 +21,7 @@ public class Wolf extends Monster{
 
     @Override
     public int chooseAttack(Player player) {            //returns damage done
-        if(super.specialAttack() == true){
+        if(super.specialAttack()){
             this.setCooldown(3);                        //reset cooldown
             return 2;                                   //does double damage to player
         }else{

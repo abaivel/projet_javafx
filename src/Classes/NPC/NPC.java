@@ -3,6 +3,7 @@ import Classes.GameObject;
 import Classes.Item.Item;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
@@ -14,17 +15,20 @@ public abstract class NPC extends GameObject {
     //endregion
 
     //region Constructor with all parameters
-    public NPC(World w, String name, double money, int x, int y) {
+    public NPC(World w, String name, double money, int x, int y, String urlImage) {
         super(w,x,y);
         this.name = name;
         this.money = money;
         this.inventory = new ArrayList<>();
+        this.node = new ImageView(urlImage);
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
     }
     //endregion
 
     //region Default constructor
     public NPC(String name) {
-        this(null, "NPC",100,0,0);
+        this(null, "NPC",100,0,0,"");
     }
     //endregion
 

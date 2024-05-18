@@ -69,11 +69,11 @@ public class Fight {
     public static void main(String[] args) {
         ArrayList<Item> items = new ArrayList<>();
         ArrayList<Item> itemsMT = new ArrayList<>();
-        Potion potion = new Potion(null,0,0,"WuawPotion",false,"ST+20",10,3);
-        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",10,3);
-        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",10,3);
-        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",10,3);
-        Key key = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4);
+        Potion potion = new Potion(null,0,0,"WuawPotion",false,"ST+20",10,3,"");
+        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",10,3,"");
+        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",10,3,"");
+        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",10,3,"");
+        Key key = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4,"");
         items.add(potion);
         items.add(potion2);
         items.add(potion3);
@@ -81,7 +81,7 @@ public class Fight {
         items.add(potion4);
         Player player = new Player(null, 5,"Mighty fighter",10,3,2,0,0);
         player.setInventory(items);
-        Slime slime = new Slime(null, "slimy", 5,3,2,itemsMT,0,0,0);
+        Slime slime = new Slime(null, "slimy", 5,3,2,itemsMT,0,0,0,"");
 
         Fight fight = new Fight(player, slime);
         fight.launchFight();

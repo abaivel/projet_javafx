@@ -11,10 +11,9 @@ import java.util.Random;
 
 public class Looter extends Monster{
     //region Constructor
-    public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown) {
-        super(w, name, lifePoints, force, defense, inventory, x, y, cooldown);
+    public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y,int cooldown, String urlImage) {
+        super(w, name, lifePoints, force, defense, inventory, x, y,cooldown,urlImage);
     }
-
     public Looter(ArrayList<Item> inventory){
         super(inventory);
     }
@@ -22,11 +21,11 @@ public class Looter extends Monster{
 
     @Override
     public int chooseAttack(Player player) {            //returns damage done
-        if(super.specialAttack() == true) {
+        if(super.specialAttack()) {
             this.setCooldown(3);                        //reset cooldown
             this.addToInventory(player.removeFromInventory(player.randomItemFromInvetory()));   //steals a random object from the player's inventory
             return 0;                                   //returns 0 because steals an object instead of attacking
-        } else if(this.canUseObject() == true){
+        } else if(this.canUseObject()){
             this.setCooldown(this.getCooldown()-1);
             Item randomItem = this.randomItemFromInventory();        //gets a random item from the looter's inventory
             if(randomItem instanceof Potion){

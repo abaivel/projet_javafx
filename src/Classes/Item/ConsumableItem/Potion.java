@@ -15,16 +15,6 @@ public class Potion extends Item{
     //region Potion's attributes
     private String effect;
     private int duration;
-    //endregion
-
-    //region Constructor
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price, int duration) {
-        super(w,x, y, name, dropped, price);
-        this.position = position;
-        this.effect = effect;
-        this.duration = duration;
-    }
-    //endregion
 
     //region Getters and Setters
     public int getDuration() {return duration;}
@@ -35,12 +25,11 @@ public class Potion extends Item{
     }
 
     //endregion
-
-    //region toString
-    public String toString(){
-        String tmp = super.toString();
-        tmp += ", Effect " + effect + ", Duration " + duration;
-        return tmp;
+    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price,int duration, String urlImage) {
+        super(w,x, y, name, dropped, price,urlImage);
+        this.position = position;
+        this.effect = effect;
+        this.duration = duration;
     }
     //endregion
 }
