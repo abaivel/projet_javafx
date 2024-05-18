@@ -106,19 +106,19 @@ public class World {
         listClasses[0]=Trap.class;
         return instanceOf(gridObjects[x][y], listClasses);
     }
-    public boolean IsThereNPC(int x, int y){
+    public NPC IsThereNPC(int x, int y){
         Class<?>[] listClasses = new Class[1];
         listClasses[0]=NPC.class;
         for (int i=x-1;i<=x+1;i++){
             for (int j=y-1;j<=y+1;j++){
                 if (i>=0 && i<=39 && j>=0 && j<=17) {
                     if (instanceOf(gridObjects[i][j],listClasses)){
-                        return true;
+                        return (NPC)gridObjects[i][j].get(0);
                     }
                 }
             }
         }
-        return false;
+        return null;
     }
     public boolean IsThereMonster(int x, int y){
         Class<?>[] listClasses = new Class[1];

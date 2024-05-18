@@ -9,11 +9,9 @@ import Classes.Monster.Slime;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Monster.Wolf;
+import Classes.NPC.NPC;
 import Classes.World.Position;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
 import javafx.scene.input.MouseButton;
@@ -43,6 +41,8 @@ public class Player extends GameObject {
     private Map<String, Integer> status;
     private ArrayList<Item> inventory;
     private final IntegerProperty sizeInventory;
+
+    private final ObjectProperty<NPC> nearByNPC;
     //endregion
 
     //region Constructor with all parameters
@@ -56,6 +56,7 @@ public class Player extends GameObject {
         this.status = new HashMap<String, Integer>();                   //No status at first
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
         this.sizeInventory = new SimpleIntegerProperty(0);
+        this.nearByNPC=new SimpleObjectProperty<>(null);
         node=new ImageView("image_pinguin.png");
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -99,6 +100,17 @@ public class Player extends GameObject {
 
     public HashMap<String, Integer> getStatus() {
         return (HashMap<String, Integer>) this.status;
+    }
+    public NPC getNearByNPC() {
+        return nearByNPC.get();
+    }
+
+    public ObjectProperty<NPC> nearByNPCProperty() {
+        return nearByNPC;
+    }
+
+    public void setNearByNPC(NPC nearByNPC) {
+        this.nearByNPC.set(nearByNPC);
     }
 
 
@@ -369,8 +381,10 @@ public class Player extends GameObject {
                 world.removeFromWorld(i);
             }
             this.setPosition(x, y);
-            if (world.IsThereNPC(x,y)){
+            NPC npc= world.IsThereNPC(x,y);
+            if (npc!=null){
                 System.out.println("There are a NPC here !");
+                setNearByNPC(npc);
             }
             if (world.IsThereMonster(x,y)){
                 System.out.println("There are a Monster here !");
