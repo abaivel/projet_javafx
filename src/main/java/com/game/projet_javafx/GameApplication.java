@@ -10,6 +10,7 @@ import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
 import Classes.Monster.Slime;
 import Classes.NPC.Fouras;
+import Classes.NPC.NPC;
 import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
@@ -215,6 +216,12 @@ public class GameApplication extends Application {
                         }
                     }
                 }
+            }
+        });
+        p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
+            @Override
+            public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
+                System.out.println("I am near a NPC");
             }
         });
     }
