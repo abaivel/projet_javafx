@@ -18,7 +18,7 @@ public class VictoryApplication extends Application {
     Media media;
     MediaPlayer mediaPlayer;
     public VictoryApplication() {
-        File file = new File("H:\\Documents\\école\\ING1\\POO Java\\projet_javafx\\projet_javafx\\src\\main\\resources\\victory_music.m4a");//"H:\\Documents\\école\\ING1\\POO Java\\Programmes\\tp2 ihm\\tp2\\src\\main\\resources\\ts.mp3");
+        File file = new File("H:\\Desktop\\CY TECH\\S2\\Java\\PROJET-FX\\projet_javafx\\src\\main\\resources\\victory_music.m4a");//"H:\\Documents\\école\\ING1\\POO Java\\Programmes\\tp2 ihm\\tp2\\src\\main\\resources\\ts.mp3");
         System.out.println("here");
         final String MEDIA_URL = file.toURI().toString();
         System.out.println("here");

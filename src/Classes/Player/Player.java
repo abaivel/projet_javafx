@@ -35,7 +35,7 @@ public class Player extends GameObject {
     //region Player's attributes
     private final DoubleProperty LP;
     private String name;
-    private double money;
+    private final DoubleProperty money;
     private double strength;
     private double defense;                 //between 0 and 10
     private Map<String, Integer> status;
@@ -50,7 +50,7 @@ public class Player extends GameObject {
         super(w,x,y);
         this.LP = new SimpleDoubleProperty(LP);
         this.name = name;
-        this.money = money;
+        this.money = new SimpleDoubleProperty(money);
         this.strength = strength;
         this.defense = defense;
         this.status = new HashMap<String, Integer>();                   //No status at first
@@ -86,8 +86,10 @@ public class Player extends GameObject {
     public String getName() {return this.name;}
     public void setName(String name) {this.name = name;}
 
-    public double getMoney() {return this.money;}
-    public void setMoney(double money) {this.money = money;}
+    public DoubleProperty getMoneyProperty() {return this.money;}
+    public double getMoney() {return this.money.getValue();}
+
+    public void setMoney(double money) {this.money.set(money);}
 
     public double getStrength() {return this.strength;}
     public void setStrength(double strength) {this.strength = strength;}
@@ -118,7 +120,7 @@ public class Player extends GameObject {
 
     //region ToString function to print
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoneyProperty() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
         if(!inventory.isEmpty()){
             tmp += "Inventory : ";
         }
@@ -408,6 +410,7 @@ public class Player extends GameObject {
             }
         }
     }
+
     //region Automatic use of item
     //Use item named buoy to not drown into rivers
     //returns false if the player dies

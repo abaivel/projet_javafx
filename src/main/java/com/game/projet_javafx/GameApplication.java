@@ -10,7 +10,9 @@ import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
 import Classes.Monster.Slime;
 import Classes.NPC.Fouras;
+import Classes.NPC.Merchant;
 import Classes.NPC.NPC;
+import Classes.NPC.UselessPerson;
 import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
@@ -30,6 +32,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import Classes.World.World;
@@ -37,6 +40,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -57,6 +61,12 @@ public class GameApplication extends Application {
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
         Player p = new Player(world,10,"Truc",25,8,2,5,5);
+        Key key0 = new Key(null,0,0,"Keyyy0",false,"GREEN",4,"potion1.png");
+        Key key1 = new Key(null,0,0,"Keyyy1",false,"GREEN",4,"potion1.png");
+        Key key2 = new Key(null,0,0,"Keyyy2",false,"GREEN",4,"potion1.png");
+        p.addToInventory(key0);
+        p.addToInventory(key1);
+        p.addToInventory(key2);
         world.addToWorld(p);
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -94,7 +104,11 @@ public class GameApplication extends Application {
                 inventory.add(r, i, j);
             }
         }
+        Label moneyLabel = new Label();
+        moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
+        Pane money = new Pane(moneyLabel);
         infosBottom.getChildren().add(inventory);
+        infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
 
 
@@ -218,10 +232,43 @@ public class GameApplication extends Application {
                 }
             }
         });
+        p.getMoneyProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                System.out.println(p.getMoneyProperty());
+
+            }
+        });
         p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
             @Override
             public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
                 System.out.println("I am near a NPC");
+                NPC npcDiag = p.getNearByNPC();
+                if(npcDiag instanceof Merchant merchantDiag){
+                    DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
+                    try {
+                        diagApp.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if(npcDiag instanceof Fouras fourasDiag){
+                    DialogFourasApplication diagFouApp = new DialogFourasApplication(fourasDiag,p);
+                    try {
+                        diagFouApp.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if(npcDiag instanceof UselessPerson upDiag){
+                    DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
+                    try {
+                        diagUseless.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
+
             }
         });
     }
@@ -232,6 +279,25 @@ public class GameApplication extends Application {
 
     public World createWorld1(){
         World w = new World("#639620");
+        Merchant merchant0 = new Merchant(w,"Bob",10,3,2,"fouras.png");
+
+        ArrayList<Item> items = new ArrayList<>();
+        Potion potion0 = new Potion(null,0,0,"WuawPotion",false,"ST+20",10,3,"potion1.png");
+        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",10,3,"potion1.png");
+        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",10,3,"potion1.png");
+        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",10,3,"potion1.png");
+        Key key0 = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4,"potion1.png");
+        items.add(potion0);
+        items.add(potion2);
+        items.add(potion3);
+        items.add(key0);
+        items.add(potion4);
+        merchant0.setInventory(items);
+        w.addToWorld(merchant0);
+
+        UselessPerson up = new UselessPerson(w,"Aurélien",2,3,5,"vase.png");
+        w.addToWorld(up);
+
         Wall wall = new Wall(w,2,2);
         w.addToWorld(wall);
         Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
