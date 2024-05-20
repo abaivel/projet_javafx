@@ -282,16 +282,22 @@ public class GameApplication extends Application {
         Merchant merchant0 = new Merchant(w,"Bob",10,3,2,"fouras.png");
 
         ArrayList<Item> items = new ArrayList<>();
-        Potion potion0 = new Potion(null,0,0,"WuawPotion",false,"ST+20",10,3,"potion1.png");
-        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",10,3,"potion1.png");
-        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",10,3,"potion1.png");
-        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",10,3,"potion1.png");
+        Potion potion0 = new Potion(null,0,0,"WuawPotion",false,"ST+20",1,3,"potion1.png");
+        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",1,3,"potion1.png");
+        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",1,3,"potion1.png");
+        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",1,3,"potion1.png");
+        Potion potion5 = new Potion(null,0,0,"etsetstset",false,"DE+40",1,3,"potion1.png");
+        Potion potion6 = new Potion(null,0,0,"bonjout",false,"DE+40",1,3,"potion1.png");
+        Potion potion7 = new Potion(null,0,0,"boup",false,"DE+40",1,3,"potion1.png");
         Key key0 = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4,"potion1.png");
         items.add(potion0);
         items.add(potion2);
         items.add(potion3);
         items.add(key0);
         items.add(potion4);
+        items.add(potion5);
+        items.add(potion6);
+        items.add(potion7);
         merchant0.setInventory(items);
         w.addToWorld(merchant0);
 

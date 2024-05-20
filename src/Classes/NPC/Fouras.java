@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
+//NPC that tells enigmas to the player and reward him with soms coins for the right answer
 public class Fouras extends NPC {
     //region Fouras's attributes
     private Map<String, String> enigma;
     //endregion
 
-    //Constructor with all parameters
+    //region Constructor with all parameters
     public Fouras(World w, String name, double money, int x, int y, String urlImage) {
         super(w,name, money, x, y, urlImage);
         this.enigma = new HashMap<>();
@@ -35,13 +35,13 @@ public class Fouras extends NPC {
     public void setEnigma(Map<String, String> enigma) {this.enigma = enigma;}
     //endregion
 
-    //TODO : add a reward ? Give some of his money ? Example he gives off 10% of his total money
     //region Function to tell an enigma to the player
     public String tellEnigma(){
         String[] keys = this.getEnigma().keySet().toArray(new String[0]);   //Puts the keySet into a List of Strings
         int i = (int) (Math.random() * keys.length);                        //Generates a random int between 0 and the list's length
         return keys[i];                                                     //Random key in the keySet
     }
+
     //Function to check to player's answer to the question
     public boolean checkAnswer(Player p, String question, String answer){
         if(answer.equals(this.getEnigma().get(question))){
@@ -62,13 +62,5 @@ public class Fouras extends NPC {
         return answer;
     }
     //endregion
-
-    public static void main(String[] args) {
-        Fouras f=new Fouras(null,"Fouras",100,0,0,"");
-        System.out.println(f);
-        f.tellEnigma();
-
-    }
-
 
 }

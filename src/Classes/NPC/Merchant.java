@@ -26,6 +26,7 @@ public class Merchant extends NPC {
     public Merchant(String name) {
         this(null,name,100,0,0,"");
     }
+    //endregion
 
     //region Getters and Setters
     public void setDialogues(String[] dialogues) {this.dialogues = dialogues;}
@@ -47,10 +48,11 @@ public class Merchant extends NPC {
         }
     }
     //endregion
+
     //TODO : verify that inventory is not full ????????
     //region For a merchant to buy stuff from the player   -> merchant looses money
     public boolean buy(Player p, Item item){
-        if (item.getPrice()<this.getMoney()){  //if the merchant has enough money to buy the item, the merchant can buy the item
+        if (item.getPrice()<this.getMoney() && !(this.inventoryIsFull())){  //if the merchant has enough money to buy the item, the merchant can buy the item
             //item part
             p.removeFromInventory(item);
             this.addToInventory(item);
@@ -78,8 +80,4 @@ public class Merchant extends NPC {
     }
     //endregion
 
-    public static void main(String[] args) {
-        Merchant merchant = new Merchant("Bob The Merchant");
-
-    }
 }

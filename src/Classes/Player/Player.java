@@ -140,7 +140,7 @@ public class Player extends GameObject {
         if (inventory.size()<10) {
             this.inventory.add(item);
             item.setDropped(false);
-            this.sizeInventory.set(sizeInventory.getValue() + 1);
+            this.sizeInventory.set(sizeInventory.getValue() + 1);   //TODO : doesn't it update by itself ??
             Player p = this;
             item.node.setOnMouseClicked(mouseEvent -> {
                 System.out.println(mouseEvent.getButton() == MouseButton.SECONDARY);
@@ -437,7 +437,7 @@ public class Player extends GameObject {
     //updates the inventory with adding the new item
     public void pickItem(Item item){
         //faire ajouter à arraylise TO DO
-        //verifier si inventaire pas full
+        //verifier si inventaire pas full   --> pour front si inventaire full -> alert de type warning
         if(item.getName().equals("Hedgehog")){
             //calls front
         }
@@ -460,7 +460,6 @@ public class Player extends GameObject {
         return false;
     }
 
-    //TODO how to get the potion the player wants ?????
     public Potion choosePotion(){
         int i=0;
         ArrayList<Potion> potionlist = new ArrayList<>();
