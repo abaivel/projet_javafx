@@ -42,6 +42,8 @@ public abstract class NPC extends GameObject {
     public ArrayList<Item> getInventory() {return this.inventory;}
     public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
     //endregion
+
+    //region Inventory functions
     public boolean addToInventory(Item item) {
         if (this.getInventory().size() < 10) {
             this.getInventory().add(item);
@@ -53,12 +55,13 @@ public abstract class NPC extends GameObject {
     }
 
     public boolean inventoryIsFull() {
-        return this.getInventory().size() == 10;
+        return this.getInventory().size() == 9;
     }
 
     public void removeFromInventory(Item item){
         this.inventory.remove(item);
     }
+    //endregion
 
     //region ToString function to print
     public String toString() {

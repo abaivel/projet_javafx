@@ -60,6 +60,8 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
+
+        //Player's instance
         Player p = new Player(world,10,"Truc",25,8,2,5,5);
         Key key0 = new Key(null,0,0,"Keyyy0",false,"GREEN",4,"potion1.png");
         Key key1 = new Key(null,0,0,"Keyyy1",false,"GREEN",4,"potion1.png");
@@ -68,14 +70,19 @@ public class GameApplication extends Application {
         p.addToInventory(key1);
         p.addToInventory(key2);
         world.addToWorld(p);
+
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
+
         FlowPane infosPerso = new FlowPane(Orientation.VERTICAL);
         infosBottom.getChildren().add(infosPerso);
         /*ImageView avatar = new ImageView("image_pinguin.png");
         avatar.setFitWidth(70);
         avatar.setFitHeight(70);
         infosPerso.getChildren().add(avatar);*/
+
+        //TODO : create seperate functions to make code more clear ?
+        //PLayer's lifebar
         GridPane lifeBar = new GridPane();
         lifeBar.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px; -fx-max-height: 20");
         for (int i=0;i<10;i++){
@@ -91,6 +98,8 @@ public class GameApplication extends Application {
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
         infosPerso.getChildren().add(lifeBar);
+
+        //Player's inventory
         GridPane inventory = new GridPane();
         inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
         inventory.setHgap(5);
@@ -104,15 +113,18 @@ public class GameApplication extends Application {
                 inventory.add(r, i, j);
             }
         }
-        Label moneyLabel = new Label();
+
+        //Player's money
+        Label moneyLabel = new Label();                                     //creating the label for the front
         moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
-        Pane money = new Pane(moneyLabel);
+        Pane money = new Pane(moneyLabel);                                  //pane creation
+
+        //Filling infosBottom FlowPane
         infosBottom.getChildren().add(inventory);
         infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
 
-
-
+        //Scene creation
         Scene scene = new Scene(flowPane);
         stage.setTitle("Hello!");
         stage.setScene(scene);
@@ -137,6 +149,7 @@ public class GameApplication extends Application {
                 }
             }
         });*/
+
         //region movement
         final BooleanProperty spacePressed = new SimpleBooleanProperty(false);
         final BooleanProperty rightPressed = new SimpleBooleanProperty(false);
@@ -192,6 +205,8 @@ public class GameApplication extends Application {
             }
         });
         //endregion
+
+        //region Player's attributes listeners
         p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -207,6 +222,7 @@ public class GameApplication extends Application {
                 lifes.setWidth(p.getLP()*15);
             }
         });
+
         p.sizeInventoryProperty().addListener(new ChangeListener<Number>() { //listener of the size of the player's inventory
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -232,6 +248,7 @@ public class GameApplication extends Application {
                 }
             }
         });
+
         p.getMoneyProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -239,29 +256,32 @@ public class GameApplication extends Application {
 
             }
         });
+        //endregion
+
+
         p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
             @Override
             public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
                 System.out.println("I am near a NPC");
                 NPC npcDiag = p.getNearByNPC();
-                if(npcDiag instanceof Merchant merchantDiag){
+                if(npcDiag instanceof Merchant merchantDiag){                                               //If near a merchant
                     DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
                     try {
-                        diagApp.start(new Stage());
+                        diagApp.start(new Stage());                                                         //starts dialog
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                }else if(npcDiag instanceof Fouras fourasDiag){
+                }else if(npcDiag instanceof Fouras fourasDiag){                                             //If near a Fouras
                     DialogFourasApplication diagFouApp = new DialogFourasApplication(fourasDiag,p);
                     try {
-                        diagFouApp.start(new Stage());
+                        diagFouApp.start(new Stage());                                                      //starts dialog
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                }else if(npcDiag instanceof UselessPerson upDiag){
+                }else if(npcDiag instanceof UselessPerson upDiag){                                          //If near a UselessPerson
                     DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
                     try {
-                        diagUseless.start(new Stage());
+                        diagUseless.start(new Stage());                                                     //starts dialog
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -273,10 +293,8 @@ public class GameApplication extends Application {
         });
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
+    //TODO : build 2 other worlds and do portals between them
+    //region World Creation
     public World createWorld1(){
         World w = new World("#639620");
         Merchant merchant0 = new Merchant(w,"Bob",10,3,2,"fouras.png");
@@ -337,5 +355,10 @@ public class GameApplication extends Application {
             w.addToWorld(r2);
         }
         return w;
+    }
+    //endregion
+
+    public static void main(String[] args) {
+        launch();
     }
 }

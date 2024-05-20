@@ -28,6 +28,7 @@ public class DialogUselessApplication extends Application {
     public Player getPlayer() {return player;}
     //endregion
 
+    //region start function
     @Override
     public void start(Stage stage) throws Exception {
         Alert uselessDialog = new Alert(Alert.AlertType.CONFIRMATION);                      //Alert dialog window : opens when nearby a UselessPerson
@@ -51,7 +52,9 @@ public class DialogUselessApplication extends Application {
             }
         }
     }
+    //endregion
 
+    //region Handlers
     private void handleWelcomeDialog() {                                                    //To handle situation if player welcomes
         Alert welcomeAlert = new Alert(Alert.AlertType.INFORMATION);                        //new alert that informs -> no choice to do
         welcomeAlert.setTitle("Welcome");
@@ -67,6 +70,7 @@ public class DialogUselessApplication extends Application {
         goodbyeAlert.setContentText(uselessPerson.goodbye());                               //displays UselessPeron's dialog
         goodbyeAlert.showAndWait();                                                         //window will close when clicking ok button or top right cross
     }
+    //endregion
 
 
 }
