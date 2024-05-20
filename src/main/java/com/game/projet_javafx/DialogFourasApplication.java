@@ -60,7 +60,7 @@ public class DialogFourasApplication extends Application {
 
         Optional<String> result = answerDialog.showAndWait();                                   //gets the player's answer
         if (result.isPresent()) {
-            String answer = result.get();                                                       //convert to String the answer
+            String answer = result.get().toLowerCase();                                         //convert to String the answer
             boolean isCorrect = this.getFouras().checkAnswer(this.getPlayer(), enigma, answer); //checks the answer with Fouras' function
             if (isCorrect) {                                                                    //is the player is correct
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

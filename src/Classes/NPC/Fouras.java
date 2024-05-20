@@ -53,7 +53,7 @@ public class Fouras extends NPC {
     }
     //endregion
 
-    //region Function called in TellEnigma() to get the answer via input
+    //region Function called in TellEnigma() to get the answer via input --> back not front
     public String answerEnigma(){
         Scanner input = new Scanner(System.in);                         //Create a Scanner object for the player's input
         System.out.println("Enter your answer to the enigma");
