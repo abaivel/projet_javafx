@@ -209,40 +209,40 @@ public class GameApplication extends Application {
         //region Player's attributes listeners
         p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (p.getLP()<=0){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {  //function called when Player's LP change
+                if (p.getLP()<=0){                                                                              //verification failure condition
                     DefeatApplication defeat = new DefeatApplication();
                     try {
-                        defeat.start(new Stage());
+                        defeat.start(new Stage());                                                              //launch defeat stage
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                     stage.close();
-                }
-                lifes.setWidth(p.getLP()*15);
+                }                                                                                               //15 is the size of one "life"
+                lifes.setWidth(p.getLP()*15);                                                                   //for the front resizes life bar with LP left
             }
         });
 
         p.sizeInventoryProperty().addListener(new ChangeListener<Number>() { //listener of the size of the player's inventory
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (p.contains("Hedgehog")){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {      //function called when the size of the inventory changes
+                if (p.contains("Hedgehog")){                                                                        //verification of win condition
                     stage.close();
                     VictoryApplication victory = new VictoryApplication();
                     try {
-                        victory.start(new Stage());
+                        victory.start(new Stage());                                                                 //launch victory stage
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
                 System.out.println("CHANGE");
                 System.out.println(p.getInventory());
-                inventory.getChildren().removeIf(n -> n instanceof ImageView);
+                inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
                 for (int i=0;i<2;i++){
                     for (int j=0;j<5;j++) {
                         int index = i*5+j;
                         if (index<p.sizeInventoryProperty().getValue()) {
-                            inventory.add(p.getInventory().get(index).getNode(), j, i);
+                            inventory.add(p.getInventory().get(index).getNode(), j, i);     //add items one by one to the gridpane
                         }
                     }
                 }
