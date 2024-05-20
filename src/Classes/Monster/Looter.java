@@ -7,6 +7,7 @@ import Classes.World.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Looter extends Monster{
@@ -59,11 +60,11 @@ public class Looter extends Monster{
         potion.setUsed(true);                                           //Set the status used to true because potions are single use
         this.getInventory().remove(potion);
 
-        if(potion.getEffect().substring(2, 3).equals("+")){           //if the potion is a bonus, looter applies to himself
+        if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
-        }else if(potion.getEffect() == "LIFE") {
-            this.setLifePoints(this.getLifePoints() + Integer.getInteger(potion.getEffect().substring(3)));
-        }else if(potion.getEffect().substring(2, 3).equals("-")){     //if the potion is a malus, looter applies it to the player
+        }else if(potion.getEffect().startsWith("LIFE")) {
+            this.setLifePoints(this.getLifePoints() + Integer.getInteger(potion.getEffect().substring(4)));
+        }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             player.addStatus(potion.getEffect(), potion.getDuration());
         }
     }

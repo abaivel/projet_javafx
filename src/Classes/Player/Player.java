@@ -25,24 +25,22 @@ import java.util.Map;
 import static java.lang.Math.random;
 
 public class Player extends GameObject {
-    //region Constants
-    private static final int HEIGHT = 675;
-    private static final int WIDTH = 1500;
-    private static final int ROWS = 18;
-    private static final int COLUMNS=40;
-    //endregion
-
     //region Player's attributes
     private final DoubleProperty LP;
     private String name;
     private double money;
     private double strength;
     private double defense;                 //between 0 and 10
+    private boolean dodge;
     private Map<String, Integer> status;
+
+    private final IntegerProperty numberStatus;
     private ArrayList<Item> inventory;
     private final IntegerProperty sizeInventory;
 
     private final ObjectProperty<NPC> nearByNPC;
+
+    private final ObjectProperty<Monster> nearByMonster;
     //endregion
 
     //region Constructor with all parameters
@@ -54,9 +52,12 @@ public class Player extends GameObject {
         this.strength = strength;
         this.defense = defense;
         this.status = new HashMap<String, Integer>();                   //No status at first
+        this.numberStatus = new SimpleIntegerProperty(0);
         this.inventory = new ArrayList<>();       //Inventory size is 9 slots max
         this.sizeInventory = new SimpleIntegerProperty(0);
         this.nearByNPC=new SimpleObjectProperty<>(null);
+        this.nearByMonster=new SimpleObjectProperty<>(null);
+        this.dodge=false;
         node=new ImageView("image_pinguin.png");
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -77,7 +78,11 @@ public class Player extends GameObject {
     public double getLP() {return this.LP.getValue();}
     public void setLP(double LP) {
         if (LP>=0) {
-            this.LP.set(LP);
+            if (LP>10){
+                this.LP.set(10);
+            }else {
+                this.LP.set(LP);
+            }
         }else{
             this.LP.set(0);
         }
@@ -96,10 +101,25 @@ public class Player extends GameObject {
     public void setDefense(double defense) {this.defense = defense;}
 
     public ArrayList<Item> getInventory() {return this.inventory;}
-    public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory = inventory;
+        this.sizeInventory.set(inventory.size());
+
+    }
 
     public HashMap<String, Integer> getStatus() {
         return (HashMap<String, Integer>) this.status;
+    }
+    public int getNumberStatus() {
+        return numberStatus.get();
+    }
+
+    public IntegerProperty numberStatusProperty() {
+        return numberStatus;
+    }
+
+    public void setNumberStatus(int numberStatus) {
+        this.numberStatus.set(numberStatus);
     }
     public NPC getNearByNPC() {
         return nearByNPC.get();
@@ -111,6 +131,24 @@ public class Player extends GameObject {
 
     public void setNearByNPC(NPC nearByNPC) {
         this.nearByNPC.set(nearByNPC);
+    }
+    public Monster getNearByMonster() {
+        return nearByMonster.get();
+    }
+
+    public ObjectProperty<Monster> nearByMonsterProperty() {
+        return nearByMonster;
+    }
+
+    public void setNearByMonster(Monster nearByMonster) {
+        this.nearByMonster.set(nearByMonster);
+    }
+    public boolean isDodge() {
+        return dodge;
+    }
+
+    public void setDodge(boolean dodge) {
+        this.dodge = dodge;
     }
 
 
@@ -205,13 +243,16 @@ public class Player extends GameObject {
     //region Status functions
     public void addStatus(String key, int value) {
         this.getStatus().put(key, value);
+        this.setNumberStatus(this.getNumberStatus()+1);
     }
 
     //Removes status from the map when they reach count 0
     public void statusWornOff(){
         for(String s : this.status.keySet()){       //loop on the keyset
+            this.status.put(s,this.status.get(s)-1);
             if(this.status.get(s) == 0){            //verification if value is 0
                 this.status.remove(s);              //removes the status
+                this.setNumberStatus(this.getNumberStatus()-1);
             }
         }
     }
@@ -219,67 +260,83 @@ public class Player extends GameObject {
     //Returns the defense status (in percentage) depending on all the potions : buff and debuff
     public int defenseStatus(){
         int defense = 0;                                     //a percentage
-        if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
+        for (String key : this.status.keySet()){
+            if (key.contains("DE+")){
+                defense += Integer.parseInt(key.substring(3));
+            }else if (key.contains("DE-")){
+                defense += Integer.parseInt(key.substring(3));
+            }
+        }
+        /*if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
             this.status.put("DE+",this.status.get("DE+")-1);
             defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
         } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
             this.status.put("DE-",this.status.get("DE-")-1);
             defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
-        }
+        }*/
         return defense;
     }
 
     //Returns the strength status (in percentage) depending on all the potions : buff and debuff
     public int strengthStatus(){
         int strength = 0;                                                       //a percentage
-        if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
+        for (String key : this.status.keySet()){
+            if (key.contains("ST+")){
+                strength +=  Integer.parseInt(key.substring(3));
+            }else if (key.contains("ST-")){
+                strength += Integer.parseInt(key.substring(3));
+            }
+        }
+        /*if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
             this.status.put("ST+",this.status.get("ST+")-1);
             strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
         } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
             this.status.put("ST-",this.status.get("ST-")-1);
             strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
-        }
+        }*/
         return strength;
     }
 
     public void isPoisonned(){
         if(this.status.containsKey("poisoned")){                              //if poisoned take one make damage per turn
             this.setLP(this.getLP()- 2);                                      //received poison damage
-            this.status.put("poisoned",this.status.get("poisoned")-1);
         }
     }
     //endregion
 
     //region Fight -> Attack, Defense, Dodge, Use potion
     //Chooses the action done in fight
-    public double chooseAction(int action, Monster monster){        //returns if deal damage or not
+    public double chooseAction(int action, Monster monster, Potion potion){        //returns if deal damage or not
+        int doDamages=0;
         if (action == 0 && this.canUsePotion()) {                   //use potion
-            Potion potion = this.choosePotion();
             this.usePotion(monster, potion);
-            return 0;                                               //doesn't do any damage
         }else if(action == 1){                                      //attack
             System.out.println(this.getName() + " attacks !");
-            return 1;                                               //1 meaning damage done
+            doDamages=1;                                               //1 meaning damage done
         }else if(action == 2){                                      //dodge
             System.out.println(this.getName() + " tries to dodge : ");
             this.dodge();
-            return 0;                                               //doesn't do any damage
         }
-        return 0;
+        //this.statusWornOff();                                   //At the end of the round, removes worn off effects from the Map
+        return doDamages;
     }
 
     //Attack function for combat -> return the amount of damage done to the ennemy
-    public double attack(int i, Monster monster){               //i is for the action the player wants : refer to chooseAction()
+    public double attack(int i, Monster monster, Potion potion){               //i is for the action the player wants : refer to chooseAction()
         System.out.println(this.getName() + " acts !");
+        System.out.println(this.status);
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
-        this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
+        this.statusWornOff();
         int STStatus = strengthStatus();
         if(STStatus > 0){                                       //If Strengh+ status -> add it to damage done
-            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
+            System.out.println("A");
+            return this.chooseAction(i, monster, potion) * (this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
         }else if(STStatus < 0){                                 //If Strengh- status -> remove it to damage done
-            return (this.chooseAction(i, monster) * this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
+            System.out.println("B");
+            return this.chooseAction(i, monster,potion) * (this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
         }else{
-            return this.chooseAction(i, monster) * this.getStrength() + weaponDamage;                         //no buff or debuff                                                                    //attack with the flat value of strength
+            System.out.println("C");
+            return this.chooseAction(i, monster,potion) * (this.getStrength() + weaponDamage);                         //no buff or debuff                                                                    //attack with the flat value of strength
         }
     }
 
@@ -287,7 +344,7 @@ public class Player extends GameObject {
     //Defense function for combat -> removes LF to the player
     public void defend(double ennemyAttack){
         System.out.println(this.getName() + " defends!");
-        this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
+        //this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         this.isPoisonned();                                     //Takes damage from poison if is poisoned
         int DEStatus = defenseStatus();
 
@@ -303,24 +360,34 @@ public class Player extends GameObject {
         }
     }
 
-    public boolean dodge(){
-        double d;
-        if(this.status.containsKey("DE+")){       //if the player is under a potion that boost his defense
+    public void dodge(){
+        double d = (this.getDefense()) * 10;
+        for (String key : this.status.keySet()){
+            if (key.contains("DE+")){
+                d *= 1 + (Double.parseDouble(key.substring(3))/100);
+            }else if (key.contains("DE-")){
+                d *= (1 - (Double.parseDouble(key.substring(3))/100));
+            }
+        }
+        /*if(this.status.containsKey("DE+")){       //if the player is under a potion that boost his defense
             d = (this.getDefense()) * 10 + (1 + (Double.parseDouble("DE+".substring(3))/100));    //we had a bonus of strength related to the player's status
         }else if(this.status.containsKey("DE-")){ //if the player is under a potion that decreases this defense
             d = (this.getDefense()) * 10 + (1 - (Double.parseDouble("DE-".substring(3))/100));    //we had a bonus of strength related to the player's status
         }else{
             d= this.getDefense() * 10;                                                                                          //attack with the flat value of strength
-        }
+        }*/
         Random rand = new Random();
-        int num = rand.nextInt(100 - 0 + 1) + 0;              //(max - min + 1) + min
+        //int num = rand.nextInt(100 - 0 + 1) + 0;              //(max - min + 1) + min
+        int num = rand.nextInt(101);
+        System.out.println("num="+num);
+        System.out.println("d="+d);
         if(num < d){
             System.out.println("dodge successful from the player !");
-            return true;
+            setDodge(true);
         }
         else{
             System.out.println("failed to dodge from the player !");
-            return false;
+            setDodge(false);
         }
     }
 
@@ -329,48 +396,21 @@ public class Player extends GameObject {
     public void usePotion(Monster monster, Potion potion){
         System.out.println(this.getName() + " uses the potion" + potion);
         potion.setUsed(true);                                           //set used to true because potions are single use
-        System.out.println(potion.getEffect().substring(2,3));
-        if(potion.getEffect().substring(2, 3).equals("+")){           //if the potion is a bonus, looter applies to himself
+        System.out.println(potion.getEffect().charAt(2));
+        if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
             System.out.println("TEST+");
-        }else if(potion.getEffect().substring(4).equals("LIFE")){
-            this.setLP(this.getLP() + Integer.getInteger(potion.getEffect().substring(3)));
-
-        }else if(potion.getEffect().substring(2, 3).equals("-")){     //if the potion is a malus, looter applies it to the player
+        }else if(potion.getEffect().startsWith("LIFE")){
+            this.setLP(this.getLP() + Integer.parseInt(potion.getEffect().substring(4)));
+        }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             monster.addStatus(potion.getEffect(), potion.getDuration());
             System.out.println("TEST-");
         }
-        this.getInventory().remove(potion);                             //removing the potion from the inventory
+        this.removeFromInventory(potion);                             //removing the potion from the inventory
     }
     //endregion
 
     //region Move
-    //If jump is to 1 it means the player jumps --> moves 2 cases
-    //If jump is to 0 the player only moves of 1 case
-    //Direction :   -x means we go to the left on the x axis
-    //              +x means we go to the right on the x axis
-    //              -y means we go to the top of the y axis
-    //              +y means we go to the bottom of the y axis
-    // (0,0) top left corner
-    //TO DO : if obstacle, player cannot move there
-    public void moveold(String direction, int jump){
-        switch(direction){
-            case "-x":
-                this.setPosition(this.position.getX()-1-jump,this.position.getY());
-                break;
-            case "+x":
-                this.setPosition(this.position.getX()+1+jump,this.position.getY());
-                System.out.println("test");
-                break;
-            case "-y":
-                this.setPosition(this.position.getX(),this.position.getY()-1-jump);
-                break;
-            case "+y":
-                this.setPosition(this.position.getX(),this.position.getY()+1+jump);
-                break;
-        }
-    }
-    //endregion
     public void move(int x, int y) {
         int x_start = getPosition().getX();
         int y_start = getPosition().getY();
@@ -381,14 +421,8 @@ public class Player extends GameObject {
                 world.removeFromWorld(i);
             }
             this.setPosition(x, y);
-            NPC npc= world.IsThereNPC(x,y);
-            if (npc!=null){
-                System.out.println("There are a NPC here !");
-                setNearByNPC(npc);
-            }
-            if (world.IsThereMonster(x,y)){
-                System.out.println("There are a Monster here !");
-            }
+            setNearByNPC(world.IsThereNPC(x,y));
+            setNearByMonster(world.IsThereMonster(x,y));
             if (world.IsThereRiver(x,y)){
                 swim(); //you die
             }
@@ -426,6 +460,7 @@ public class Player extends GameObject {
         }
         return true;
     }
+    //endregion
     //endregion
 
     //TODO

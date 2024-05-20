@@ -120,19 +120,19 @@ public class World {
         }
         return null;
     }
-    public boolean IsThereMonster(int x, int y){
+    public Monster IsThereMonster(int x, int y){
         Class<?>[] listClasses = new Class[1];
         listClasses[0]=Monster.class;
         for (int i=x-1;i<=x+1;i++){
             for (int j=y-1;j<=y+1;j++){
                 if (i>=0 && i<=39 && j>=0 && j<=17) {
                     if (instanceOf(gridObjects[i][j],listClasses)){
-                        return true;
+                        return (Monster) gridObjects[i][j].get(0);
                     }
                 }
             }
         }
-        return false;
+        return null;
     }
 
     public boolean instanceOf(ArrayList<GameObject> grid, Class<?>[] c){

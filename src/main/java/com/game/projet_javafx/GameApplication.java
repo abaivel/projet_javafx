@@ -8,8 +8,10 @@ import Classes.Item.NotConsumableItem.Book;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
+import Classes.Monster.Monster;
 import Classes.Monster.Slime;
 import Classes.NPC.Fouras;
+import Classes.NPC.Merchant;
 import Classes.NPC.NPC;
 import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
@@ -40,10 +42,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameApplication extends Application {
 
@@ -56,7 +60,8 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
-        Player p = new Player(world,10,"Truc",25,8,2,5,5);
+        Player p = new Player(world,5,"Truc",25,4,2,5,5);
+        //p.setInventory(new ArrayList<>(Arrays.asList(new Sword(world,"Sword",true,10,10,4,25,"sword.png"),new Book(world,"Book",true,"This is a book",1,1,14,"book.png"))));
         world.addToWorld(p);
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -85,13 +90,17 @@ public class GameApplication extends Application {
         inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
         inventory.setHgap(5);
         inventory.setVgap(5);
-        for (int i=0;i<5;i++){
-            for (int j=0;j<2;j++) {
+        for (int i=0;i<2;i++){
+            for (int j=0;j<5;j++) {
                 Region r = new Region();
                 r.setPrefHeight(40);
                 r.setPrefWidth(40);
                 r.setStyle("-fx-border-color: black;-fx-border-width: 1px;");
-                inventory.add(r, i, j);
+                inventory.add(r, j, i);
+                int index = i*5+j;
+                if (index<p.sizeInventoryProperty().getValue()) {
+                    inventory.add(p.getInventory().get(index).getNode(), j, i);
+                }
             }
         }
         infosBottom.getChildren().add(inventory);
@@ -221,7 +230,29 @@ public class GameApplication extends Application {
         p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
             @Override
             public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
-                System.out.println("I am near a NPC");
+                System.out.println("listener");
+                if (p.getNearByNPC()!=null) {
+                    System.out.println("I am near a NPC");
+                }
+            }
+        });
+        p.nearByMonsterProperty().addListener(new ChangeListener<Monster>() {
+            @Override
+            public void changed(ObservableValue<? extends Monster> observableValue, Monster monster, Monster t1) {
+                System.out.println("listener");
+                if (p.getNearByMonster()!=null) {
+                    FightApplication fight = new FightApplication(p,t1, stage);
+                    try {
+                        fight.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (p.getNearByMonster().getLifePoints()<=0){
+                        world.removeFromWorld(p.getNearByMonster());
+                        p.setNearByMonster(null);
+                    }
+                    System.out.println(p.getInventory());
+                }
             }
         });
     }
@@ -236,11 +267,11 @@ public class GameApplication extends Application {
         w.addToWorld(wall);
         Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
         w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Sword",true,"ST+20",10,3,"potion1.png");
+        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
         w.addToWorld(potion);
         Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
         w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,6,5,"Hedgehog",true,"hedgehog.png");
+        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
         Key key = new Key(w,10,15,"Key",true,"#ffffff",12,"key.png");
         w.addToWorld(key);
@@ -248,7 +279,7 @@ public class GameApplication extends Application {
         w.addToWorld(book);
         Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
         w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 2, 1, new ArrayList<>(),25,13,2,"slime.png");
+        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,2,"slime.png");
         w.addToWorld(slime);
         Tree tree = new Tree(w,5,17,"tree.png");
         w.addToWorld(tree);
