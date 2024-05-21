@@ -319,6 +319,8 @@ public class GameApplication extends Application {
         merchant0.setInventory(items);
         w.addToWorld(merchant0);
 
+        Book book1 = new Book(w,"HDEGHOG",true,"vbfdsuikvcgbyfdguksyjsfcsvjgcyj",10,10,5,"book.png");
+        w.addToWorld(book1);
         UselessPerson up = new UselessPerson(w,"Aurélien",2,3,5,"vase.png");
         w.addToWorld(up);
 

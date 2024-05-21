@@ -98,10 +98,18 @@ public class DialogMerchantApplication extends Application {
                     merchantMoneyLabel.setText(this.getMerchant().getName() + " money : " + this.getMerchant().getMoney()); //update merchant's money
                 }else{                                                                                              //if merchant can't sell <-> if player can't buy
                     Alert warning = new Alert(Alert.AlertType.WARNING);                                             //warning alert window
-                    warning.setTitle("Insufficient Funds");                                                         //sets title
-                    warning.setHeaderText(null);
-                    warning.setContentText("You don't have enough money to buy this item.");                        //prints text
-                    warning.showAndWait();                                                                          //closes when button clicked
+                    if(player.inventoryIsFull()){
+                        warning.setTitle("Inventory full");
+                        warning.setHeaderText(null);
+                        warning.setContentText("Unable to buy the item. Player's inventory is full.");
+                    }else{
+                        warning.setTitle("Insufficient Funds");                                                         //sets title
+                        warning.setHeaderText(null);
+                        warning.setContentText("You don't have enough money to buy this item.");                        //prints text
+
+                    }
+                    warning.showAndWait();
+                                                                                             //closes when button clicked
                 }
 
             });
@@ -170,6 +178,8 @@ public class DialogMerchantApplication extends Application {
 
     //3rd dialog -> player and merchant swap items
     private void handleSwapDialog(){
+        System.out.println(player);
+        System.out.println(merchant);
         while (true) {                                                              //to repat swap item if failed -> breaks when successful or player cancels
             System.out.println("Player wants to swap items");
 
@@ -217,6 +227,8 @@ public class DialogMerchantApplication extends Application {
                 errorAlert.showAndWait();                                                                       //window will close when ok button clicked or top right cross clicked
             }
         }
+        System.out.println(player);
+        System.out.println(merchant);
     }
 
     //endregion

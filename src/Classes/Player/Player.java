@@ -3,6 +3,7 @@ package Classes.Player;
 import Classes.GameObject;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
+import Classes.Item.NotConsumableItem.Book;
 import Classes.Monster.Looter;
 import Classes.Monster.Monster;
 import Classes.Monster.Slime;
@@ -11,10 +12,12 @@ import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Monster.Wolf;
 import Classes.NPC.NPC;
 import Classes.World.Position;
+import com.game.projet_javafx.BookApplication;
 import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -140,13 +143,26 @@ public class Player extends GameObject {
         if (inventory.size()<10) {
             this.inventory.add(item);
             item.setDropped(false);
-            this.sizeInventory.set(sizeInventory.getValue() + 1);   //TODO : doesn't it update by itself ??
+            this.sizeInventory.set(sizeInventory.getValue() + 1);
             Player p = this;
             item.node.setOnMouseClicked(mouseEvent -> {
                 System.out.println(mouseEvent.getButton() == MouseButton.SECONDARY);
                 if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
                     System.out.println("ici");
                     p.removeFromInventory(item);
+                    item.setPosition(p.getPosition().getX(), p.getPosition().getY());
+                    world.addToWorld(item);
+                }
+                if(!item.isDropped() && mouseEvent.getButton() == MouseButton.PRIMARY){
+                    if(item instanceof Book){
+                        BookApplication bookApp = new BookApplication((Book) item);
+                        try {
+                            bookApp.start(new Stage());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                 }
             });
         }
@@ -157,12 +173,16 @@ public class Player extends GameObject {
         int index = this.inventory.indexOf(item);
         if(index != -1){
             this.sizeInventory.set(sizeInventory.getValue()-1);
-            Item removed = this.inventory.remove(index);        //get the removed item
-            return removed;
+            return this.inventory.remove(index);
         }else{
             return null;                                        //if item not in inventory
         }
     }
+
+    public boolean inventoryIsFull() {
+        return this.getInventory().size() == 10;
+    }
+
     public IntegerProperty sizeInventoryProperty() {
         return sizeInventory;
     }

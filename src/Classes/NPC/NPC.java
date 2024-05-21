@@ -55,7 +55,7 @@ public abstract class NPC extends GameObject {
     }
 
     public boolean inventoryIsFull() {
-        return this.getInventory().size() == 9;
+        return this.getInventory().size() == 10;
     }
 
     public void removeFromInventory(Item item){

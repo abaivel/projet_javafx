@@ -35,7 +35,7 @@ public class Merchant extends NPC {
 
     //region For a merchant to sell stuff to the player -> merchant gains money
     public boolean sell(Player p,Item item){
-        if (item.getPrice()<p.getMoney()){ //if the player has enough money to buy the item, the merchant can sell the item to them
+        if (item.getPrice()<p.getMoney() && !(p.inventoryIsFull())){ //if the player has enough money to buy the item, the merchant can sell the item to them
             //item part
             p.addToInventory(item);
             this.removeFromInventory(item);
@@ -49,7 +49,6 @@ public class Merchant extends NPC {
     }
     //endregion
 
-    //TODO : verify that inventory is not full ????????
     //region For a merchant to buy stuff from the player   -> merchant looses money
     public boolean buy(Player p, Item item){
         if (item.getPrice()<this.getMoney() && !(this.inventoryIsFull())){  //if the merchant has enough money to buy the item, the merchant can buy the item
