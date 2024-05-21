@@ -66,7 +66,7 @@ public class World {
         gridObjects[x][y].add(gameObject);
         GridPane.setColumnIndex(gameObject.getNode(),x);
         GridPane.setRowIndex(gameObject.getNode(),y);
-        if (!pane.getChildren().contains(gameObject)){
+        if (!pane.getChildren().contains(gameObject.getNode())){
             pane.add(gameObject.getNode(),x,y);
         }
     }

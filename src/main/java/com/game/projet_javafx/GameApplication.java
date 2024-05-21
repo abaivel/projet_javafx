@@ -305,7 +305,6 @@ public class GameApplication extends Application {
             }
         });
     }
-    }
 
     //TODO : build 2 other worlds and do portals between them
     //region World Creation
