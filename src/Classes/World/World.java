@@ -74,7 +74,7 @@ public class World {
     public boolean CanGoThere(int x, int y){
         Class<?>[] listClasses = new Class[6];
         for (GameObject g : gridObjects[x][y]){
-            if (g instanceof Wall || g instanceof Tree || g instanceof Hedge || g instanceof NPC ||g instanceof Monster ||(g instanceof Door && !((Door)g).isOpen())){
+            if (g instanceof Wall || g instanceof Tree || g instanceof Hedge || g instanceof NPC ||g instanceof Monster || g instanceof Door){
                 return false;
             }
         }
@@ -146,13 +146,13 @@ public class World {
         return null;
     }
 
-    public boolean IsThereDoorOpen(int x, int y){
+    public int IsThereDoorOpen(int x, int y){
         for (GameObject g : gridObjects[x][y]){
             if ((g instanceof Door && ((Door)g).isOpen())){
-                return true;
+                return (((Door) g).getNextWorld());
             }
         }
-        return false;
+        return -1;
     }
 
     public boolean instanceOf(ArrayList<GameObject> grid, Class<?>[] c){

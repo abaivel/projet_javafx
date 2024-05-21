@@ -58,19 +58,31 @@ import java.util.Arrays;
 
 public class GameApplication extends Application {
     private Player p;
+    private World world;
+    GridPane pane;
+    FlowPane flowPane;
+    FlowPane infosBottom;
 
     @Override
     public void start(Stage stage) throws IOException {
         /*ArrayList<ArrayList<GameObject>> gridObject = new ArrayList<>();
         gridObject.set(2,new ArrayList<GameObject>())*/
-        World world = createWorld1();
-        FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
+        World world1 = createWorld1();
+        World world2 = createWorld2();
+        World world3 = createWorld3();
+
+        World[] listWorld = new World[3];
+        listWorld[0] = world1;
+        listWorld[1] = world2;
+        listWorld[2] = world3;
+        world=listWorld[0];
+        flowPane = new FlowPane(Orientation.HORIZONTAL);
         flowPane.setStyle("-fx-background-color: white");
-        GridPane pane = world.getPane();
+        pane = world.getPane();
         flowPane.getChildren().add(pane);
         p = new Player(world,10,"Truc",25,8,2,5,5);
         world.addToWorld(p);
-        FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
+        infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
         FlowPane infosPerso = new FlowPane(Orientation.VERTICAL);
         infosBottom.getChildren().add(infosPerso);
@@ -258,6 +270,27 @@ public class GameApplication extends Application {
 
             }
         });
+
+        p.getIndexWorldProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                world.removeFromWorld(p);
+                for (Item item : p.getInventory()){
+                    world.removeFromWorld(item);
+                }
+                world = listWorld[p.getIndexWorld()];
+                flowPane.getChildren().clear();
+                pane = world.getPane();
+                flowPane.getChildren().add(pane);
+                flowPane.getChildren().add(infosBottom);
+                p.setWorld(world);
+                world.addToWorld(p);
+                for (Item item : p.getInventory()){
+                    item.setWorld(world);
+                }
+
+            }
+        });
         //endregion
 
 
@@ -356,7 +389,7 @@ public class GameApplication extends Application {
             w.addToWorld(r2);
         }
 
-        Door door = new Door(w,16,10,"BLUE","door_closed.png");
+        Door door = new Door(w,16,10,"BLUE","door_closed.png",1);
         w.addToWorld(door);
 
         door.getNode().setOnMouseClicked(mouseEvent -> {
@@ -367,6 +400,139 @@ public class GameApplication extends Application {
                         if(door.getColor().equals(k.getColor())){
                             door.setOpen(true);
                             ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                            p.removeFromInventory(k);
+                        }
+                    }
+                }
+
+            }
+
+        });
+
+        return w;
+    }
+
+    public World createWorld2(){
+        World w = new World("#8e9700");
+        Wall wall = new Wall(w,2,2);
+        w.addToWorld(wall);
+        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
+        w.addToWorld(sword);
+        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
+        w.addToWorld(potion);
+        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+        w.addToWorld(buoy);
+        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
+        w.addToWorld(trinket);
+        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
+        w.addToWorld(key);
+        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
+        w.addToWorld(book);
+        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
+        w.addToWorld(fouras1);
+        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
+        w.addToWorld(slime);
+        Tree tree = new Tree(w,5,17,"tree.png");
+        w.addToWorld(tree);
+        Hedge hedge = new Hedge(w,12,12);
+        w.addToWorld(hedge);
+        Trap trap = new Trap(w,15,15,"trap2.png");
+
+        ArrayList<Item> looterInv = new ArrayList<>();
+        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        w.addToWorld(looter);
+
+        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
+        w.addToWorld(wolf);
+
+        w.addToWorld(trap);
+        for (int i=0;i<5;i++){
+            River r1 = new River(w,i,14);
+            w.addToWorld(r1);
+        }
+        for (int i=15;i<18;i++){
+            River r2 = new River(w,4,i);
+            w.addToWorld(r2);
+        }
+
+        Door door = new Door(w,16,10,"BLUE","door_closed.png",2);
+        w.addToWorld(door);
+
+        door.getNode().setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                ArrayList<Key> keys = p.containsKey();
+                if(!keys.isEmpty()){
+                    for(Key k : keys){
+                        if(door.getColor().equals(k.getColor())){
+                            door.setOpen(true);
+                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                            p.removeFromInventory(k);
+                        }
+                    }
+                }
+
+            }
+
+        });
+
+        return w;
+    }
+
+    public World createWorld3(){
+        World w = new World("#611120");
+        Wall wall = new Wall(w,2,2);
+        w.addToWorld(wall);
+        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
+        w.addToWorld(sword);
+        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
+        w.addToWorld(potion);
+        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+        w.addToWorld(buoy);
+        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
+        w.addToWorld(trinket);
+        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
+        w.addToWorld(key);
+        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
+        w.addToWorld(book);
+        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
+        w.addToWorld(fouras1);
+        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
+        w.addToWorld(slime);
+        Tree tree = new Tree(w,5,17,"tree.png");
+        w.addToWorld(tree);
+        Hedge hedge = new Hedge(w,12,12);
+        w.addToWorld(hedge);
+        Trap trap = new Trap(w,15,15,"trap2.png");
+
+        ArrayList<Item> looterInv = new ArrayList<>();
+        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        w.addToWorld(looter);
+
+        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
+        w.addToWorld(wolf);
+
+        w.addToWorld(trap);
+        for (int i=0;i<5;i++){
+            River r1 = new River(w,i,14);
+            w.addToWorld(r1);
+        }
+        for (int i=15;i<18;i++){
+            River r2 = new River(w,4,i);
+            w.addToWorld(r2);
+        }
+
+        Door door = new Door(w,16,10,"BLUE","door_closed.png",0);
+        w.addToWorld(door);
+
+        door.getNode().setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                ArrayList<Key> keys = p.containsKey();
+                if(!keys.isEmpty()){
+                    for(Key k : keys){
+                        if(door.getColor().equals(k.getColor())){
+                            door.setOpen(true);
+                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                            p.removeFromInventory(k);
                         }
                     }
                 }

@@ -37,6 +37,7 @@ public class Player extends GameObject {
     private double defense;                 //between 0 and 10
     private boolean dodge;
     private Map<String, Integer> status;
+    private IntegerProperty indexWorld;
 
     private final IntegerProperty numberStatus;
     private ArrayList<Item> inventory;
@@ -62,6 +63,7 @@ public class Player extends GameObject {
         this.nearByNPC=new SimpleObjectProperty<>(null);
         this.nearByMonster=new SimpleObjectProperty<>(null);
         this.dodge=false;
+        this.indexWorld = new SimpleIntegerProperty(0);
         node=new ImageView("image_pinguin.png");
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -156,6 +158,17 @@ public class Player extends GameObject {
         this.dodge = dodge;
     }
 
+    public int getIndexWorld() {
+        return indexWorld.get();
+    }
+
+    public IntegerProperty getIndexWorldProperty() {
+        return indexWorld;
+    }
+
+    public void setIndexWorld(int indexWorld) {
+        this.indexWorld.set(indexWorld);
+    }
 
     //endregion
 
@@ -470,7 +483,12 @@ public class Player extends GameObject {
                 if (world.IsThereTrap(x, y)) {
                     this.setLP(this.getLP() - 2);
                 }
-            }else if (world.IsThereDoorOpen(x,y)){
+            }else{
+                int indexWorld = world.IsThereDoorOpen(x,y);
+                if (indexWorld!=-1){
+                    setIndexWorld(indexWorld);
+                }
+
                 //TODO : call function change world
             }
 
