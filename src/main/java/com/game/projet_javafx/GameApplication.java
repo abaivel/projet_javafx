@@ -8,6 +8,7 @@ import Classes.Item.NotConsumableItem.Book;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
+import Classes.Monster.Monster;
 import Classes.Monster.Slime;
 import Classes.NPC.Fouras;
 import Classes.NPC.Merchant;
@@ -44,10 +45,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameApplication extends Application {
 
@@ -60,20 +63,10 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
-
-        //Player's instance
         Player p = new Player(world,10,"Truc",25,8,2,5,5);
-        Key key0 = new Key(null,0,0,"Keyyy0",false,"GREEN",4,"potion1.png");
-        Key key1 = new Key(null,0,0,"Keyyy1",false,"GREEN",4,"potion1.png");
-        Key key2 = new Key(null,0,0,"Keyyy2",false,"GREEN",4,"potion1.png");
-        p.addToInventory(key0);
-        p.addToInventory(key1);
-        p.addToInventory(key2);
         world.addToWorld(p);
-
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
-
         FlowPane infosPerso = new FlowPane(Orientation.VERTICAL);
         infosBottom.getChildren().add(infosPerso);
         /*ImageView avatar = new ImageView("image_pinguin.png");
@@ -104,13 +97,17 @@ public class GameApplication extends Application {
         inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
         inventory.setHgap(5);
         inventory.setVgap(5);
-        for (int i=0;i<5;i++){
-            for (int j=0;j<2;j++) {
+        for (int i=0;i<2;i++){
+            for (int j=0;j<5;j++) {
                 Region r = new Region();
                 r.setPrefHeight(40);
                 r.setPrefWidth(40);
                 r.setStyle("-fx-border-color: black;-fx-border-width: 1px;");
-                inventory.add(r, i, j);
+                inventory.add(r, j, i);
+                int index = i*5+j;
+                if (index<p.sizeInventoryProperty().getValue()) {
+                    inventory.add(p.getInventory().get(index).getNode(), j, i);
+                }
             }
         }
 
@@ -286,9 +283,25 @@ public class GameApplication extends Application {
                         throw new RuntimeException(e);
                     }
                 }
-
-
-
+            }
+        });
+        p.nearByMonsterProperty().addListener(new ChangeListener<Monster>() {
+            @Override
+            public void changed(ObservableValue<? extends Monster> observableValue, Monster monster, Monster t1) {
+                System.out.println("listener");
+                if (p.getNearByMonster()!=null) {
+                    FightApplication fight = new FightApplication(p,t1, stage);
+                    try {
+                        fight.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (p.getNearByMonster().getLifePoints()<=0){
+                        world.removeFromWorld(p.getNearByMonster());
+                        p.setNearByMonster(null);
+                    }
+                    System.out.println(p.getInventory());
+                }
             }
         });
     }
@@ -297,42 +310,15 @@ public class GameApplication extends Application {
     //region World Creation
     public World createWorld1(){
         World w = new World("#639620");
-        Merchant merchant0 = new Merchant(w,"Bob",10,3,2,"fouras.png");
-
-        ArrayList<Item> items = new ArrayList<>();
-        Potion potion0 = new Potion(null,0,0,"WuawPotion",false,"ST+20",1,3,"potion1.png");
-        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",1,3,"potion1.png");
-        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",1,3,"potion1.png");
-        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",1,3,"potion1.png");
-        Potion potion5 = new Potion(null,0,0,"etsetstset",false,"DE+40",1,3,"potion1.png");
-        Potion potion6 = new Potion(null,0,0,"bonjout",false,"DE+40",1,3,"potion1.png");
-        Potion potion7 = new Potion(null,0,0,"boup",false,"DE+40",1,3,"potion1.png");
-        Key key0 = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4,"potion1.png");
-        items.add(potion0);
-        items.add(potion2);
-        items.add(potion3);
-        items.add(key0);
-        items.add(potion4);
-        items.add(potion5);
-        items.add(potion6);
-        items.add(potion7);
-        merchant0.setInventory(items);
-        w.addToWorld(merchant0);
-
-        Book book1 = new Book(w,"HDEGHOG",true,"vbfdsuikvcgbyfdguksyjsfcsvjgcyj",10,10,5,"book.png");
-        w.addToWorld(book1);
-        UselessPerson up = new UselessPerson(w,"Aurélien",2,3,5,"vase.png");
-        w.addToWorld(up);
-
         Wall wall = new Wall(w,2,2);
         w.addToWorld(wall);
         Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
         w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Sword",true,"ST+20",10,3,"potion1.png");
+        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
         w.addToWorld(potion);
         Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
         w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,6,5,"Hedgehog",true,"hedgehog.png");
+        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
         Key key = new Key(w,10,15,"Key",true,"#ffffff",12,"key.png");
         w.addToWorld(key);
@@ -340,7 +326,7 @@ public class GameApplication extends Application {
         w.addToWorld(book);
         Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
         w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 2, 1, new ArrayList<>(),25,13,2,"slime.png");
+        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
         w.addToWorld(slime);
         Tree tree = new Tree(w,5,17,"tree.png");
         w.addToWorld(tree);

@@ -6,6 +6,10 @@ import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Player.Player;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ import java.util.Map;
 public abstract class Monster extends GameObject {
     //region Monster's Attributes
     private String name;
-    private double lifePoints;
+    private DoubleProperty lifePoints;
     private int strength;
     private int defense;
     private int cooldown;       //number of rounds until special attack ; 3 by default
@@ -24,19 +28,22 @@ public abstract class Monster extends GameObject {
     private ArrayList<Item> inventory;
     private boolean alive;
     private Map<String, Integer> status;
+
+    private final IntegerProperty numberStatus;
     //endregion
 
     //region Constructor
     public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown,String urlImage) {
         super(w,x,y);
         this.name = name;
-        this.lifePoints = lifePoints;
+        this.lifePoints = new SimpleDoubleProperty(lifePoints);
         this.strength = force;
         this.defense = defense;
         this.inventory = inventory;
         this.alive=true;
         this.cooldown = cooldown;
         this.status = new HashMap<String, Integer>();
+        this.numberStatus = new SimpleIntegerProperty(0);
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -55,6 +62,9 @@ public abstract class Monster extends GameObject {
     }
 
     public double getLifePoints() {
+        return lifePoints.get();
+    }
+    public DoubleProperty lifePointsProperty() {
         return lifePoints;
     }
 
@@ -77,16 +87,26 @@ public abstract class Monster extends GameObject {
     public HashMap<String, Integer> getStatus() {
         return (HashMap<String, Integer>) this.status;
     }
+    public int getNumberStatus() {
+        return numberStatus.get();
+    }
+
+    public IntegerProperty numberStatusProperty() {
+        return numberStatus;
+    }
 
     //endregion
 
     //region Setters
+    public void setNumberStatus(int numberStatus) {
+        this.numberStatus.set(numberStatus);
+    }
     public void setName(String name) {
         this.name = name;
     }
 
     public void setLifePoints(double lifePoints) {
-        this.lifePoints = lifePoints;
+        this.lifePoints.set(lifePoints);
     }
 
     public void setStrength(int force) {
@@ -160,13 +180,18 @@ public abstract class Monster extends GameObject {
     //endregion
 
     //region Status functions
-    public void addStatus(String key, int value) {this.getStatus().put(key, value);}
+    public void addStatus(String key, int value) {
+        this.getStatus().put(key, value);
+        this.setNumberStatus(this.getNumberStatus()+1);
+    }
 
     //Removes status from the map when they reach count 0
     public void statusWornOff(){
         for(String s : this.status.keySet()){       //loop on the keyset
+            this.status.put(s,this.status.get(s)-1);
             if(this.status.get(s) == 0){            //verification if value is 0
                 this.status.remove(s);              //removes the status
+                this.setNumberStatus(this.getNumberStatus()-1);
             }
         }
     }
@@ -174,26 +199,40 @@ public abstract class Monster extends GameObject {
     //Returns the defense status (in percentage) depending on all the potions : buff and debuff
     public int defenseStatus(){
         int defense = 0;                                     //a percentage
-        if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
+        for (String key : this.status.keySet()){
+            if (key.contains("DE+")){
+                defense += Integer.parseInt(key.substring(3));
+            }else if (key.contains("DE-")){
+                defense += Integer.parseInt(key.substring(3));
+            }
+        }
+        /*if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
             this.status.put("DE+",this.status.get("DE+")-1);
             defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
         } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
             this.status.put("DE-",this.status.get("DE-")-1);
             defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
-        }
+        }*/
         return defense;
     }
 
     //Returns the strength status (in percentage) depending on all the potions : buff and debuff
     public int strengthStatus(){
         int strength = 0;                                                       //a percentage
-        if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
+        for (String key : this.status.keySet()){
+            if (key.contains("ST+")){
+                strength +=  Integer.parseInt(key.substring(3));
+            }else if (key.contains("ST-")){
+                strength += Integer.parseInt(key.substring(3));
+            }
+        }
+        /*if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
             this.status.put("ST+",this.status.get("ST+")-1);
             strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
         } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
             this.status.put("ST-",this.status.get("ST-")-1);
             strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
-        }
+        }*/
         return strength;
     }
 
@@ -227,6 +266,7 @@ public abstract class Monster extends GameObject {
 
     public void defend(double ennemyAttack){
         System.out.println(this.getName() + " defends !");
+        System.out.println(ennemyAttack);
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int DEStatus = defenseStatus();
         if(DEStatus > 0){                     //if the monster is under a potion that boost his defense

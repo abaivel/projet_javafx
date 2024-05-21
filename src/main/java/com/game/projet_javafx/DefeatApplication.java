@@ -6,10 +6,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.File;
 
 public class DefeatApplication extends Application {
     @Override
@@ -22,6 +27,18 @@ public class DefeatApplication extends Application {
         text.setTextAlignment(TextAlignment.CENTER);
         pane.getChildren().add(text);
         pane.setAlignment(text, Pos.CENTER);
+
+        File file = new File("H:\\Documents\\école\\ING1\\POO Java\\projet_javafx\\projet_javafx\\src\\main\\resources\\death_music.mp3");//"H:\\Documents\\école\\ING1\\POO Java\\Programmes\\tp2 ihm\\tp2\\src\\main\\resources\\ts.mp3");
+        System.out.println("here");
+        final String MEDIA_URL = file.toURI().toString();
+        System.out.println("here");
+        Media media = new Media(MEDIA_URL);
+        System.out.println("here");
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        System.out.println("here");
+        mediaPlayer.volumeProperty().set(100);
+        mediaPlayer.setStopTime(Duration.seconds(212));
+        mediaPlayer.play();
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setMaximized(true);

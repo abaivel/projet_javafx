@@ -66,6 +66,9 @@ public class World {
         gridObjects[x][y].add(gameObject);
         GridPane.setColumnIndex(gameObject.getNode(),x);
         GridPane.setRowIndex(gameObject.getNode(),y);
+        if (!pane.getChildren().contains(gameObject.getNode())){
+            pane.add(gameObject.getNode(),x,y);
+        }
     }
 
     public boolean CanGoThere(int x, int y){
@@ -93,11 +96,13 @@ public class World {
 
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
+        System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
         for (GameObject g : gridObjects[x][y]){
             if (g instanceof Item){
                 listItems.add((Item)g);
             }
         }
+        System.out.println("listItems="+listItems);
         return listItems;
     }
 
@@ -126,19 +131,19 @@ public class World {
         }
         return null;
     }
-    public boolean IsThereMonster(int x, int y){
+    public Monster IsThereMonster(int x, int y){
         Class<?>[] listClasses = new Class[1];
         listClasses[0]=Monster.class;
         for (int i=x-1;i<=x+1;i++){
             for (int j=y-1;j<=y+1;j++){
                 if (i>=0 && i<=39 && j>=0 && j<=17) {
                     if (instanceOf(gridObjects[i][j],listClasses)){
-                        return true;
+                        return (Monster) gridObjects[i][j].get(0);
                     }
                 }
             }
         }
-        return false;
+        return null;
     }
 
     public boolean instanceOf(ArrayList<GameObject> grid, Class<?>[] c){
