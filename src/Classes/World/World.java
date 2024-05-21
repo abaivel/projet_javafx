@@ -50,20 +50,24 @@ public class World {
             }
         }
     }
+
     public void addToWorld(GameObject gameObject){
         gridObjects[gameObject.getPosition().getX()][gameObject.getPosition().getY()].add(gameObject);
         pane.add(gameObject.getNode(),gameObject.getPosition().getX(),gameObject.getPosition().getY());
     }
+
     public void removeFromWorld(GameObject gameObject){
         gridObjects[gameObject.getPosition().getX()][gameObject.getPosition().getY()].remove(gameObject);
         pane.getChildren().remove(gameObject.getNode());
     }
+
     public void moveGameObject(GameObject gameObject, int x, int y){
         gridObjects[gameObject.getPosition().getX()][gameObject.getPosition().getY()].remove(gameObject);
         gridObjects[x][y].add(gameObject);
         GridPane.setColumnIndex(gameObject.getNode(),x);
         GridPane.setRowIndex(gameObject.getNode(),y);
     }
+
     public boolean CanGoThere(int x, int y){
         Class<?>[] listClasses = new Class[6];
         for (GameObject g : gridObjects[x][y]){
@@ -74,6 +78,7 @@ public class World {
         return true;
         //return !(gridObjects[x][y] instanceof Wall || gridObjects[x][y] instanceof Tree || gridObjects[x][y] instanceof Hedge || gridObjects[x][y] instanceof NPC ||gridObjects[x][y] instanceof Monster ||(gridObjects[x][y] instanceof Door && !((Door)gridObjects[x][y]).isOpen()));
     }
+
     public boolean CanJumpThere(int x_start, int y_start, int x, int y){
         Class<?>[] listClasses = new Class[2];
         listClasses[0]=Hedge.class;
@@ -85,6 +90,7 @@ public class World {
             return instanceOf(gridObjects[x+(x_start-x)/2][y],listClasses) || gridObjects[x+(x_start-x)/2][y].isEmpty();
         }*/
     }
+
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
         for (GameObject g : gridObjects[x][y]){

@@ -3,6 +3,7 @@ package Classes.Player;
 import Classes.GameObject;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
+import Classes.Item.NotConsumableItem.Book;
 import Classes.Monster.Looter;
 import Classes.Monster.Monster;
 import Classes.Monster.Slime;
@@ -11,10 +12,12 @@ import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Monster.Wolf;
 import Classes.NPC.NPC;
 import Classes.World.Position;
+import com.game.projet_javafx.BookApplication;
 import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 import Classes.World.World;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -35,7 +38,7 @@ public class Player extends GameObject {
     //region Player's attributes
     private final DoubleProperty LP;
     private String name;
-    private double money;
+    private final DoubleProperty money;
     private double strength;
     private double defense;                 //between 0 and 10
     private Map<String, Integer> status;
@@ -50,7 +53,7 @@ public class Player extends GameObject {
         super(w,x,y);
         this.LP = new SimpleDoubleProperty(LP);
         this.name = name;
-        this.money = money;
+        this.money = new SimpleDoubleProperty(money);
         this.strength = strength;
         this.defense = defense;
         this.status = new HashMap<String, Integer>();                   //No status at first
@@ -86,8 +89,10 @@ public class Player extends GameObject {
     public String getName() {return this.name;}
     public void setName(String name) {this.name = name;}
 
-    public double getMoney() {return this.money;}
-    public void setMoney(double money) {this.money = money;}
+    public DoubleProperty getMoneyProperty() {return this.money;}
+    public double getMoney() {return this.money.getValue();}
+
+    public void setMoney(double money) {this.money.set(money);}
 
     public double getStrength() {return this.strength;}
     public void setStrength(double strength) {this.strength = strength;}
@@ -118,7 +123,7 @@ public class Player extends GameObject {
 
     //region ToString function to print
     public String toString(){
-        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoney() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
+        String tmp = "Name : " + this.getName() + "\nLP : " + this.getLP() + "\nMoney : " + this.getMoneyProperty() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\nPosition : " + this.getPosition() + "\n";
         if(!inventory.isEmpty()){
             tmp += "Inventory : ";
         }
@@ -145,6 +150,19 @@ public class Player extends GameObject {
                 if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
                     System.out.println("ici");
                     p.removeFromInventory(item);
+                    item.setPosition(p.getPosition().getX(), p.getPosition().getY());
+                    world.addToWorld(item);
+                }
+                if(!item.isDropped() && mouseEvent.getButton() == MouseButton.PRIMARY){
+                    if(item instanceof Book){
+                        BookApplication bookApp = new BookApplication((Book) item);
+                        try {
+                            bookApp.start(new Stage());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                 }
             });
         }
@@ -155,12 +173,16 @@ public class Player extends GameObject {
         int index = this.inventory.indexOf(item);
         if(index != -1){
             this.sizeInventory.set(sizeInventory.getValue()-1);
-            Item removed = this.inventory.remove(index);        //get the removed item
-            return removed;
+            return this.inventory.remove(index);
         }else{
             return null;                                        //if item not in inventory
         }
     }
+
+    public boolean inventoryIsFull() {
+        return this.getInventory().size() == 10;
+    }
+
     public IntegerProperty sizeInventoryProperty() {
         return sizeInventory;
     }
@@ -408,6 +430,7 @@ public class Player extends GameObject {
             }
         }
     }
+
     //region Automatic use of item
     //Use item named buoy to not drown into rivers
     //returns false if the player dies
@@ -434,7 +457,7 @@ public class Player extends GameObject {
     //updates the inventory with adding the new item
     public void pickItem(Item item){
         //faire ajouter à arraylise TO DO
-        //verifier si inventaire pas full
+        //verifier si inventaire pas full   --> pour front si inventaire full -> alert de type warning
         if(item.getName().equals("Hedgehog")){
             //calls front
         }
@@ -457,7 +480,6 @@ public class Player extends GameObject {
         return false;
     }
 
-    //TODO how to get the potion the player wants ?????
     public Potion choosePotion(){
         int i=0;
         ArrayList<Potion> potionlist = new ArrayList<>();

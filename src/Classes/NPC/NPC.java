@@ -42,12 +42,26 @@ public abstract class NPC extends GameObject {
     public ArrayList<Item> getInventory() {return this.inventory;}
     public void setInventory(ArrayList<Item> inventory) {this.inventory = inventory;}
     //endregion
-    public void addToInventory(Item item){
-        this.inventory.add(item);
+
+    //region Inventory functions
+    public boolean addToInventory(Item item) {
+        if (this.getInventory().size() < 10) {
+            this.getInventory().add(item);
+            return true;
+        } else {
+            System.out.println("Cannot add element. The inventory is full.");
+            return false;
+        }
     }
+
+    public boolean inventoryIsFull() {
+        return this.getInventory().size() == 10;
+    }
+
     public void removeFromInventory(Item item){
         this.inventory.remove(item);
     }
+    //endregion
 
     //region ToString function to print
     public String toString() {
