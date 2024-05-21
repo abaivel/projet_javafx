@@ -77,11 +77,11 @@ public class FightApplication extends Application {
         for (String s : player.getStatus().keySet()){
             Text status = new Text();
             if (s.startsWith("ST")){
-                status.setText("Strenght : "+s.substring(2));
+                status.setText("Strenght "+s.substring(2)+" : "+player.getStatus().get(s)+" rounds left");
             }else if (s.startsWith("DE")){
-                status.setText("Defense : "+s.substring(2));
+                status.setText("Defense "+s.substring(2)+" : "+player.getStatus().get(s)+" rounds left");
             }else if (s.equals("poisoned")){
-                status.setText("Poisoned");
+                status.setText("Poisoned : "+player.getStatus().get(s)+" rounds left");
             }
             listStatusPlayer.getChildren().add(status);
         }
@@ -92,11 +92,11 @@ public class FightApplication extends Application {
         for (String s : monster.getStatus().keySet()){
             Text status = new Text();
             if (s.startsWith("ST")){
-                status.setText("Strenght : "+s.substring(2));
+                status.setText("Strenght "+s.substring(2)+" : "+monster.getStatus().get(s)+" rounds left");
             }else if (s.startsWith("DE")){
-                status.setText("Defense : "+s.substring(2));
+                status.setText("Defense "+s.substring(2)+" : "+monster.getStatus().get(s)+" rounds left");
             }else if (s.equals("poisoned")){
-                status.setText("Poisoned");
+                status.setText("Poisoned : "+monster.getStatus().get(s)+" rounds left");
             }
             listStatusMonster.getChildren().add(status);
         }
@@ -252,10 +252,12 @@ public class FightApplication extends Application {
                 textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
                 gridButtonsChoiceAction.setVisible(playerTurn.get());
                 gridPotions.setVisible(false);
-                if (!playerTurn.get() && monster.getLifePoints()>0 && !player.isDodge()){
-                    System.out.println("Time for the monster to fight");
-                    double attackMonster = monster.attack(player);
-                    player.defend(attackMonster);
+                if (!playerTurn.get() && monster.getLifePoints()>0){
+                    if (!player.isDodge()) {
+                        System.out.println("Time for the monster to fight");
+                        double attackMonster = monster.attack(player);
+                        player.defend(attackMonster);
+                    }
                     playerTurn.set(true);
                 }
             }
@@ -282,11 +284,11 @@ public class FightApplication extends Application {
             for (String s : player.getStatus().keySet()){
                 Text status = new Text();
                 if (s.startsWith("ST")){
-                    status.setText("Strenght : "+s.substring(2));
+                    status.setText("Strenght "+s.substring(2)+" : "+player.getStatus().get(s)+" rounds left");
                 }else if (s.startsWith("DE")){
-                    status.setText("Defense : "+s.substring(2));
+                    status.setText("Defense "+s.substring(2)+" : "+player.getStatus().get(s)+" rounds left");
                 }else if (s.equals("poisoned")){
-                    status.setText("Poisoned");
+                    status.setText("Poisoned : "+player.getStatus().get(s)+" rounds left");
                 }
                 listStatusPlayer.getChildren().add(status);
             }

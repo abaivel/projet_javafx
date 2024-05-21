@@ -63,6 +63,9 @@ public class World {
         gridObjects[x][y].add(gameObject);
         GridPane.setColumnIndex(gameObject.getNode(),x);
         GridPane.setRowIndex(gameObject.getNode(),y);
+        if (!pane.getChildren().contains(gameObject)){
+            pane.add(gameObject.getNode(),x,y);
+        }
     }
     public boolean CanGoThere(int x, int y){
         Class<?>[] listClasses = new Class[6];
@@ -87,11 +90,13 @@ public class World {
     }
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
+        System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
         for (GameObject g : gridObjects[x][y]){
             if (g instanceof Item){
                 listItems.add((Item)g);
             }
         }
+        System.out.println("listItems="+listItems);
         return listItems;
     }
 

@@ -279,7 +279,7 @@ public class GameApplication extends Application {
         w.addToWorld(book);
         Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
         w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,2,"slime.png");
+        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
         w.addToWorld(slime);
         Tree tree = new Tree(w,5,17,"tree.png");
         w.addToWorld(tree);

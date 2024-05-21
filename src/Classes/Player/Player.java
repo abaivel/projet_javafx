@@ -183,6 +183,7 @@ public class Player extends GameObject {
                 if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
                     System.out.println("ici");
                     p.removeFromInventory(item);
+                    item.setPosition(p.getPosition().getX(),p.getPosition().getY());
                 }
             });
         }
@@ -192,8 +193,8 @@ public class Player extends GameObject {
     public Item removeFromInventory(Item item){
         int index = this.inventory.indexOf(item);
         if(index != -1){
-            this.sizeInventory.set(sizeInventory.getValue()-1);
             Item removed = this.inventory.remove(index);        //get the removed item
+            this.sizeInventory.set(sizeInventory.getValue()-1);
             return removed;
         }else{
             return null;                                        //if item not in inventory
@@ -250,6 +251,8 @@ public class Player extends GameObject {
     public void statusWornOff(){
         for(String s : this.status.keySet()){       //loop on the keyset
             this.status.put(s,this.status.get(s)-1);
+            this.setNumberStatus(this.getNumberStatus()+1);
+            this.setNumberStatus(this.getNumberStatus()-1);
             if(this.status.get(s) == 0){            //verification if value is 0
                 this.status.remove(s);              //removes the status
                 this.setNumberStatus(this.getNumberStatus()-1);
