@@ -132,9 +132,8 @@ public class FightApplication extends Application {
         //endregion
         //region paneDodge
         StackPane paneDodge = new StackPane();
-        Text textDodgeSuccessfull = new Text("You didn't succeed to dodge the monster 's attack");
+        Text textDodgeSuccessfull = new Text("");
         textDodgeSuccessfull.setStyle("-fx-font-size: 40px;-fx-font-family: 'Brush Script MT'");
-        textDodgeSuccessfull.setVisible(false);
         paneDodge.setAlignment(Pos.CENTER);
         paneDodge.getChildren().add(textDodgeSuccessfull);
         pane.getChildren().add(paneDodge);
@@ -218,13 +217,13 @@ public class FightApplication extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 scrollGridPotions.setVisible(true);
-                textDodgeSuccessfull.setVisible(false);
+                //textDodgeSuccessfull.setVisible(false);
             }
         });
         buttonAttack.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                textDodgeSuccessfull.setVisible(false);
+                //textDodgeSuccessfull.setVisible(false);
                 System.out.println("ici");
                 double playerAttack = player.attack(1,monster,null);
                 monster.defend(playerAttack);
@@ -242,7 +241,6 @@ public class FightApplication extends Application {
                 }else{
                     textDodgeSuccessfull.setText("You didn't succeed to dodge the monster 's attack");
                 }
-                textDodgeSuccessfull.setVisible(true);
                 delay(2000, () -> playerTurn.set(false));
             }
         });
@@ -307,6 +305,26 @@ public class FightApplication extends Application {
                 listStatusMonster.getChildren().add(status);
             }
         });
+        monster.messageAttackProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                System.out.println(monster.getMessageAttack());
+                if (!monster.getMessageAttack().isEmpty()) {
+                    System.out.println("hello");
+                    textDodgeSuccessfull.setVisible(true);
+                    textDodgeSuccessfull.setText(monster.getMessageAttack());
+                    monster.setMessageAttack("");
+                }
+            }
+        });
+        textDodgeSuccessfull.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                System.out.println("TEXT="+t1);
+                System.out.println("TEXT CHANGE");
+            }
+        });
+
         stage.showAndWait();
     }
     public static void main(String[] args) {

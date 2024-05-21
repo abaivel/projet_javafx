@@ -27,6 +27,9 @@ public class Looter extends Monster{
             Item itemToSteal = player.removeFromInventory(player.randomItemFromInvetory());
             if (itemToSteal != null) {
                 this.addToInventory(itemToSteal);   //steals a random object from the player's inventory
+                setMessageAttack("The looter stole "+itemToSteal.getName()+" from your inventory");
+            }else{
+                setMessageAttack("The looter tried to steal something from your inventory, but it's empty ! ");
             }
             return 0;                                   //returns 0 because steals an object instead of attacking
         } else if(this.canUseObject()){
@@ -35,13 +38,18 @@ public class Looter extends Monster{
             if(randomItem instanceof Potion){
                 Potion potion = (Potion) randomItem;
                 this.usePotion(player, potion);
+                setMessageAttack("The looter used a potion");
                 return 0;                                           //if it's not a potion does nothing in damage
+            }else{
+                setMessageAttack("The looter attacked the player");
+                this.setCooldown(this.getCooldown()-1);
+                return 1;
             }
         } else{
+            setMessageAttack("The looter attacked the player");
             this.setCooldown(this.getCooldown()-1);
             return 1;                                               //returns 1 to do the calculus in attack function
         }
-        return 1;                                                   //because the IDE is stupid, THERE IS A RETURN STATEMENT IN THE ELSE BRO
     }
 
     //To know if looter can use an object : meaning inventory not empty

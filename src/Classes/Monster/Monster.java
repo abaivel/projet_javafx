@@ -6,10 +6,7 @@ import Classes.Item.NotConsumableItem.Weapon.Weapon;
 import Classes.Player.Player;
 import Classes.World.Position;
 import Classes.World.World;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -30,6 +27,8 @@ public abstract class Monster extends GameObject {
     private Map<String, Integer> status;
 
     private final IntegerProperty numberStatus;
+
+    private final StringProperty messageAttack;
     //endregion
 
     //region Constructor
@@ -44,6 +43,7 @@ public abstract class Monster extends GameObject {
         this.cooldown = cooldown;
         this.status = new HashMap<String, Integer>();
         this.numberStatus = new SimpleIntegerProperty(0);
+        this.messageAttack = new SimpleStringProperty("");
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -124,6 +124,18 @@ public abstract class Monster extends GameObject {
     public void setCooldown(int cooldown) {this.cooldown = cooldown;}
 
     public int getCooldown() {return cooldown;}
+
+    public String getMessageAttack() {
+        return messageAttack.get();
+    }
+
+    public StringProperty messageAttackProperty() {
+        return messageAttack;
+    }
+
+    public void setMessageAttack(String messageAttack) {
+        this.messageAttack.set(messageAttack);
+    }
     //endregion
 
     //region toString Function

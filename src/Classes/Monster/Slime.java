@@ -24,10 +24,12 @@ public class Slime extends Monster{
             System.out.println(this.getName() + " poisons " + player.getName());
             player.addStatus("poisoned",2);             //adding poisoned status to player
             this.setCooldown(3);                        //reset cooldown
+            setMessageAttack("The slime poisoned you !");
             return 0;                                   //returns 0 because only affects status
         }else{
             this.setCooldown(this.getCooldown()-1);
             System.out.println(this.getName() + " attacks " + player.getName() + "\n");
+            setMessageAttack("The slime attacked you !");
             return 1;                                   //returns 1 to do the calculus in attack function : normal attack
         }
     }

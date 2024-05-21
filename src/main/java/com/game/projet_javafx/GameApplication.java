@@ -80,7 +80,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
         flowPane.getChildren().add(pane);
-        p = new Player(world,10,"Truc",25,8,2,5,5);
+        p = new Player(world,10,"Truc",25,4,2,5,5);
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -446,15 +446,15 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
         w.addToWorld(wolf);
 
         w.addToWorld(trap);
-        Looter looter = new Looter(w,"looter",7,3,2,new ArrayList<>(),7,7,0,"looter.png");
-        w.addToWorld(looter);
+        //Looter looter = new Looter(w,"looter",7,3,2,new ArrayList<>(),7,7,0,"looter.png");
+        //w.addToWorld(looter);
         for (int i=0;i<5;i++){
             River r1 = new River(w,i,14);
             w.addToWorld(r1);
@@ -514,7 +514,7 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
@@ -580,7 +580,7 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
