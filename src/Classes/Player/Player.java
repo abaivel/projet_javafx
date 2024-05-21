@@ -408,6 +408,8 @@ public class Player extends GameObject {
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             monster.addStatus(potion.getEffect(), potion.getDuration());
             System.out.println("TEST-");
+        }else if (potion.getEffect().equals("DEATH")){
+            monster.setLifePoints(0);
         }
         this.removeFromInventory(potion);                             //removing the potion from the inventory
     }
