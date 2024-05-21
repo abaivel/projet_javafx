@@ -181,7 +181,7 @@ public class FightApplication extends Application {
         //endregion
 
         Scene scene = new Scene(new ScrollPane(pane));
-        stage.initModality(Modality.APPLICATION_MODAL);
+        //stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.initOwner(primaryStage);
@@ -249,16 +249,16 @@ public class FightApplication extends Application {
         playerTurn.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                //System.out.println("Time for the monster to fight");
                 textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
                 gridButtonsChoiceAction.setVisible(playerTurn.get());
                 gridPotions.setVisible(false);
                 if (!playerTurn.get() && monster.getLifePoints()>0){
                     if (!player.isDodge()) {
-                        System.out.println("Time for the monster to fight");
                         double attackMonster = monster.attack(player);
                         player.defend(attackMonster);
                     }
-                    playerTurn.set(true);
+                    delay(2000, () -> playerTurn.set(true));
                 }
             }
         });

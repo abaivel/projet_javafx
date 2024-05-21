@@ -225,8 +225,11 @@ public class Player extends GameObject {
     }
 
     public Item randomItemFromInvetory(){
-        int index = new Random().nextInt(this.inventory.size());        //randomize an index
-        return this.getInventory().get(index);                          //return the item linked to the random index
+        if (!this.getInventory().isEmpty()) {
+            int index = new Random().nextInt(this.inventory.size());        //randomize an index
+            return this.getInventory().get(index);                          //return the item linked to the random index
+        }
+        return null;
     }
 
     public boolean contains(String item){

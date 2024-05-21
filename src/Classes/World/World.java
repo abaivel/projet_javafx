@@ -83,9 +83,10 @@ public class World {
     }
 
     public boolean CanJumpThere(int x_start, int y_start, int x, int y){
-        Class<?>[] listClasses = new Class[2];
+        Class<?>[] listClasses = new Class[3];
         listClasses[0]=Hedge.class;
         listClasses[1]=Item.class;
+        listClasses[2]=Trap.class;
         return instanceOf(gridObjects[x+(x_start-x)/2][y+(y_start-y)/2],listClasses) || gridObjects[x+(x_start-x)/2][y+(y_start-y)/2].isEmpty();
         /*if (x_start==x){
             return instanceOf(gridObjects[x][y+(y_start-y)/2],listClasses) || gridObjects[x][y+(y_start-y)/2].isEmpty();
