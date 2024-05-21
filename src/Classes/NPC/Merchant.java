@@ -15,8 +15,8 @@ public class Merchant extends NPC {
     public Merchant(World w,String name, double money, int x, int y, String urlImage) {
         super(w,name, money, x,y,urlImage);
         this.dialogues = new String[5];
-        this.dialogues[0] = "Would you like to see my wares ?\n";
-        this.dialogues[1] = "Would you like to sell me something ?\n";
+        this.dialogues[0] = "Can I see your wares?\n";
+        this.dialogues[1] = "Can i sell something?\n";
         this.dialogues[2] = "Would you like to swap one of your item for one of mine ?\n";
         this.dialogues[3] = "Goodbye !\n";
     }
@@ -26,6 +26,7 @@ public class Merchant extends NPC {
     public Merchant(String name) {
         this(null,name,100,0,0,"");
     }
+    //endregion
 
     //region Getters and Setters
     public void setDialogues(String[] dialogues) {this.dialogues = dialogues;}
@@ -34,9 +35,13 @@ public class Merchant extends NPC {
 
     //region For a merchant to sell stuff to the player -> merchant gains money
     public boolean sell(Player p,Item item){
-        if (item.getPrice()<p.getMoney()){ //if the player has enough money to buy the item, the merchant can sell the item to them
+        if (item.getPrice()<p.getMoney() && !(p.inventoryIsFull())){ //if the player has enough money to buy the item, the merchant can sell the item to them
+            //item part
             p.addToInventory(item);
             this.removeFromInventory(item);
+            //money part
+            p.setMoney(p.getMoney()-item.getPrice());
+            this.setMoney(this.getMoney()+item.getPrice());
             return true;
         }else{
             return false;
@@ -46,9 +51,13 @@ public class Merchant extends NPC {
 
     //region For a merchant to buy stuff from the player   -> merchant looses money
     public boolean buy(Player p, Item item){
-        if (item.getPrice()<this.getMoney()){  //if the merchant has enough money to buy the item, the merchant can buy the item
+        if (item.getPrice()<this.getMoney() && !(this.inventoryIsFull())){  //if the merchant has enough money to buy the item, the merchant can buy the item
+            //item part
             p.removeFromInventory(item);
             this.addToInventory(item);
+            //money part
+            p.setMoney(p.getMoney()+item.getPrice());
+            this.setMoney(this.getMoney()-item.getPrice());
             return true;
         }else{
             return false;
@@ -70,8 +79,4 @@ public class Merchant extends NPC {
     }
     //endregion
 
-    public static void main(String[] args) {
-        Merchant merchant = new Merchant("Bob The Merchant");
-
-    }
 }

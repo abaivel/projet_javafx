@@ -137,10 +137,15 @@ public abstract class Monster extends GameObject {
     //endregion
 
     //region Inventory functions
-    public void addToInventory(Item item){
-        this.inventory.add(item);
+    public boolean addToInventory(Item item) {
+        if (this.getInventory().size() < 10) {
+            this.getInventory().add(item);
+            return true;
+        } else {
+            System.out.println("Cannot add element. The inventory is full.");
+            return false;
+        }
     }
-
     public Item removeFromInventory(Item item){
         int index = this.inventory.indexOf(item);
         if(index != -1){

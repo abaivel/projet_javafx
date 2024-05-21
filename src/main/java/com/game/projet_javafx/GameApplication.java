@@ -13,6 +13,7 @@ import Classes.Monster.Slime;
 import Classes.NPC.Fouras;
 import Classes.NPC.Merchant;
 import Classes.NPC.NPC;
+import Classes.NPC.UselessPerson;
 import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
@@ -32,6 +33,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import Classes.World.World;
@@ -39,6 +41,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -60,8 +63,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
-        Player p = new Player(world,5,"Truc",25,4,2,5,5);
-        //p.setInventory(new ArrayList<>(Arrays.asList(new Sword(world,"Sword",true,10,10,4,25,"sword.png"),new Book(world,"Book",true,"This is a book",1,1,14,"book.png"))));
+        Player p = new Player(world,10,"Truc",25,8,2,5,5);
         world.addToWorld(p);
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -71,6 +73,9 @@ public class GameApplication extends Application {
         avatar.setFitWidth(70);
         avatar.setFitHeight(70);
         infosPerso.getChildren().add(avatar);*/
+
+        //TODO : create seperate functions to make code more clear ?
+        //PLayer's lifebar
         GridPane lifeBar = new GridPane();
         lifeBar.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px; -fx-max-height: 20");
         for (int i=0;i<10;i++){
@@ -86,6 +91,8 @@ public class GameApplication extends Application {
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
         infosPerso.getChildren().add(lifeBar);
+
+        //Player's inventory
         GridPane inventory = new GridPane();
         inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
         inventory.setHgap(5);
@@ -103,11 +110,18 @@ public class GameApplication extends Application {
                 }
             }
         }
+
+        //Player's money
+        Label moneyLabel = new Label();                                     //creating the label for the front
+        moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
+        Pane money = new Pane(moneyLabel);                                  //pane creation
+
+        //Filling infosBottom FlowPane
         infosBottom.getChildren().add(inventory);
+        infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
 
-
-
+        //Scene creation
         Scene scene = new Scene(flowPane);
         stage.setTitle("Hello!");
         stage.setScene(scene);
@@ -132,6 +146,7 @@ public class GameApplication extends Application {
                 }
             }
         });*/
+
         //region movement
         final BooleanProperty spacePressed = new SimpleBooleanProperty(false);
         final BooleanProperty rightPressed = new SimpleBooleanProperty(false);
@@ -187,52 +202,86 @@ public class GameApplication extends Application {
             }
         });
         //endregion
+
+        //region Player's attributes listeners
         p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (p.getLP()<=0){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {  //function called when Player's LP change
+                if (p.getLP()<=0){                                                                              //verification failure condition
                     DefeatApplication defeat = new DefeatApplication();
                     try {
-                        defeat.start(new Stage());
+                        defeat.start(new Stage());                                                              //launch defeat stage
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                     stage.close();
-                }
-                lifes.setWidth(p.getLP()*15);
+                }                                                                                               //15 is the size of one "life"
+                lifes.setWidth(p.getLP()*15);                                                                   //for the front resizes life bar with LP left
             }
         });
+
         p.sizeInventoryProperty().addListener(new ChangeListener<Number>() { //listener of the size of the player's inventory
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (p.contains("Hedgehog")){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {      //function called when the size of the inventory changes
+                if (p.contains("Hedgehog")){                                                                        //verification of win condition
                     stage.close();
                     VictoryApplication victory = new VictoryApplication();
                     try {
-                        victory.start(new Stage());
+                        victory.start(new Stage());                                                                 //launch victory stage
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
                 System.out.println("CHANGE");
                 System.out.println(p.getInventory());
-                inventory.getChildren().removeIf(n -> n instanceof ImageView);
+                inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
                 for (int i=0;i<2;i++){
                     for (int j=0;j<5;j++) {
                         int index = i*5+j;
                         if (index<p.sizeInventoryProperty().getValue()) {
-                            inventory.add(p.getInventory().get(index).getNode(), j, i);
+                            inventory.add(p.getInventory().get(index).getNode(), j, i);     //add items one by one to the gridpane
                         }
                     }
                 }
             }
         });
+
+        p.getMoneyProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                System.out.println(p.getMoneyProperty());
+
+            }
+        });
+        //endregion
+
+
         p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
             @Override
             public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
-                System.out.println("listener");
-                if (p.getNearByNPC()!=null) {
-                    System.out.println("I am near a NPC");
+                System.out.println("I am near a NPC");
+                NPC npcDiag = p.getNearByNPC();
+                if(npcDiag instanceof Merchant merchantDiag){                                               //If near a merchant
+                    DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
+                    try {
+                        diagApp.start(new Stage());                                                         //starts dialog
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if(npcDiag instanceof Fouras fourasDiag){                                             //If near a Fouras
+                    DialogFourasApplication diagFouApp = new DialogFourasApplication(fourasDiag,p);
+                    try {
+                        diagFouApp.start(new Stage());                                                      //starts dialog
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if(npcDiag instanceof UselessPerson upDiag){                                          //If near a UselessPerson
+                    DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
+                    try {
+                        diagUseless.start(new Stage());                                                     //starts dialog
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -256,11 +305,10 @@ public class GameApplication extends Application {
             }
         });
     }
-
-    public static void main(String[] args) {
-        launch();
     }
 
+    //TODO : build 2 other worlds and do portals between them
+    //region World Creation
     public World createWorld1(){
         World w = new World("#639620");
         Wall wall = new Wall(w,2,2);
@@ -296,5 +344,10 @@ public class GameApplication extends Application {
             w.addToWorld(r2);
         }
         return w;
+    }
+    //endregion
+
+    public static void main(String[] args) {
+        launch();
     }
 }
