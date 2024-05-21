@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 
 public abstract class GameObject {
     public Position position;
+
     public World world;
 
     public Node node;
@@ -28,5 +29,9 @@ public abstract class GameObject {
     }
     public Node getNode() {
         return node;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 }
