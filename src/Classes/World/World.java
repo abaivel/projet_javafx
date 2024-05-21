@@ -146,6 +146,15 @@ public class World {
         return null;
     }
 
+    public boolean IsThereDoorOpen(int x, int y){
+        for (GameObject g : gridObjects[x][y]){
+            if ((g instanceof Door && ((Door)g).isOpen())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean instanceOf(ArrayList<GameObject> grid, Class<?>[] c){
         for (GameObject g : grid){
             for (Class<?> c0 : c) {

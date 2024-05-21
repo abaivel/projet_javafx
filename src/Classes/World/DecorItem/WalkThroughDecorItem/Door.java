@@ -3,7 +3,10 @@ package Classes.World.DecorItem.WalkThroughDecorItem;
 import Classes.Item.ConsumableItem.Key;
 import Classes.World.Position;
 import Classes.World.World;
+import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class Door extends WalkThroughDecorItem{
 
@@ -17,6 +20,8 @@ public class Door extends WalkThroughDecorItem{
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
+
+
     }
     public boolean isOpen() {
         return open;
@@ -27,4 +32,8 @@ public class Door extends WalkThroughDecorItem{
     public Key getKey() {
         return key;
     }
+
+    public String getColor(){return this.color;}
+
+
 }

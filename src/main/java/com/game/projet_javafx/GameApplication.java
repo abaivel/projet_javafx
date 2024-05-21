@@ -8,8 +8,10 @@ import Classes.Item.NotConsumableItem.Book;
 import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
+import Classes.Monster.Looter;
 import Classes.Monster.Monster;
 import Classes.Monster.Slime;
+import Classes.Monster.Wolf;
 import Classes.NPC.Fouras;
 import Classes.NPC.Merchant;
 import Classes.NPC.NPC;
@@ -18,6 +20,7 @@ import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
+import Classes.World.DecorItem.WalkThroughDecorItem.Door;
 import Classes.World.DecorItem.WalkThroughDecorItem.Hedge;
 import Classes.World.DecorItem.WalkThroughDecorItem.River;
 import Classes.World.World;
@@ -34,6 +37,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import Classes.World.World;
@@ -53,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameApplication extends Application {
+    private Player p;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -63,7 +68,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         GridPane pane = world.getPane();
         flowPane.getChildren().add(pane);
-        Player p = new Player(world,10,"Truc",25,8,2,5,5);
+        p = new Player(world,10,"Truc",25,8,2,5,5);
         world.addToWorld(p);
         FlowPane infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -320,7 +325,7 @@ public class GameApplication extends Application {
         w.addToWorld(buoy);
         Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
-        Key key = new Key(w,10,15,"Key",true,"#ffffff",12,"key.png");
+        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
         w.addToWorld(key);
         Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
         w.addToWorld(book);
@@ -333,6 +338,14 @@ public class GameApplication extends Application {
         Hedge hedge = new Hedge(w,12,12);
         w.addToWorld(hedge);
         Trap trap = new Trap(w,15,15,"trap2.png");
+
+        ArrayList<Item> looterInv = new ArrayList<>();
+        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        w.addToWorld(looter);
+
+        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
+        w.addToWorld(wolf);
+
         w.addToWorld(trap);
         for (int i=0;i<5;i++){
             River r1 = new River(w,i,14);
@@ -342,6 +355,26 @@ public class GameApplication extends Application {
             River r2 = new River(w,4,i);
             w.addToWorld(r2);
         }
+
+        Door door = new Door(w,16,10,"BLUE","door_closed.png");
+        w.addToWorld(door);
+
+        door.getNode().setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton() == MouseButton.PRIMARY){
+                ArrayList<Key> keys = p.containsKey();
+                if(!keys.isEmpty()){
+                    for(Key k : keys){
+                        if(door.getColor().equals(k.getColor())){
+                            door.setOpen(true);
+                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                        }
+                    }
+                }
+
+            }
+
+        });
+
         return w;
     }
     //endregion

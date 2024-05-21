@@ -1,6 +1,7 @@
 package Classes.Player;
 
 import Classes.GameObject;
+import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
 import Classes.Item.NotConsumableItem.Book;
@@ -225,8 +226,11 @@ public class Player extends GameObject {
     }
 
     public Item randomItemFromInvetory(){
-        int index = new Random().nextInt(this.inventory.size());        //randomize an index
-        return this.getInventory().get(index);                          //return the item linked to the random index
+        if (!this.getInventory().isEmpty()) {
+            int index = new Random().nextInt(this.inventory.size());        //randomize an index
+            return this.getInventory().get(index);                          //return the item linked to the random index
+        }
+        return null;
     }
 
     public boolean contains(String item){
@@ -258,6 +262,20 @@ public class Player extends GameObject {
             }
         }
         return w.get(max).getDamage();
+    }
+
+    public ArrayList<Key> containsKey() {
+        ArrayList<Key> k = new ArrayList<>();     //list of keys to fill
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i) instanceof Key) {
+                k.add((Key) this.getInventory().get(i));                 //Adding the weapons to the list
+            }
+        }
+        if (k.isEmpty()) {
+            return null;
+        } else {
+            return k;
+        }
     }
     //endregion
 
