@@ -1,6 +1,7 @@
 package Classes.Player;
 
 import Classes.GameObject;
+import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
 import Classes.Item.NotConsumableItem.Book;
@@ -36,6 +37,7 @@ public class Player extends GameObject {
     private double defense;                 //between 0 and 10
     private boolean dodge;
     private Map<String, Integer> status;
+    private IntegerProperty indexWorld;
 
     private final IntegerProperty numberStatus;
     private ArrayList<Item> inventory;
@@ -61,6 +63,7 @@ public class Player extends GameObject {
         this.nearByNPC=new SimpleObjectProperty<>(null);
         this.nearByMonster=new SimpleObjectProperty<>(null);
         this.dodge=false;
+        this.indexWorld = new SimpleIntegerProperty(0);
         node=new ImageView("image_pinguin.png");
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -155,6 +158,17 @@ public class Player extends GameObject {
         this.dodge = dodge;
     }
 
+    public int getIndexWorld() {
+        return indexWorld.get();
+    }
+
+    public IntegerProperty getIndexWorldProperty() {
+        return indexWorld;
+    }
+
+    public void setIndexWorld(int indexWorld) {
+        this.indexWorld.set(indexWorld);
+    }
 
     //endregion
 
@@ -261,6 +275,20 @@ public class Player extends GameObject {
             }
         }
         return w.get(max).getDamage();
+    }
+
+    public ArrayList<Key> containsKey() {
+        ArrayList<Key> k = new ArrayList<>();     //list of keys to fill
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i) instanceof Key) {
+                k.add((Key) this.getInventory().get(i));                 //Adding the weapons to the list
+            }
+        }
+        if (k.isEmpty()) {
+            return null;
+        } else {
+            return k;
+        }
     }
     //endregion
 
@@ -439,21 +467,31 @@ public class Player extends GameObject {
     public void move(int x, int y) {
         int x_start = getPosition().getX();
         int y_start = getPosition().getY();
-        if (x>=0 && x<=39 && y>=0 && y<=17 && world.CanGoThere(x,y)) {
-            ArrayList<Item> listItems = world.IsThereItem(x,y);
-            for (Item i : listItems){
-                this.addToInventory(i);
-                world.removeFromWorld(i);
+        if (x>=0 && x<=39 && y>=0 && y<=17) {
+            if (world.CanGoThere(x,y)) {
+                ArrayList<Item> listItems = world.IsThereItem(x, y);
+                for (Item i : listItems) {
+                    this.addToInventory(i);
+                    world.removeFromWorld(i);
+                }
+                this.setPosition(x, y);
+                setNearByNPC(world.IsThereNPC(x, y));
+                setNearByMonster(world.IsThereMonster(x, y));
+                if (world.IsThereRiver(x, y)) {
+                    swim(); //you die
+                }
+                if (world.IsThereTrap(x, y)) {
+                    this.setLP(this.getLP() - 2);
+                }
+            }else{
+                int indexWorld = world.IsThereDoorOpen(x,y);
+                if (indexWorld!=-1){
+                    setIndexWorld(indexWorld);
+                }
+
+                //TODO : call function change world
             }
-            this.setPosition(x, y);
-            setNearByNPC(world.IsThereNPC(x,y));
-            setNearByMonster(world.IsThereMonster(x,y));
-            if (world.IsThereRiver(x,y)){
-                swim(); //you die
-            }
-            if (world.IsThereTrap(x,y)){
-                this.setLP(this.getLP()-2);
-            }
+
         }
     }
 

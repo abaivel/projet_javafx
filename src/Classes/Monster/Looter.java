@@ -25,7 +25,7 @@ public class Looter extends Monster{
         if(super.specialAttack()) {
             this.setCooldown(3);                        //reset cooldown
             Item itemToSteal = player.removeFromInventory(player.randomItemFromInvetory());
-            if (itemToSteal!=null) {
+            if (itemToSteal != null) {
                 this.addToInventory(itemToSteal);   //steals a random object from the player's inventory
             }
             return 0;                                   //returns 0 because steals an object instead of attacking
