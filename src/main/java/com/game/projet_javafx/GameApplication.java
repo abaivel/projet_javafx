@@ -80,7 +80,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
         flowPane.getChildren().add(pane);
-        p = new Player(world,10,"Truc",25,8,2,5,5);
+        p = new Player(world,10,"Truc",25,4,2,5,5);
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -167,44 +167,111 @@ public class GameApplication extends Application {
         //region movement
         final BooleanProperty spacePressed = new SimpleBooleanProperty(false);
         final BooleanProperty rightPressed = new SimpleBooleanProperty(false);
+        final BooleanProperty leftPressed = new SimpleBooleanProperty(false);
+        final BooleanProperty upPressed = new SimpleBooleanProperty(false);
+        final BooleanProperty downPressed = new SimpleBooleanProperty(false);
+        final BooleanProperty jumpEffectued = new SimpleBooleanProperty(false);
         final BooleanBinding spaceAndRightPressed = spacePressed.and(rightPressed);
-        final BooleanProperty a = new SimpleBooleanProperty(true);
-        final BooleanProperty b = new SimpleBooleanProperty(true);
+        final BooleanBinding spaceAndLeftPressed = spacePressed.and(leftPressed);
+        final BooleanBinding spaceAndUpPressed = spacePressed.and(upPressed);
+        final BooleanBinding spaceAndDownPressed = spacePressed.and(downPressed);
         spaceAndRightPressed.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 if (spacePressed.getValue()) {
-                    System.out.println("jump");
                     p.jump(GridPane.getColumnIndex(p.node) + 2, GridPane.getRowIndex(p.node));
-                    a.set(false);
                     spacePressed.set(false);
+                    jumpEffectued.set(true);
                 }
             }
+        });
+        spaceAndLeftPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (spacePressed.getValue()) {
+                    p.jump(GridPane.getColumnIndex(p.node) - 2, GridPane.getRowIndex(p.node));
+                    spacePressed.set(false);
+                    jumpEffectued.set(true);
+                }
+            }
+        });
 
+        spaceAndUpPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (spacePressed.getValue()) {
+                    p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-2);
+                    spacePressed.set(false);
+                    jumpEffectued.set(true);
+                }
+            }
+        });
+
+        spaceAndDownPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (spacePressed.getValue()) {
+                    p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+2);
+                    spacePressed.set(false);
+                    jumpEffectued.set(true);
+                }
+            }
         });
 
         rightPressed.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (!spacePressed.getValue() && rightPressed.getValue()){
-                    System.out.println("avance");
+                if (!jumpEffectued.getValue() && rightPressed.getValue()){
                     p.move(GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node));
                     rightPressed.set(false);
-                }else{
-                    System.out.println("avance pas");
                 }
             }
         });
+
+        leftPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (!jumpEffectued.getValue() && leftPressed.getValue()){
+                    p.move(GridPane.getColumnIndex(p.node) - 1, GridPane.getRowIndex(p.node));
+                    leftPressed.set(false);
+                }
+            }
+        });
+
+        upPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (!jumpEffectued.getValue() && upPressed.getValue()){
+                    p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-1);
+                    upPressed.set(false);
+                }
+            }
+        });
+
+        downPressed.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (!jumpEffectued.getValue() && downPressed.getValue()){
+                    p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+1);
+                    downPressed.set(false);
+                }
+            }
+        });
+
+
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.RIGHT) {
                 rightPressed.set(true);
                 //p.move(GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node));
             }else if (e.getCode() == KeyCode.LEFT) {
-                p.move(GridPane.getColumnIndex(p.node) - 1,GridPane.getRowIndex(p.node));
+                leftPressed.set(true);
+                //p.move(GridPane.getColumnIndex(p.node) - 1,GridPane.getRowIndex(p.node));
             }else if (e.getCode() == KeyCode.UP) {
-                p.move(GridPane.getColumnIndex(p.node),GridPane.getRowIndex(p.node)-1);
+                upPressed.set(true);
+                //p.move(GridPane.getColumnIndex(p.node),GridPane.getRowIndex(p.node)-1);
             }else if (e.getCode() == KeyCode.DOWN) {
-                p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node) + 1);
+                downPressed.set(true);
+                //p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node) + 1);
             }
             if (e.getCode() == KeyCode.SPACE){
                 spacePressed.set(true);
@@ -213,9 +280,15 @@ public class GameApplication extends Application {
         scene.setOnKeyReleased(e->{
             if (e.getCode() == KeyCode.SPACE){
                 spacePressed.set(false);
-                //a.set(true);
+                jumpEffectued.set(false);
             }else if (e.getCode() == KeyCode.RIGHT){
                 rightPressed.set(false);
+            }else if (e.getCode() == KeyCode.LEFT){
+                leftPressed.set(false);
+            }else if (e.getCode() == KeyCode.UP){
+                upPressed.set(false);
+            }else if (e.getCode() == KeyCode.DOWN){
+                downPressed.set(false);
             }
         });
         //endregion
@@ -373,13 +446,15 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
         w.addToWorld(wolf);
 
         w.addToWorld(trap);
+        //Looter looter = new Looter(w,"looter",7,3,2,new ArrayList<>(),7,7,0,"looter.png");
+        //w.addToWorld(looter);
         for (int i=0;i<5;i++){
             River r1 = new River(w,i,14);
             w.addToWorld(r1);
@@ -439,7 +514,7 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
@@ -505,7 +580,7 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
 
         ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",15,5,2,looterInv,8,8,0,"looter.png");
+        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
         w.addToWorld(looter);
 
         Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
