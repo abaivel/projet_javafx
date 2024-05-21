@@ -454,21 +454,26 @@ public class Player extends GameObject {
     public void move(int x, int y) {
         int x_start = getPosition().getX();
         int y_start = getPosition().getY();
-        if (x>=0 && x<=39 && y>=0 && y<=17 && world.CanGoThere(x,y)) {
-            ArrayList<Item> listItems = world.IsThereItem(x,y);
-            for (Item i : listItems){
-                this.addToInventory(i);
-                world.removeFromWorld(i);
+        if (x>=0 && x<=39 && y>=0 && y<=17) {
+            if (world.CanGoThere(x,y)) {
+                ArrayList<Item> listItems = world.IsThereItem(x, y);
+                for (Item i : listItems) {
+                    this.addToInventory(i);
+                    world.removeFromWorld(i);
+                }
+                this.setPosition(x, y);
+                setNearByNPC(world.IsThereNPC(x, y));
+                setNearByMonster(world.IsThereMonster(x, y));
+                if (world.IsThereRiver(x, y)) {
+                    swim(); //you die
+                }
+                if (world.IsThereTrap(x, y)) {
+                    this.setLP(this.getLP() - 2);
+                }
+            }else if (world.IsThereDoorOpen(x,y)){
+                //TODO : call function change world
             }
-            this.setPosition(x, y);
-            setNearByNPC(world.IsThereNPC(x,y));
-            setNearByMonster(world.IsThereMonster(x,y));
-            if (world.IsThereRiver(x,y)){
-                swim(); //you die
-            }
-            if (world.IsThereTrap(x,y)){
-                this.setLP(this.getLP()-2);
-            }
+
         }
     }
 
