@@ -1,6 +1,7 @@
 package com.game.projet_javafx;
 
 import Classes.GameObject;
+import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
@@ -444,6 +445,8 @@ public class GameApplication extends Application {
         Hedge hedge = new Hedge(w,12,12);
         w.addToWorld(hedge);
         Trap trap = new Trap(w,15,15,"trap2.png");
+        Bomb bomb = new Bomb(w,6,17,"BIGBOMB",false,10,"bomb.png");
+        w.addToWorld(bomb);
 
         ArrayList<Item> looterInv = new ArrayList<>();
         Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
@@ -467,6 +470,7 @@ public class GameApplication extends Application {
         Door door = new Door(w,16,10,"BLUE","door_closed.png",1);
         w.addToWorld(door);
 
+        //Door mouse event
         door.getNode().setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton() == MouseButton.PRIMARY){
                 ArrayList<Key> keys = p.containsKey();

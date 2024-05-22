@@ -1,9 +1,11 @@
 package Classes.World;
 
 import Classes.GameObject;
+import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.Item;
 import Classes.Monster.Monster;
 import Classes.NPC.NPC;
+import Classes.Player.Player;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
@@ -17,17 +19,27 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class World {
+    //region Attributes
     public ArrayList<GameObject>[][] gridObjects = new ArrayList[40][18];
     String color;
     GridPane pane;
+    //endregion
+
+    //region Constants
     private static final int HEIGHT = 675;
     private static final int WIDTH = 1500;
     private static final int ROWS = 18;
     private static final int COLUMNS=40;
+
+    //endregion
+
+    //region Getters
     public GridPane getPane() {
         return pane;
     }
+    //endregion
 
+    //region Constructor
     public World(String color) {
         this.color=color;
         pane = new GridPane();
@@ -50,7 +62,9 @@ public class World {
             }
         }
     }
+    //endregion
 
+    //region add, remove, move
     public void addToWorld(GameObject gameObject){
         gridObjects[gameObject.getPosition().getX()][gameObject.getPosition().getY()].add(gameObject);
         pane.add(gameObject.getNode(),gameObject.getPosition().getX(),gameObject.getPosition().getY());
@@ -70,7 +84,9 @@ public class World {
             pane.add(gameObject.getNode(),x,y);
         }
     }
+    //endregion
 
+    //region For movement
     public boolean CanGoThere(int x, int y){
         Class<?>[] listClasses = new Class[6];
         for (GameObject g : gridObjects[x][y]){
@@ -94,7 +110,9 @@ public class World {
             return instanceOf(gridObjects[x+(x_start-x)/2][y],listClasses) || gridObjects[x+(x_start-x)/2][y].isEmpty();
         }*/
     }
+    //endregion
 
+    //region Item
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
         System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
@@ -107,6 +125,26 @@ public class World {
         return listItems;
     }
 
+    public void destroysRadiusBomb(int x, int y){  //for the use of bombs -> destroys decors in a 9 block radius around the bomb and kill the player
+        for (int i=x-1;i<=x+1;i++){                 //parcours matrice des 9 cases autour de notre case x,y
+            for (int j=y-1;j<=y+1;j++){             //parcours matrice des 9 cases autour de notre case x,y
+                if (i>=0 && i<=39 && j>=0 && j<=17) {   //verify if we're in the grid
+                    for(int k=0; k<gridObjects[i][j].size();k++){   //parcours des ArrayList de GameObjects pour chaque case i,j, get(k) pour récup le GameObject
+                        if(gridObjects[i][j].get(k) instanceof Trap || gridObjects[i][j].get(k) instanceof Hedge || gridObjects[i][j].get(k) instanceof Wall || gridObjects[i][j].get(k) instanceof Tree || gridObjects[i][j].get(k) instanceof Bomb){
+                            this.removeFromWorld(gridObjects[i][j].get(k));         //"detroys" -> removes particular decor items from the world if present in the radius of the bomb's explosion
+                        }
+                        else if(gridObjects[i][j].get(k) instanceof Player player){
+                            player.setLP(0);                                        //kills the player if they're in the radius of the bomb's explosion
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    //endregion
+
+    //region IsThere...
     public boolean IsThereRiver(int x, int y){
         Class<?>[] listClasses = new Class[1];
         listClasses[0]=River.class;
@@ -148,14 +186,16 @@ public class World {
     }
 
     public int IsThereDoorOpen(int x, int y){
-        for (GameObject g : gridObjects[x][y]){
-            if ((g instanceof Door && ((Door)g).isOpen())){
+        for (GameObject g : gridObjects[x][y]){                 //parcours les GameObject de la case d'indice x,y de la matrice gridObjects
+            if ((g instanceof Door && ((Door)g).isOpen())){     //chaque case de gridObject est une ArrayList de GameObjects
                 return (((Door) g).getNextWorld());
             }
         }
         return -1;
     }
+    //endregion
 
+    //region InstanceOf function
     public boolean instanceOf(ArrayList<GameObject> grid, Class<?>[] c){
         for (GameObject g : grid){
             for (Class<?> c0 : c) {
@@ -167,4 +207,8 @@ public class World {
             return false;
 
     }
+    //endregion
+
+
+
 }

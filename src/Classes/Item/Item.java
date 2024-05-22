@@ -7,7 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-//TODO destroy potion when used in fights
+
 public abstract class Item extends GameObject {
     //region Item's attributes
     private String name;
@@ -56,15 +56,16 @@ public abstract class Item extends GameObject {
     }
     //endregion
 
+    //region Item
     //When an item is picked up by the player
     public void pickedUp(){
         setDropped(false);
     }
 
-
     public void appear(){
         setDropped(true);
     }
+    //endregion
 
 
 }
