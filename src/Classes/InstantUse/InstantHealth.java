@@ -7,8 +7,8 @@ import Classes.World.World;
 public class InstantHealth extends Instant{
 
     //region Constructor
-    public InstantHealth(World w, int x, int y, int value) {
-        super(w, x, y, value);
+    public InstantHealth(World w, int x, int y, int value, String urlImage) {
+        super(w, x, y, value,urlImage);
     }
     //endregion
 

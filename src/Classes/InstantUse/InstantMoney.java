@@ -6,8 +6,8 @@ import Classes.World.World;
 public class InstantMoney extends Instant{
 
     //region Constructor
-    public InstantMoney(World w, int x, int y, int value) {
-        super(w, x, y, value);
+    public InstantMoney(World w, int x, int y, int value, String urlImage) {
+        super(w, x, y, value, urlImage);
     }
     //endregion
 
@@ -15,3 +15,4 @@ public class InstantMoney extends Instant{
         player.setMoney(player.getMoney() + getValue());            //The player gains the amount of money of the InstantUse "item"
     }
 }
+

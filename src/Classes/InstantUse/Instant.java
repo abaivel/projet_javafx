@@ -1,7 +1,9 @@
 package Classes.InstantUse;
 
 import Classes.GameObject;
+import Classes.World.Position;
 import Classes.World.World;
+import javafx.scene.image.ImageView;
 
 //TODO : front + image ?
 public abstract class Instant extends GameObject {
@@ -10,9 +12,12 @@ public abstract class Instant extends GameObject {
     //endregion
 
     //region Constructor
-    public Instant(World w, int x, int y, int value) {
+    public Instant(World w, int x, int y, int value, String urlImage) {
         super(w, x, y);
         this.value = value;
+        this.node = new ImageView(urlImage);
+        ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
+        ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
     }
     //endregion
 

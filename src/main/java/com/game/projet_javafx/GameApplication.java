@@ -1,5 +1,7 @@
 package com.game.projet_javafx;
 
+import Classes.InstantUse.InstantHealth;
+import Classes.InstantUse.InstantMoney;
 import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
@@ -461,6 +463,15 @@ public class GameApplication extends Application {
         Trap trap = new Trap(w,15,15,"trap2.png");
         Bomb bomb = new Bomb(w,6,17,"BIGBOMB",false,10,"bomb.png");
         w.addToWorld(bomb);
+
+        InstantMoney instantMoney = new InstantMoney(w,5,10,10,"coin.png");
+        w.addToWorld(instantMoney);
+        InstantHealth instantHealth = new InstantHealth(w,6,6,10,"heart.png");
+        w.addToWorld(instantHealth);
+
+        InstantHealth instant2Health = new InstantHealth(w,1,2,1,"heart.png");
+        w.addToWorld(instant2Health);
+
 
         ArrayList<Item> looterInv = new ArrayList<>();
         Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");

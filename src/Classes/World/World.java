@@ -1,6 +1,7 @@
 package Classes.World;
 
 import Classes.GameObject;
+import Classes.InstantUse.Instant;
 import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.Item;
 import Classes.Monster.Monster;
@@ -114,7 +115,7 @@ public class World {
     }
     //endregion
 
-    //region Item
+    //region Item : IsThereItem ; destroysRadiusBomb
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
         System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
@@ -194,6 +195,18 @@ public class World {
             }
         }
         return -1;
+    }
+
+    public ArrayList<Instant> IsThereInstant(int x, int y){
+        ArrayList<Instant> listInstants = new ArrayList<>();
+        System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
+        for (GameObject g : gridObjects[x][y]){
+            if (g instanceof Instant){
+                listInstants.add((Instant)g);
+            }
+        }
+        System.out.println("listInstant="+listInstants);
+        return listInstants;
     }
     //endregion
 

@@ -1,6 +1,9 @@
 package Classes.Player;
 
 import Classes.GameObject;
+import Classes.InstantUse.Instant;
+import Classes.InstantUse.InstantHealth;
+import Classes.InstantUse.InstantMoney;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
@@ -474,10 +477,15 @@ public class Player extends GameObject {
         int y_start = getPosition().getY();
         if (x>=0 && x<=39 && y>=0 && y<=17) {
             if (world.CanGoThere(x,y)) {
+                ArrayList<Instant> listInstants = world.IsThereInstant(x, y);
                 ArrayList<Item> listItems = world.IsThereItem(x, y);
                 for (Item i : listItems) {
                     this.addToInventory(i);
                     world.removeFromWorld(i);
+                }
+                for (Instant inst : listInstants) {
+                    this.useInstant(inst);
+                    world.removeFromWorld(inst);
                 }
                 this.setPosition(x, y);
                 setNearByNPC(world.IsThereNPC(x, y));
@@ -579,6 +587,20 @@ public class Player extends GameObject {
         Potion potion = potionlist.get(action);
         System.out.println("The selected potion is " + potion);
         return potion;
+    }
+    //endregion
+
+    //region Instants
+    public void useInstant(Instant instant){
+        if(instant instanceof InstantHealth instH){
+            if(this.getLP() + instH.getValue() > 10){
+                this.setLP(10);
+            }else{
+                this.setLP(this.getLP() + instH.getValue());
+            }
+        }else if(instant instanceof InstantMoney instM){
+            this.setMoney(this.getMoney()+instM.getValue());
+        }
     }
     //endregion
 
