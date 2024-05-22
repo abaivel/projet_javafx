@@ -8,7 +8,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+//Doors have 2 states :
+//  - closed -> the player can't walk through but can open them if they have the corresponding key in their inventory
+//  - opened -> if player walk through, they'll be teleported to the next world
 public class Door extends WalkThroughDecorItem{
+
     //region Attributes
     private Key key;
     private String color;

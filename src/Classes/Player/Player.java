@@ -28,7 +28,12 @@ import java.util.Map;
 
 import static java.lang.Math.random;
 
+//The main character ! A brave penguin (that deserves a bonus point in itself !!)
+//Goal : reach the MIGHTY HEDGEHOG -> to win pick up Hedgehog item
+//Can die in fights, drowning, being blown up by a bomb
+//Can move in every direction and jump over low decors
 public class Player extends GameObject {
+
     //region Player's attributes
     private final DoubleProperty LP;
     private String name;
@@ -527,10 +532,8 @@ public class Player extends GameObject {
     //endregion
     //endregion
 
-    //TODO
+    //TODO :  a retirer (celles non utilisées)???
     //region Item functions
-    //to pick up items on the floor ? Need to walk on the cell that has an item in it
-    //updates the inventory with adding the new item
     public void pickItem(Item item){
         //faire ajouter à arraylise TO DO
         //verifier si inventaire pas full   --> pour front si inventaire full -> alert de type warning
@@ -579,7 +582,7 @@ public class Player extends GameObject {
     }
     //endregion
 
-    //TODO : savoir ce qu'on en fait
+    //TODO : A retirer ????
     //region Victory and failure condition
     public boolean victory(){
         return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory

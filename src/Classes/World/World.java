@@ -6,19 +6,21 @@ import Classes.Item.Item;
 import Classes.Monster.Monster;
 import Classes.NPC.NPC;
 import Classes.Player.Player;
-import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
+import Classes.World.DecorItem.WalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
 import Classes.World.DecorItem.WalkThroughDecorItem.Door;
-import Classes.World.DecorItem.WalkThroughDecorItem.Hedge;
+import Classes.World.DecorItem.NotWalkThroughDecorItem.Hedge;
 import Classes.World.DecorItem.WalkThroughDecorItem.River;
-import Classes.World.World;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+//World contains is a matrix where in each square there's an Array of GameObjects
+//We can have multiple GamoObjects on a square exemple : PLayer and river ; PLayer and item (when player discard an object on the floor)
 public class World {
+
     //region Attributes
     public ArrayList<GameObject>[][] gridObjects = new ArrayList[40][18];
     String color;

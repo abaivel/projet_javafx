@@ -6,7 +6,10 @@ import Classes.World.World;
 
 import java.util.Objects;
 
+//is used to open Door with the same color
+//when linked key in inventory -> left click on door to open it
 public class Key extends Item {
+
     //region Attributes
     String color;
     //endregion

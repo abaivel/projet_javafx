@@ -12,7 +12,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+//First window of the game
+//Welcome !
 public class WelcomeApplication extends Application {
+
+    //region start function
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Game");
@@ -43,6 +47,7 @@ public class WelcomeApplication extends Application {
             }
         });
     }
+    //endregion
 
     public static void main(String[] args) {
         launch();

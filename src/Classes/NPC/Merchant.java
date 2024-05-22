@@ -6,7 +6,9 @@ import Classes.Player.Player;
 import Classes.World.Position;
 import Classes.World.World;
 
+//NPC that can trade with the player : buy, sell and swap items
 public class Merchant extends NPC {
+
     //region Merchant's attributes
     private String[] dialogues;
     //endregion

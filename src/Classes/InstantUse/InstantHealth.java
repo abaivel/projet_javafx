@@ -1,4 +1,4 @@
-package InstantUse;
+package Classes.InstantUse;
 
 import Classes.Player.Player;
 import Classes.World.World;

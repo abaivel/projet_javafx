@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-//NPC that tells enigmas to the player and reward him with soms coins for the right answer
+//NPC that tells enigmas to the player and reward them with some coins for the right answer
 public class Fouras extends NPC {
+
     //region Fouras's attributes
     private Map<String, String> enigma;
     //endregion

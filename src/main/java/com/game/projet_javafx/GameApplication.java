@@ -1,6 +1,5 @@
 package com.game.projet_javafx;
 
-import Classes.GameObject;
 import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
@@ -18,11 +17,11 @@ import Classes.NPC.Merchant;
 import Classes.NPC.NPC;
 import Classes.NPC.UselessPerson;
 import Classes.Player.Player;
-import Classes.World.DecorItem.NotWalkThroughDecorItem.Trap;
+import Classes.World.DecorItem.WalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
 import Classes.World.DecorItem.WalkThroughDecorItem.Door;
-import Classes.World.DecorItem.WalkThroughDecorItem.Hedge;
+import Classes.World.DecorItem.NotWalkThroughDecorItem.Hedge;
 import Classes.World.DecorItem.WalkThroughDecorItem.River;
 import Classes.World.World;
 import javafx.application.Application;
@@ -31,52 +30,57 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import Classes.World.World;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+//Main Application
+//Contains 3 world creations
 public class GameApplication extends Application {
+
+    //region Attributes
     private Player p;
     private World world;
     GridPane pane;
     FlowPane flowPane;
     FlowPane infosBottom;
+    //endregion
 
+    //region start function
     @Override
     public void start(Stage stage) throws IOException {
         /*ArrayList<ArrayList<GameObject>> gridObject = new ArrayList<>();
         gridObject.set(2,new ArrayList<GameObject>())*/
+
+        //region Worlds
+        //Creations of the 3 worlds
         World world1 = createWorld1();
         World world2 = createWorld2();
         World world3 = createWorld3();
 
+        //Initialisation of the world list
         World[] listWorld = new World[3];
         listWorld[0] = world1;
         listWorld[1] = world2;
         listWorld[2] = world3;
         world=listWorld[0];
+        //endregion
+
+        //region Front : main panes
         flowPane = new FlowPane(Orientation.HORIZONTAL);
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
@@ -91,9 +95,9 @@ public class GameApplication extends Application {
         avatar.setFitWidth(70);
         avatar.setFitHeight(70);
         infosPerso.getChildren().add(avatar);*/
+        //endregion
 
-        //TODO : create seperate functions to make code more clear ?
-        //PLayer's lifebar
+        //region Front : PLayer's lifebar
         GridPane lifeBar = new GridPane();
         lifeBar.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px; -fx-max-height: 20");
         for (int i=0;i<10;i++){
@@ -109,8 +113,9 @@ public class GameApplication extends Application {
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
         infosPerso.getChildren().add(lifeBar);
+        //endregion
 
-        //Player's inventory
+        //region Front : Player's inventory
         GridPane inventory = new GridPane();
         inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
         inventory.setHgap(5);
@@ -128,23 +133,28 @@ public class GameApplication extends Application {
                 }
             }
         }
+        //endregion
 
-        //Player's money
+        //region Front : Player's money
         Label moneyLabel = new Label();                                     //creating the label for the front
         moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
         Pane money = new Pane(moneyLabel);                                  //pane creation
+        //endregion
 
-        //Filling infosBottom FlowPane
+        //region Front : Filling infosBottom FlowPane
         infosBottom.getChildren().add(inventory);
         infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
+        //endregion
 
-        //Scene creation
+        //region Front : Scene creation
         Scene scene = new Scene(flowPane);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+        //endregion
+
         /*scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.RIGHT) {
                 if (GridPane.getColumnIndex(p.node)<COLUMNS-1 && IsThereWall(world.gridObjects, GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node))) {
@@ -165,7 +175,7 @@ public class GameApplication extends Application {
             }
         });*/
 
-        //region movement
+        //region Listener : movement
         final BooleanProperty spacePressed = new SimpleBooleanProperty(false);
         final BooleanProperty rightPressed = new SimpleBooleanProperty(false);
         final BooleanProperty leftPressed = new SimpleBooleanProperty(false);
@@ -294,7 +304,7 @@ public class GameApplication extends Application {
         });
         //endregion
 
-        //region Player's attributes listeners
+        //region Listeners : Player's attributes
         p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {  //function called when Player's LP change
@@ -345,7 +355,7 @@ public class GameApplication extends Application {
             }
         });
 
-        p.getIndexWorldProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
+        p.getIndexWorldProperty().addListener(new ChangeListener<Number>() { //listener of the value of indexWorld of the player
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 world.removeFromWorld(p);
@@ -367,7 +377,7 @@ public class GameApplication extends Application {
         });
         //endregion
 
-
+        //region Listener : Player near an NPC
         p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
             @Override
             public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
@@ -397,6 +407,9 @@ public class GameApplication extends Application {
                 }
             }
         });
+        //endregion
+
+        //region Listener : Player near a Monster
         p.nearByMonsterProperty().addListener(new ChangeListener<Monster>() {
             @Override
             public void changed(ObservableValue<? extends Monster> observableValue, Monster monster, Monster t1) {
@@ -416,9 +429,10 @@ public class GameApplication extends Application {
                 }
             }
         });
+        //endregion
     }
+    //endregion
 
-    //TODO : build 2 other worlds and do portals between them
     //region World Creation
     public World createWorld1(){
         World w = new World("#639620");
@@ -624,7 +638,5 @@ public class GameApplication extends Application {
     }
     //endregion
 
-    public static void main(String[] args) {
-        launch();
-    }
+    public static void main(String[] args) {launch();}
 }

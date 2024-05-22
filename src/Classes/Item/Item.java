@@ -7,8 +7,11 @@ import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-
+//GameObjects usable or not by the Player
+//Can be picked up by walking on them
+//Can be discarded from the inventory by right click on them in the inventory bar -> on player's position
 public abstract class Item extends GameObject {
+
     //region Item's attributes
     private String name;
     private int price;
