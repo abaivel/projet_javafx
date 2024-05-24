@@ -490,7 +490,7 @@ public class GameApplication extends Application {
 
         //column3
         for (int i=0;i<=5;i++) {
-            Tree tree3 = new Tree(w,0,i,"tree.png");
+            Tree tree3 = new Tree(w,3,i,"tree.png");
             w.addToWorld(tree3);
         }
         Tree tree313 = new Tree(w,3,13,"tree.png");
@@ -506,7 +506,7 @@ public class GameApplication extends Application {
 
         //column6
         for (int i=1;i<=6;i++) {
-            Tree tree6 = new Tree(w,0,i,"tree.png");
+            Tree tree6 = new Tree(w,6,i,"tree.png");
             w.addToWorld(tree6);
         }
 
@@ -584,11 +584,11 @@ public class GameApplication extends Application {
 
         //column28
         for (int i=0;i<=1;i++) {
-            Tree tree282 = new Tree(w,0,i,"tree.png");
+            Tree tree282 = new Tree(w,28,i,"tree.png");
             w.addToWorld(tree282);
         }
         for (int i=3;i<=6;i++) {
-            Tree tree283 = new Tree(w,0,i,"tree.png");
+            Tree tree283 = new Tree(w,28,i,"tree.png");
             w.addToWorld(tree283);
         }
         Tree tree2810 = new Tree(w,28,10,"tree.png");
@@ -602,7 +602,7 @@ public class GameApplication extends Application {
 
         //colum30
         for (int i=2;i<=3;i++) {
-            Tree tree30 = new Tree(w,0,i,"tree.png");
+            Tree tree30 = new Tree(w,30,i,"tree.png");
             w.addToWorld(tree30);
         }
 
@@ -638,11 +638,17 @@ public class GameApplication extends Application {
 
         //column38
         for (int i=2;i<=3;i++) {
-            Tree tree38 = new Tree(w,0,i,"tree.png");
+            Tree tree38 = new Tree(w,38,i,"tree.png");
             w.addToWorld(tree38);
         }
         Tree tree3810 = new Tree(w,38,10,"tree.png");
         w.addToWorld(tree3810);
+
+        //column39
+        Tree tree390 = new Tree(w,39,0,"tree.png");
+        w.addToWorld(tree390);
+        Tree tree3910 = new Tree(w,39,10,"tree.png");
+        w.addToWorld(tree3910);
         //endregion
 
         //region River
@@ -658,76 +664,242 @@ public class GameApplication extends Application {
         }
 
         //row1
-        for (int i=10;i<=13;i++) {
-            River river0 = new River(w,i,0);
-            w.addToWorld(river0);
+        for (int i=12;i<=14;i++) {
+            River river1 = new River(w,i,1);
+            w.addToWorld(river1);
+        }
+        for (int i=17;i<=21;i++) {
+            River river11 = new River(w,i,1);
+            w.addToWorld(river11);
+        }
+
+        //row2
+        for (int i=13;i<=20;i++) {
+            River river2 = new River(w,i,2);
+            w.addToWorld(river2);
+        }
+
+        //row9
+        for (int i=0;i<=2;i++) {
+            River river9 = new River(w,i,9);
+            w.addToWorld(river9);
+        }
+        //row10
+        for (int i=0;i<=4;i++) {
+            River river10 = new River(w,i,10);
+            w.addToWorld(river10);
+        }
+        //row11
+        for (int i=2;i<=4;i++) {
+            River river11 = new River(w,i,11);
+            w.addToWorld(river11);
         }
         for (int i=19;i<=21;i++) {
-            River river01 = new River(w,i,0);
-            w.addToWorld(river01);
+            River river111 = new River(w,i,11);
+            w.addToWorld(river111);
+        }
+        //row12
+        for (int i=3;i<=22;i++) {
+            River river12 = new River(w,i,12);
+            w.addToWorld(river12);
+        }
+        //row13
+        for (int i=5;i<=18;i++) {
+            River river13 = new River(w,i,13);
+            w.addToWorld(river13);
+        }
+        for (int i=21;i<=23;i++) {
+            River river131 = new River(w,i,13);
+            w.addToWorld(river131);
+        }
+        //row14
+        for (int i=23;i<=25;i++) {
+            River river14 = new River(w,i,14);
+            w.addToWorld(river14);
+        }
+        //row15
+        for (int i=23;i<=39;i++) {
+            River river15 = new River(w,i,15);
+            w.addToWorld(river15);
+        }
+        //row16
+        for (int i=25;i<=39;i++) {
+            River river16 = new River(w,i,16);
+            w.addToWorld(river16);
         }
         //endregion
 
+        //region Walls
+        //market
+        //row
+        for (int i=10;i<=19;i++) {
+            Wall wall0 = new Wall(w,i,4);
+            w.addToWorld(wall0);
+        }
+
+        //columns
+        for (int i=5;i<=8;i++){
+            Wall wall01 = new Wall(w,10,i);
+            w.addToWorld(wall01);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall02 = new Wall(w,13,i);
+            w.addToWorld(wall02);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall03 = new Wall(w,16,i);
+            w.addToWorld(wall03);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall04 = new Wall(w,19,i);
+            w.addToWorld(wall04);
+        }
+
+        //Looter's warehouse
+        //rows
+        for (int i=1;i<=6;i++) {
+            Wall wall1 = new Wall(w,i,14);
+            w.addToWorld(wall1);
+        }
+        for (int i=1;i<=6;i++) {
+            Wall wall11 = new Wall(w,i,17);
+            w.addToWorld(wall11);
+        }
+
+        //column
+        for (int i=15;i<=16;i++) {
+            Wall wall12 = new Wall(w,1,i);
+            w.addToWorld(wall12);
+        }
+
+        //Trappppp, I like trap, trap cute
+        //rows
+        for (int i=36;i<=39;i++) {
+            Wall wall2 = new Wall(w,i,11);
+            w.addToWorld(wall2);
+        }
+        for (int i=36;i<=39;i++) {
+            Wall wall21 = new Wall(w,i,14);
+            w.addToWorld(wall21);
+        }
+
+        //column
+        for (int i=12;i<=13;i++) {
+            Wall wall22 = new Wall(w,39,i);
+            w.addToWorld(wall22);
+        }
+        Wall wall23 = new Wall(w,36,12);
+        w.addToWorld(wall23);
+
+        //endregion
+
+        //region hedges
+        for (int i=20;i<=28;i++) {
+            Hedge hedge0 = new Hedge(w,i,6);
+            w.addToWorld(hedge0);
+        }
+        for (int i=8;i<=9;i++){
+            Hedge hedge1 = new Hedge(w,36,i);
+            w.addToWorld(hedge1);
+        }
+        //endregion
+
+        //region items
+        Key key_green = new Key(w,1,2,"green key",true,"green",5,"key_green.png");
+        w.addToWorld(key_green);
 
 
 
+        Bomb bomb1 = new Bomb(w,4,0,"boum",true,10,"bomb.png");
+        w.addToWorld(bomb1);
+        Bomb bomb2 = new Bomb(w,6,16,"BOUUUUM eheh",true,10,"bomb.png");
+        w.addToWorld(bomb2);
+        Bomb bomb3 = new Bomb(w,17,5,"boum",true,10,"bomb.png");
+        w.addToWorld(bomb3);
 
 
-        Wall wall = new Wall(w,2,2);
-        w.addToWorld(wall);
-        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
-        w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
-        w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+
+        InstantMoney instMoney1 = new InstantMoney(w,11,6,10,"coin.png");
+        w.addToWorld(instMoney1);
+        InstantMoney instMoney2 = new InstantMoney(w,14,5,10,"coin.png");
+        w.addToWorld(instMoney2);
+        InstantMoney instMoney3 = new InstantMoney(w,15,5,10,"coin.png");
+        w.addToWorld(instMoney3);
+        for (int i=2;i<=3;i++) {
+            InstantMoney instMoney4 = new InstantMoney(w,i,15,10,"coin.png");
+            w.addToWorld(instMoney4);
+        }
+        InstantMoney instMoney5 = new InstantMoney(w,2,16,10,"coin.png");
+        w.addToWorld(instMoney5);
+
+        InstantHealth instHealth1 = new InstantHealth(w,19,14,10,"heart.png");
+        w.addToWorld(instHealth1);
+        InstantHealth instHealth2 = new InstantHealth(w,38,12,10,"heart.png");
+        w.addToWorld(instHealth2);
+
+        Trap trap0 = new Trap(w,4,1,"trap2.png");
+        w.addToWorld(trap0);
+        Trap trap1 = new Trap(w,18,7,"trap2.png");
+        w.addToWorld(trap1);
+        Trap trap2 = new Trap(w,36,13,"trap2.png");
+        w.addToWorld(trap2);
+        for (int i=3;i<=4;i++) {
+            Trap trap3 = new Trap(w,i,16,"trap.png");
+            w.addToWorld(trap3);
+        }
+
+        Buoy buoy = new Buoy(w,14,6,"Buoyyyyyy",true,8,"buoy.png");
         w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
-        w.addToWorld(trinket);
-        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
-        //w.addToWorld(key);
-        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
+
+        Book book = new Book(w,"Nice book",true,"I am a nice book eheh",37,12,7,"book.png");
         w.addToWorld(book);
-        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
+
+        Trinket vase = new Trinket(w,10,38,13,"Cute vase",true,"vase.png");
+        w.addToWorld(vase);
+
+        Potion potion1 = new Potion(w,12,5,"Life potion",true,"LIFE+5",10,0,"potion1.png");
+        w.addToWorld(potion1);
+
+        Sword sword = new Sword(w,"Sword",true,37,2,4,25,"sword.png");
+        w.addToWorld(sword);
+
+
+
+
+        //endregion
+
+        //region NPC
+        Fouras fouras1 = new Fouras(w,"Grand Fouras Suprême",50,5,4,"fouras.png");
         w.addToWorld(fouras1);
-        ArrayList<Item> itemSlime = new ArrayList<>();
-        itemSlime.add(key);
-        Slime slime = new Slime(w, "Slime", 5, 3, 2, itemSlime,7,5,0,"slime.png");
-        w.addToWorld(slime);
-        Hedge hedge = new Hedge(w,12,12);
-        w.addToWorld(hedge);
-        Trap trap = new Trap(w,15,15,"trap2.png");
-        Bomb bomb = new Bomb(w,6,17,"BIGBOMB",true,10,"bomb.png");
-        w.addToWorld(bomb);
 
-        InstantMoney instantMoney = new InstantMoney(w,5,10,10,"coin.png");
-        w.addToWorld(instantMoney);
-        InstantHealth instantHealth = new InstantHealth(w,6,6,10,"heart.png");
-        w.addToWorld(instantHealth);
+        Fouras fouras2 = new Fouras(w,"Magicien",30,0,8,"fouras2.png");
+        w.addToWorld(fouras2);
 
-        InstantHealth instant2Health = new InstantHealth(w,1,2,1,"heart.png");
-        w.addToWorld(instant2Health);
+        Merchant merchant1 = new Merchant(w,"Bob the merchant",40,11,7,"merchant.png");
+        w.addToWorld(merchant1);
 
+        Merchant merchant2 = new Merchant(w,"Patrick the merchant",30,15,6,"merchant.png");
+        w.addToWorld(merchant2);
+        //endregion
 
-        ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
+        //region Monsters
+        Looter looter = new Looter(w,"Mwahaha I loot",10,5,2,new ArrayList<Item>(),4,15,0,"looter.png");
         w.addToWorld(looter);
 
-        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
-        w.addToWorld(wolf);
+        Wolf wolf1 = new Wolf(w,"agrougrou",10,4,3,new ArrayList<Item>(),2,0,0,"wolf.png");
+        w.addToWorld(wolf1);
 
-        w.addToWorld(trap);
-        //Looter looter = new Looter(w,"looter",7,3,2,new ArrayList<>(),7,7,0,"looter.png");
-        //w.addToWorld(looter);
-        for (int i=0;i<5;i++){
-            River r1 = new River(w,i,14);
-            w.addToWorld(r1);
-        }
-        for (int i=15;i<18;i++){
-            River r2 = new River(w,4,i);
-            w.addToWorld(r2);
-        }
+        Wolf wolf2 = new Wolf(w,"ahouuuuuuu",10,4,3,new ArrayList<Item>(),1,1,0,"wolf.png");
+        w.addToWorld(wolf2);
 
-        Door door = new Door(w,16,10,"BLUE","door_closed.png",1);
+        Slime slime1 = new Slime(w,"slimeyyy",10,3,2,new ArrayList<Item>(),15,0,0,"slime.png");
+        w.addToWorld(slime1);
+
+        Slime slime2 = new Slime(w,"slimeuuuh",10,3,2,new ArrayList<Item>(),17,0,0,"slime2.png");
+        w.addToWorld(slime2);
+        //endregion
+
+        Door door = new Door(w,18,5,"green","door_closed_green.png",1);
         w.addToWorld(door);
 
         //Door mouse event
@@ -738,7 +910,7 @@ public class GameApplication extends Application {
                     for(Key k : keys){
                         if(door.getColor().equals(k.getColor())){
                             door.setOpen(true);
-                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                            ((ImageView) door.getNode()).setImage(new Image("door_open_green.png"));
                             p.removeFromInventory(k);
                         }
                     }

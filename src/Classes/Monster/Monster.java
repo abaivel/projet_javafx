@@ -109,7 +109,16 @@ public abstract class Monster extends GameObject {
     }
 
     public void setLifePoints(double lifePoints) {
-        this.lifePoints.set(lifePoints);
+
+        if (lifePoints>=0) {
+            if (lifePoints>10){
+                this.lifePoints.set(10);
+            }else {
+                this.lifePoints.set(lifePoints);
+            }
+        }else{
+            this.lifePoints.set(0);
+        }
     }
 
     public void setStrength(int force) {
