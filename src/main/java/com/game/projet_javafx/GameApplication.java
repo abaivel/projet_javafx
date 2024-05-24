@@ -479,7 +479,7 @@ public class GameApplication extends Application {
         Hedge hedge = new Hedge(w,12,12);
         w.addToWorld(hedge);
         Trap trap = new Trap(w,15,15,"trap2.png");
-        Bomb bomb = new Bomb(w,6,17,"BIGBOMB",false,10,"bomb.png");
+        Bomb bomb = new Bomb(w,6,17,"BIGBOMB",true,10,"bomb.png");
         w.addToWorld(bomb);
 
         InstantMoney instantMoney = new InstantMoney(w,5,10,10,"coin.png");

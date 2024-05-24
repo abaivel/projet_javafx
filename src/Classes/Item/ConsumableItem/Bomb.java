@@ -12,7 +12,7 @@ public class Bomb extends Item {
         super(w, x, y, name, dropped, price, urlImage);
 
         this.getNode().setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY && this.isDropped()){  //TODO : merge pour avoir le droppped corrigé sur les items et retester
+            if(mouseEvent.getButton() == MouseButton.PRIMARY && this.isDropped()){
                 w.destroysRadiusBomb(this.getPosition().getX(), this.getPosition().getY());
             }
         });
