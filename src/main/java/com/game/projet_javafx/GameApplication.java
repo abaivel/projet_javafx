@@ -49,11 +49,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,7 +88,7 @@ public class GameApplication extends Application {
         listWorld[0] = world1;
         listWorld[1] = world2;
         listWorld[2] = world3;
-        world=listWorld[0];
+        world=listWorld[1];
         //endregion
 
         //region Front : main panes
@@ -93,7 +96,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
         flowPane.getChildren().add(pane);
-        p = new Player(world,10,"Truc",25,4,2,5,5);
+        p = new Player(world,10,"Truc",25,4,2,15,7);
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -155,7 +158,7 @@ public class GameApplication extends Application {
         flowPane.getChildren().add(infosBottom);
         //endregion
 
-        /*File file = new File("src\\main\\resources\\game_music.mp3");
+        File file = new File("src/main/resources/game_music.mp3");
         System.out.println("here");
         final String MEDIA_URL = file.toURI().toString();
         System.out.println("here");
@@ -165,7 +168,7 @@ public class GameApplication extends Application {
         System.out.println("here");
         mediaPlayer.volumeProperty().set(0.1);
         //mediaPlayer.setStopTime(Duration.seconds(212));
-        mediaPlayer.play();*/
+        mediaPlayer.play();
 
         //region Front : Scene creation
         Scene scene = new Scene(flowPane);
@@ -353,7 +356,7 @@ public class GameApplication extends Application {
                         throw new RuntimeException(e);
                     }
                 }
-                System.out.println("CHANGE");
+                System.out.println("CHANGE CHANGE");
                 System.out.println(p.getInventory());
                 inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
                 for (int i=0;i<2;i++){
@@ -443,6 +446,7 @@ public class GameApplication extends Application {
                     }
                     if (p.getNearByMonster().getLifePoints()<=0){
                         world.removeFromWorld(p.getNearByMonster());
+                        p.getNearByMonster().dropItem();
                         p.setNearByMonster(null);
                     }
                     System.out.println(p.getInventory());
@@ -462,7 +466,7 @@ public class GameApplication extends Application {
         w.addToWorld(sword);
         Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
         w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+        Buoy buoy = new Buoy(w,28,15,"Buoy",true,10,"buoy.png");
         w.addToWorld(buoy);
         Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
@@ -536,66 +540,145 @@ public class GameApplication extends Application {
 
     public World createWorld2(){
         World w = new World("#8e9700");
-        Wall wall = new Wall(w,2,2);
-        w.addToWorld(wall);
-        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
-        w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
-        w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
-        w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
-        w.addToWorld(trinket);
-        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
-        w.addToWorld(key);
-        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
-        w.addToWorld(book);
-        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
-        w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
-        w.addToWorld(slime);
-        Tree tree = new Tree(w,5,17,"tree.png");
-        w.addToWorld(tree);
-        Hedge hedge = new Hedge(w,12,12);
-        w.addToWorld(hedge);
-        Trap trap = new Trap(w,15,15,"trap2.png");
-
-        ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
-        w.addToWorld(looter);
-
-        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
-        w.addToWorld(wolf);
-
-        w.addToWorld(trap);
+        //region Trees
+        //region forest
+        for (int i=0;i<7;i++){
+            w.addToWorld(new Tree(w,0,i,"tree.png"));
+        }
+        w.addToWorld(new Tree(w,1,6,"tree.png"));
+        for (int i=1;i<7;i++){
+            w.addToWorld(new Tree(w,2,i,"tree.png"));
+        }
+        for (int i=1;i<7;i++){
+            w.addToWorld(new Tree(w,3,i,"tree.png"));
+        }
+        w.addToWorld(new Tree(w,4,2,"tree.png"));
+        w.addToWorld(new Tree(w,4,4,"tree.png"));
+        w.addToWorld(new Tree(w,4,6,"tree.png"));
+        w.addToWorld(new Tree(w,5,6,"tree.png"));
+        for (int i=1;i<7;i++){
+            w.addToWorld(new Tree(w,6,i,"tree.png"));
+        }
+        //endregion
+        w.addToWorld(new Tree(w,8,14,"tree.png"));
+        w.addToWorld(new Tree(w,8,16,"tree.png"));
+        w.addToWorld(new Tree(w,9,15,"tree.png"));
+        w.addToWorld(new Tree(w,10,14,"tree.png"));
+        w.addToWorld(new Tree(w,10,16,"tree.png"));
+        for (int i=14;i<18;i++){
+            w.addToWorld(new Tree(w,35,i,"tree.png"));
+        }
+        //endregion
+        //region Walls
+        for (int i=0;i<3;i++){
+            w.addToWorld(new Wall(w,i,7));
+        }
+        for (int i=8;i<12;i++){
+            w.addToWorld(new Wall(w,0,i));
+        }
+        for (int i=0;i<11;i++){
+            w.addToWorld(new Wall(w,i,11));
+        }
+        for (int i=0;i<6;i++){
+            w.addToWorld(new Wall(w,11+i,11+i));
+            w.addToWorld(new Wall(w,11+i,12+i));
+        }
+        for (int i=0;i<4;i++){
+            w.addToWorld(new Wall(w,i,14));
+        }
+        for (int i=14;i<18;i++){
+            w.addToWorld(new Wall(w,3,i));
+        }
+        for (int i=10;i<18;i++){
+            w.addToWorld(new Wall(w,36,i));
+        }
+        for (int i=21;i<30;i++){
+            w.addToWorld(new Wall(w,i,3));
+        }
+        for (int i=0;i<3;i++){
+            w.addToWorld(new Wall(w,30+i,3+i));
+            w.addToWorld(new Wall(w,30+i,4+i));
+        }
+        for (int i=33;i<40;i++){
+            w.addToWorld(new Wall(w,i,6));
+        }
+        //endregion
+        //region River
         for (int i=0;i<5;i++){
-            River r1 = new River(w,i,14);
-            w.addToWorld(r1);
+            w.addToWorld(new River(w,29-i,13+i));
+            w.addToWorld(new River(w,30-i,13+i));
+            w.addToWorld(new River(w,31-i,13+i));
         }
-        for (int i=15;i<18;i++){
-            River r2 = new River(w,4,i);
-            w.addToWorld(r2);
+        for (int i=32;i<36;i++){
+            w.addToWorld(new River(w,i,13));
         }
-
-        Door door = new Door(w,16,10,"BLUE","door_closed.png",2);
-        w.addToWorld(door);
-
-        door.getNode().setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY){
-                ArrayList<Key> keys = p.containsKey();
-                if(!keys.isEmpty()){
-                    for(Key k : keys){
-                        if(door.getColor().equals(k.getColor())){
-                            door.setOpen(true);
-                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
-                            p.removeFromInventory(k);
-                        }
-                    }
-                }
-
+        for (int i=31;i<35;i++){
+            w.addToWorld(new River(w,i,14));
+        }
+        for (int i=0;i<3;i++){
+            w.addToWorld(new River(w,36-i,7+i));
+            w.addToWorld(new River(w,37-i,7+i));
+            w.addToWorld(new River(w,38-i,7+i));
+        }
+        for (int i=34;i<36;i++){
+            for (int j=10;j<13;j++){
+                w.addToWorld(new River(w,i,j));
             }
+        }
+        w.addToWorld(new River(w,39,7));
+        //endregion
+        //region Hedge
+        w.addToWorld(new Hedge(w,8,15));
+        w.addToWorld(new Hedge(w,9,14));
+        w.addToWorld(new Hedge(w,9,16));
+        w.addToWorld(new Hedge(w,10,15));
+        //endregion
+        //region Money
+        for (int i=33;i<36;i++){
+            w.addToWorld(new InstantMoney(w,i,1,1,"coin.png"));
+        }
+        for (int i=2;i<5;i++){
+            w.addToWorld(new InstantMoney(w,34,i,1,"coin.png"));
+        }
+        w.addToWorld(new InstantMoney(w,38,1,1,"coin.png"));
+        w.addToWorld(new InstantMoney(w,37,2,1,"coin.png"));
+        w.addToWorld(new InstantMoney(w,38,3,1,"coin.png"));
+        w.addToWorld(new InstantMoney(w,37,4,1,"coin.png"));
+        w.addToWorld(new InstantMoney(w,4,3,1,"coin.png"));
+        //endregion
+        //region Heart
+        w.addToWorld(new InstantHealth(w,0,17,1,"heart.png"));
+        //endregion
+        //region Monster
+        //region Slime
+        w.addToWorld(new Slime(w,"Cutie Slime",8,3,2,new ArrayList<>(),5,5,0,"slime2.png"));
+        w.addToWorld(new Slime(w,"Speaky Slime",9,5,3,new ArrayList<>(),3,9,0,"slime3.png"));
+        w.addToWorld(new Slime(w,"Red Slime",10,7,4,new ArrayList<>(),38,11,0,"slime.png"));
+        //endregion
+        //region Looter
+        w.addToWorld(new Looter(w,"Scooter",7,4,1,new ArrayList<>(),29,1,0,"looter.png"));
+        w.addToWorld(new Looter(w,"Kanye",5,3,2,new ArrayList<>(),14,17,0,"looter2.png"));
+        //endregion
+        //region Wolf
+        w.addToWorld(new Wolf(w,"Meredith the Wolf", 8,4,3,new ArrayList<>(),2,12,0,"wolf.png"));
+        w.addToWorld(new Wolf(w,"Olivia the Wolf", 8,6,4,new ArrayList<>(),24,1,0,"wolf.png"));
+        //endregion
+        //endregion
+        //region NPC
+        //region Fouras
+        w.addToWorld(new Fouras(w,"Willow",10,7,3,"fouras2.png"));
+        w.addToWorld(new Fouras(w,"Dumbledore",20,33,16,"fouras.png"));
+        //endregion
+        //region Merchant
+        w.addToWorld(new Merchant(w,"Forest Merchant",30,1,5,"merchant.png"));
+        w.addToWorld(new Merchant(w,"Hidden Merchant",25,5,16,"merchant.png"));
+        //endregion
+        //region Useless
+        w.addToWorld(new UselessPerson(w, "TayTay",100,36,2,"useless1.png"));
+        w.addToWorld(new UselessPerson(w, "Knight",10,8,10,"useless2.png"));
+        //endregion
+        //endregion
 
-        });
 
         return w;
     }
@@ -608,7 +691,7 @@ public class GameApplication extends Application {
         w.addToWorld(sword);
         Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
         w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+        Buoy buoy = new Buoy(w,28,15,"Buoy",true,10,"buoy.png");
         w.addToWorld(buoy);
         Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
