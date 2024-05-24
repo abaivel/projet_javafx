@@ -93,7 +93,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
         flowPane.getChildren().add(pane);
-        p = new Player(world,10,"Truc",25,4,2,5,5);
+        p = new Player(world,10,"Bearu",25,4,2,5,5);
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.VERTICAL);
         infosBottom.setHgap(10);
@@ -441,8 +441,9 @@ public class GameApplication extends Application {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    if (p.getNearByMonster().getLifePoints()<=0){
+                    if (p.getNearByMonster().getLifePoints()<=0){       //verify if monster dead here
                         world.removeFromWorld(p.getNearByMonster());
+                        p.getNearByMonster().dropItem();
                         p.setNearByMonster(null);
                     }
                     System.out.println(p.getInventory());
@@ -456,61 +457,449 @@ public class GameApplication extends Application {
     //region World Creation
     public World createWorld1(){
         World w = new World("#639620");
-        Wall wall = new Wall(w,2,2);
-        w.addToWorld(wall);
-        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
-        w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
-        w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Sword",true,10,"buoy.png");
+
+
+        //region Trees
+        //column0
+        for (int i=0;i<=7;i++) {
+            Tree tree0 = new Tree(w,0,i,"tree.png");
+            w.addToWorld(tree0);
+        }
+        Tree tree012 = new Tree(w,0,12,"tree.png");
+        Tree tree015 = new Tree(w,0,15,"tree.png");
+        Tree tree016 = new Tree(w,12,16,"tree.png");
+        Tree tree017 = new Tree(w,0,17,"tree.png");
+        w.addToWorld(tree012);
+        w.addToWorld(tree015);
+        w.addToWorld(tree016);
+        w.addToWorld(tree017);
+
+        //column1
+        Tree tree14 = new Tree(w,1,4,"tree.png");
+        w.addToWorld(tree14);
+
+        //column2
+        Tree tree21 = new Tree(w,2,1,"tree.png");
+        Tree tree22 = new Tree(w,2,2,"tree.png");
+        Tree tree212 = new Tree(w,2,12,"tree.png");
+        Tree tree213 = new Tree(w,2,13,"tree.png");
+        w.addToWorld(tree21);
+        w.addToWorld(tree22);
+        w.addToWorld(tree212);
+        w.addToWorld(tree213);
+
+        //column3
+        for (int i=0;i<=5;i++) {
+            Tree tree3 = new Tree(w,3,i,"tree.png");
+            w.addToWorld(tree3);
+        }
+        Tree tree313 = new Tree(w,3,13,"tree.png");
+        w.addToWorld(tree313);
+
+        //column4
+        Tree tree42 = new Tree(w,4,2,"tree.png");
+        w.addToWorld(tree42);
+
+        //column5
+        Tree tree53 = new Tree(w,4,2,"tree.png");
+        w.addToWorld(tree53);
+
+        //column6
+        for (int i=1;i<=6;i++) {
+            Tree tree6 = new Tree(w,6,i,"tree.png");
+            w.addToWorld(tree6);
+        }
+
+        //column7
+        Tree tree76 = new Tree(w,7,6,"tree.png");
+        Tree tree77 = new Tree(w,7,7,"tree.png");
+        Tree tree716 = new Tree(w,7,16,"tree.png");
+        w.addToWorld(tree76);
+        w.addToWorld(tree77);
+        w.addToWorld(tree716);
+
+        //column9
+        Tree tree92 = new Tree(w,9,2,"tree.png");
+        Tree tree914 = new Tree(w,9,14,"tree.png");
+        w.addToWorld(tree92);
+        w.addToWorld(tree914);
+
+        //column10
+        Tree tree102 = new Tree(w,10,2,"tree.png");
+        Tree tree1014 = new Tree(w,10,14,"tree.png");
+        Tree tree1016 = new Tree(w,10,16,"tree.png");
+        w.addToWorld(tree102);
+        w.addToWorld(tree1014);
+        w.addToWorld(tree1016);
+
+        //column11
+        Tree tree111 = new Tree(w,11,11,"tree.png");
+        w.addToWorld(tree111);
+
+        //column12
+        Tree tree1215 = new Tree(w,12,15,"tree.png");
+        Tree tree1217 = new Tree(w,12,17,"tree.png");
+        w.addToWorld(tree1215);
+        w.addToWorld(tree1217);
+
+        //column17
+        Tree tree1716 = new Tree(w,17,16,"tree.png");
+        w.addToWorld(tree1716);
+
+        //column18
+        Tree tree1814 = new Tree(w,18,14,"tree.png");
+        Tree tree1815 = new Tree(w,18,15,"tree.png");
+        w.addToWorld(tree1814);
+        w.addToWorld(tree1815);
+
+        //column19
+        Tree tree1913 = new Tree(w,19,13,"tree.png");
+        w.addToWorld(tree1913);
+
+        //column20
+        Tree tree207 = new Tree(w,20,7,"tree.png");
+        w.addToWorld(tree207);
+
+        //column22
+        Tree tree2216 = new Tree(w,22,16,"tree.png");
+        w.addToWorld(tree2216);
+
+        //colum23
+        Tree tree231 = new Tree(w,23,1,"tree.png");
+        Tree tree234 = new Tree(w,23,4,"tree.png");
+        Tree tree2317 = new Tree(w,23,17,"tree.png");
+        w.addToWorld(tree231);
+        w.addToWorld(tree234);
+        w.addToWorld(tree2317);
+
+        //column24
+        Tree tree245 = new Tree(w,24,5,"tree.png");
+        Tree tree248 = new Tree(w,24,8,"tree.png");
+        w.addToWorld(tree245);
+        w.addToWorld(tree248);
+
+        //colum27
+        Tree tree274 = new Tree(w,27,4,"tree.png");
+        w.addToWorld(tree274);
+
+        //column28
+        for (int i=0;i<=1;i++) {
+            Tree tree282 = new Tree(w,28,i,"tree.png");
+            w.addToWorld(tree282);
+        }
+        for (int i=3;i<=6;i++) {
+            Tree tree283 = new Tree(w,28,i,"tree.png");
+            w.addToWorld(tree283);
+        }
+        Tree tree2810 = new Tree(w,28,10,"tree.png");
+        w.addToWorld(tree2810);
+
+        //column29
+        Tree tree293 = new Tree(w,29,3,"tree.png");
+        Tree tree2910 = new Tree(w,29,10,"tree.png");
+        w.addToWorld(tree293);
+        w.addToWorld(tree2910);
+
+        //colum30
+        for (int i=2;i<=3;i++) {
+            Tree tree30 = new Tree(w,30,i,"tree.png");
+            w.addToWorld(tree30);
+        }
+
+        //column31
+        Tree tree3111 = new Tree(w,31,11,"tree.png");
+        w.addToWorld(tree3111);
+
+        //column32
+        Tree tree3217 = new Tree(w,32,17,"tree.png");
+        w.addToWorld(tree3217);
+
+        //column33
+        Tree tree332 = new Tree(w,33,2,"tree.png");
+        w.addToWorld(tree332);
+
+        //column34
+        Tree tree345 = new Tree(w,34,5,"tree.png");
+        w.addToWorld(tree345);
+
+        //column36
+        Tree tree360 = new Tree(w,36,0,"tree.png");
+        Tree tree367 = new Tree(w,36,7,"tree.png");
+        Tree tree3610 = new Tree(w,36,10,"tree.png");
+        w.addToWorld(tree360);
+        w.addToWorld(tree367);
+        w.addToWorld(tree3610);
+
+        //column37
+        Tree tree373 = new Tree(w,37,3,"tree.png");
+        Tree tree3710 = new Tree(w,37,10,"tree.png");
+        w.addToWorld(tree373);
+        w.addToWorld(tree3710);
+
+        //column38
+        for (int i=2;i<=3;i++) {
+            Tree tree38 = new Tree(w,38,i,"tree.png");
+            w.addToWorld(tree38);
+        }
+        Tree tree3810 = new Tree(w,38,10,"tree.png");
+        w.addToWorld(tree3810);
+
+        //column39
+        Tree tree390 = new Tree(w,39,0,"tree.png");
+        w.addToWorld(tree390);
+        Tree tree3910 = new Tree(w,39,10,"tree.png");
+        w.addToWorld(tree3910);
+        //endregion
+
+        //region River
+
+        //row0
+        for (int i=10;i<=13;i++) {
+            River river0 = new River(w,i,0);
+            w.addToWorld(river0);
+        }
+        for (int i=19;i<=21;i++) {
+            River river01 = new River(w,i,0);
+            w.addToWorld(river01);
+        }
+
+        //row1
+        for (int i=12;i<=14;i++) {
+            River river1 = new River(w,i,1);
+            w.addToWorld(river1);
+        }
+        for (int i=17;i<=21;i++) {
+            River river11 = new River(w,i,1);
+            w.addToWorld(river11);
+        }
+
+        //row2
+        for (int i=13;i<=20;i++) {
+            River river2 = new River(w,i,2);
+            w.addToWorld(river2);
+        }
+
+        //row9
+        for (int i=0;i<=2;i++) {
+            River river9 = new River(w,i,9);
+            w.addToWorld(river9);
+        }
+        //row10
+        for (int i=0;i<=4;i++) {
+            River river10 = new River(w,i,10);
+            w.addToWorld(river10);
+        }
+        //row11
+        for (int i=2;i<=4;i++) {
+            River river11 = new River(w,i,11);
+            w.addToWorld(river11);
+        }
+        for (int i=19;i<=21;i++) {
+            River river111 = new River(w,i,11);
+            w.addToWorld(river111);
+        }
+        //row12
+        for (int i=3;i<=22;i++) {
+            River river12 = new River(w,i,12);
+            w.addToWorld(river12);
+        }
+        //row13
+        for (int i=5;i<=18;i++) {
+            River river13 = new River(w,i,13);
+            w.addToWorld(river13);
+        }
+        for (int i=21;i<=23;i++) {
+            River river131 = new River(w,i,13);
+            w.addToWorld(river131);
+        }
+        //row14
+        for (int i=23;i<=25;i++) {
+            River river14 = new River(w,i,14);
+            w.addToWorld(river14);
+        }
+        //row15
+        for (int i=23;i<=39;i++) {
+            River river15 = new River(w,i,15);
+            w.addToWorld(river15);
+        }
+        //row16
+        for (int i=25;i<=39;i++) {
+            River river16 = new River(w,i,16);
+            w.addToWorld(river16);
+        }
+        //endregion
+
+        //region Walls
+        //market
+        //row
+        for (int i=10;i<=19;i++) {
+            Wall wall0 = new Wall(w,i,4);
+            w.addToWorld(wall0);
+        }
+
+        //columns
+        for (int i=5;i<=8;i++){
+            Wall wall01 = new Wall(w,10,i);
+            w.addToWorld(wall01);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall02 = new Wall(w,13,i);
+            w.addToWorld(wall02);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall03 = new Wall(w,16,i);
+            w.addToWorld(wall03);
+        }
+        for (int i=5;i<=8;i++) {
+            Wall wall04 = new Wall(w,19,i);
+            w.addToWorld(wall04);
+        }
+
+        //Looter's warehouse
+        //rows
+        for (int i=1;i<=6;i++) {
+            Wall wall1 = new Wall(w,i,14);
+            w.addToWorld(wall1);
+        }
+        for (int i=1;i<=6;i++) {
+            Wall wall11 = new Wall(w,i,17);
+            w.addToWorld(wall11);
+        }
+
+        //column
+        for (int i=15;i<=16;i++) {
+            Wall wall12 = new Wall(w,1,i);
+            w.addToWorld(wall12);
+        }
+
+        //Trappppp, I like trap, trap cute
+        //rows
+        for (int i=36;i<=39;i++) {
+            Wall wall2 = new Wall(w,i,11);
+            w.addToWorld(wall2);
+        }
+        for (int i=36;i<=39;i++) {
+            Wall wall21 = new Wall(w,i,14);
+            w.addToWorld(wall21);
+        }
+
+        //column
+        for (int i=12;i<=13;i++) {
+            Wall wall22 = new Wall(w,39,i);
+            w.addToWorld(wall22);
+        }
+        Wall wall23 = new Wall(w,36,12);
+        w.addToWorld(wall23);
+
+        //endregion
+
+        //region hedges
+        for (int i=20;i<=28;i++) {
+            Hedge hedge0 = new Hedge(w,i,6);
+            w.addToWorld(hedge0);
+        }
+        for (int i=8;i<=9;i++){
+            Hedge hedge1 = new Hedge(w,36,i);
+            w.addToWorld(hedge1);
+        }
+        //endregion
+
+        //region items
+        Key key_green = new Key(w,1,2,"green key",true,"green",5,"key_green.png");
+        w.addToWorld(key_green);
+
+
+
+        Bomb bomb1 = new Bomb(w,4,0,"boum",true,10,"bomb.png");
+        w.addToWorld(bomb1);
+        Bomb bomb2 = new Bomb(w,6,16,"BOUUUUM eheh",true,10,"bomb.png");
+        w.addToWorld(bomb2);
+        Bomb bomb3 = new Bomb(w,17,5,"boum",true,10,"bomb.png");
+        w.addToWorld(bomb3);
+
+
+
+        InstantMoney instMoney1 = new InstantMoney(w,11,6,10,"coin.png");
+        w.addToWorld(instMoney1);
+        InstantMoney instMoney2 = new InstantMoney(w,14,5,10,"coin.png");
+        w.addToWorld(instMoney2);
+        InstantMoney instMoney3 = new InstantMoney(w,15,5,10,"coin.png");
+        w.addToWorld(instMoney3);
+        for (int i=2;i<=3;i++) {
+            InstantMoney instMoney4 = new InstantMoney(w,i,15,10,"coin.png");
+            w.addToWorld(instMoney4);
+        }
+        InstantMoney instMoney5 = new InstantMoney(w,2,16,10,"coin.png");
+        w.addToWorld(instMoney5);
+
+        InstantHealth instHealth1 = new InstantHealth(w,19,14,10,"heart.png");
+        w.addToWorld(instHealth1);
+        InstantHealth instHealth2 = new InstantHealth(w,38,12,10,"heart.png");
+        w.addToWorld(instHealth2);
+
+        Trap trap0 = new Trap(w,4,1,"trap2.png");
+        w.addToWorld(trap0);
+        Trap trap1 = new Trap(w,18,7,"trap2.png");
+        w.addToWorld(trap1);
+        Trap trap2 = new Trap(w,36,13,"trap2.png");
+        w.addToWorld(trap2);
+        for (int i=3;i<=4;i++) {
+            Trap trap3 = new Trap(w,i,16,"trap.png");
+            w.addToWorld(trap3);
+        }
+
+        Buoy buoy = new Buoy(w,14,6,"Buoyyyyyy",true,8,"buoy.png");
         w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
-        w.addToWorld(trinket);
-        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
-        w.addToWorld(key);
-        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
+
+        Book book = new Book(w,"Nice book",true,"I am a nice book eheh",37,12,7,"book.png");
         w.addToWorld(book);
-        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
+
+        Trinket vase = new Trinket(w,10,38,13,"Cute vase",true,"vase.png");
+        w.addToWorld(vase);
+
+        Potion potion1 = new Potion(w,12,5,"Life potion",true,"LIFE+5",10,0,"potion1.png");
+        w.addToWorld(potion1);
+
+        Sword sword = new Sword(w,"Sword",true,37,2,4,25,"sword.png");
+        w.addToWorld(sword);
+
+
+
+
+        //endregion
+
+        //region NPC
+        Fouras fouras1 = new Fouras(w,"Grand Fouras Suprême",50,5,4,"fouras.png");
         w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
-        w.addToWorld(slime);
-        Tree tree = new Tree(w,5,17,"tree.png");
-        w.addToWorld(tree);
-        Hedge hedge = new Hedge(w,12,12);
-        w.addToWorld(hedge);
-        Trap trap = new Trap(w,15,15,"trap2.png");
-        Bomb bomb = new Bomb(w,6,17,"BIGBOMB",false,10,"bomb.png");
-        w.addToWorld(bomb);
 
-        InstantMoney instantMoney = new InstantMoney(w,5,10,10,"coin.png");
-        w.addToWorld(instantMoney);
-        InstantHealth instantHealth = new InstantHealth(w,6,6,10,"heart.png");
-        w.addToWorld(instantHealth);
+        Fouras fouras2 = new Fouras(w,"Magicien",30,0,8,"fouras2.png");
+        w.addToWorld(fouras2);
 
-        InstantHealth instant2Health = new InstantHealth(w,1,2,1,"heart.png");
-        w.addToWorld(instant2Health);
+        Merchant merchant1 = new Merchant(w,"Bob the merchant",40,11,7,"merchant.png");
+        w.addToWorld(merchant1);
 
+        Merchant merchant2 = new Merchant(w,"Patrick the merchant",30,15,6,"merchant.png");
+        w.addToWorld(merchant2);
+        //endregion
 
-        ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
+        //region Monsters
+        Looter looter = new Looter(w,"Mwahaha I loot",10,5,2,new ArrayList<Item>(),4,15,0,"looter.png");
         w.addToWorld(looter);
 
-        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
-        w.addToWorld(wolf);
+        Wolf wolf1 = new Wolf(w,"agrougrou",10,4,3,new ArrayList<Item>(),2,0,0,"wolf.png");
+        w.addToWorld(wolf1);
 
-        w.addToWorld(trap);
-        //Looter looter = new Looter(w,"looter",7,3,2,new ArrayList<>(),7,7,0,"looter.png");
-        //w.addToWorld(looter);
-        for (int i=0;i<5;i++){
-            River r1 = new River(w,i,14);
-            w.addToWorld(r1);
-        }
-        for (int i=15;i<18;i++){
-            River r2 = new River(w,4,i);
-            w.addToWorld(r2);
-        }
+        Wolf wolf2 = new Wolf(w,"ahouuuuuuu",10,4,3,new ArrayList<Item>(),1,1,0,"wolf.png");
+        w.addToWorld(wolf2);
 
-        Door door = new Door(w,16,10,"BLUE","door_closed.png",1);
+        Slime slime1 = new Slime(w,"slimeyyy",10,3,2,new ArrayList<Item>(),15,0,0,"slime.png");
+        w.addToWorld(slime1);
+
+        Slime slime2 = new Slime(w,"slimeuuuh",10,3,2,new ArrayList<Item>(),17,0,0,"slime2.png");
+        w.addToWorld(slime2);
+        //endregion
+
+        Door door = new Door(w,18,5,"green","door_closed_green.png",1);
         w.addToWorld(door);
 
         //Door mouse event
@@ -521,7 +910,7 @@ public class GameApplication extends Application {
                     for(Key k : keys){
                         if(door.getColor().equals(k.getColor())){
                             door.setOpen(true);
-                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
+                            ((ImageView) door.getNode()).setImage(new Image("door_open_green.png"));
                             p.removeFromInventory(k);
                         }
                     }

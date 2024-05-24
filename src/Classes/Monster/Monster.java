@@ -109,7 +109,16 @@ public abstract class Monster extends GameObject {
     }
 
     public void setLifePoints(double lifePoints) {
-        this.lifePoints.set(lifePoints);
+
+        if (lifePoints>=0) {
+            if (lifePoints>10){
+                this.lifePoints.set(10);
+            }else {
+                this.lifePoints.set(lifePoints);
+            }
+        }else{
+            this.lifePoints.set(0);
+        }
     }
 
     public void setStrength(int force) {
@@ -305,7 +314,8 @@ public abstract class Monster extends GameObject {
     }
 
     public void dropItem(){
-        for (Item item : getInventory()) {
+        ArrayList<Item> copyInventory = (ArrayList<Item>) getInventory().clone();
+        for (Item item : copyInventory) {
             item.setPosition(this.getPosition().getX(), this.getPosition().getY());
             item.setDropped(true);
             removeFromInventory(item);
