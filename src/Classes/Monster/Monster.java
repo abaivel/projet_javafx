@@ -306,7 +306,9 @@ public abstract class Monster extends GameObject {
 
     public void dropItem(){
         for (Item item : getInventory()) {
-            //TODO: Appeler la fonction faisant apparaitre un item dans la classe de l'item
+            item.setPosition(this.getPosition().getX(), this.getPosition().getY());
+            item.setDropped(true);
+            removeFromInventory(item);
         }
     }
     //endregion

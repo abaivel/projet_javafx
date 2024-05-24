@@ -32,26 +32,32 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import Classes.World.World;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-//Main Application
-//Contains 3 world creations
 public class GameApplication extends Application {
 
     //region Attributes
@@ -148,6 +154,18 @@ public class GameApplication extends Application {
         infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
         //endregion
+
+        /*File file = new File("src\\main\\resources\\game_music.mp3");
+        System.out.println("here");
+        final String MEDIA_URL = file.toURI().toString();
+        System.out.println("here");
+        Media media = new Media(MEDIA_URL);
+        System.out.println("here");
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        System.out.println("here");
+        mediaPlayer.volumeProperty().set(0.1);
+        //mediaPlayer.setStopTime(Duration.seconds(212));
+        mediaPlayer.play();*/
 
         //region Front : Scene creation
         Scene scene = new Scene(flowPane);

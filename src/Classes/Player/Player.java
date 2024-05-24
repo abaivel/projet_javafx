@@ -208,6 +208,7 @@ public class Player extends GameObject {
                 System.out.println(mouseEvent.getButton() == MouseButton.SECONDARY);
                 if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
                     System.out.println("ici");
+                    item.setDropped(true);
                     p.removeFromInventory(item);
                     item.setPosition(p.getPosition().getX(), p.getPosition().getY());
                 }
@@ -368,10 +369,10 @@ public class Player extends GameObject {
 
     //region Fight -> Attack, Defense, Dodge, Use potion
     //Chooses the action done in fight
-    public double chooseAction(int action, Monster monster, Potion potion){        //returns if deal damage or not
+    public double chooseAction(int action, Monster monster, Item item){        //returns if deal damage or not
         int doDamages=0;
         if (action == 0 && this.canUsePotion()) {                   //use potion
-            this.usePotion(monster, potion);
+            this.usePotion(monster, (Potion) item);
         }else if(action == 1){                                      //attack
             System.out.println(this.getName() + " attacks !");
             doDamages=1;                                               //1 meaning damage done
@@ -379,23 +380,27 @@ public class Player extends GameObject {
             System.out.println(this.getName() + " tries to dodge : ");
             this.dodge();
         }
+        //TODO to use items in fight
+        /*else if (action==3){
+            this.useItem(monster, item);
+        }*/
         //this.statusWornOff();                                   //At the end of the round, removes worn off effects from the Map
         return doDamages;
     }
 
     //Attack function for combat -> return the amount of damage done to the ennemy
-    public double attack(int i, Monster monster, Potion potion){               //i is for the action the player wants : refer to chooseAction()
+    public double attack(int i, Monster monster, Item item){               //i is for the action the player wants : refer to chooseAction()
         System.out.println(this.getName() + " acts !");
         System.out.println(this.status);
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();
         int STStatus = strengthStatus();
         if(STStatus > 0){                                       //If Strengh+ status -> add it to damage done
-            return this.chooseAction(i, monster, potion) * (this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
+            return this.chooseAction(i, monster, item) * (this.getStrength() + weaponDamage)*(1 + STStatus/100);    //buff of strength
         }else if(STStatus < 0){                                 //If Strengh- status -> remove it to damage done
-            return this.chooseAction(i, monster,potion) * (this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
+            return this.chooseAction(i, monster,item) * (this.getStrength() + weaponDamage)*(1 - STStatus/100);    //debuff of strength
         }else{
-            return this.chooseAction(i, monster,potion) * (this.getStrength() + weaponDamage);                         //no buff or debuff                                                                    //attack with the flat value of strength
+            return this.chooseAction(i, monster,item) * (this.getStrength() + weaponDamage);                         //no buff or debuff                                                                    //attack with the flat value of strength
         }
     }
 
@@ -458,17 +463,22 @@ public class Player extends GameObject {
         System.out.println(potion.getEffect().charAt(2));
         if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
-            System.out.println("TEST+");
         }else if(potion.getEffect().startsWith("LIFE")){
             this.setLP(this.getLP() + Integer.parseInt(potion.getEffect().substring(4)));
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             monster.addStatus(potion.getEffect(), potion.getDuration());
-            System.out.println("TEST-");
         }else if (potion.getEffect().equals("DEATH")){
             monster.setLifePoints(0);
         }
         this.removeFromInventory(potion);                             //removing the potion from the inventory
     }
+
+    //TODO to use items in fight
+    /*public void useItem(Monster monster, Item item){
+        item.setUsed(true);                                           //set used to true because potions are single use
+        //Comportement item
+        this.removeFromInventory(item);                             //removing the potion from the inventory
+    }*/
     //endregion
 
     //region Move
