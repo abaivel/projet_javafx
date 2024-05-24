@@ -441,7 +441,7 @@ public class GameApplication extends Application {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    if (p.getNearByMonster().getLifePoints()<=0){
+                    if (p.getNearByMonster().getLifePoints()<=0){       //verify if monster dead here
                         world.removeFromWorld(p.getNearByMonster());
                         p.setNearByMonster(null);
                     }
