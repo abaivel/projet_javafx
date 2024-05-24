@@ -305,7 +305,8 @@ public abstract class Monster extends GameObject {
     }
 
     public void dropItem(){
-        for (Item item : getInventory()) {
+        ArrayList<Item> copyInventory = (ArrayList<Item>) getInventory().clone();
+        for (Item item : copyInventory) {
             item.setPosition(this.getPosition().getX(), this.getPosition().getY());
             item.setDropped(true);
             removeFromInventory(item);
