@@ -11,7 +11,9 @@ import Classes.World.World;
 //  DE-40 --> means defense -40%
 
 //  LIFE10 --> regenerate 10 life points -> duration = 0
+//  DEATH --> kills an ennemy
 public class Potion extends Item{
+
     //region Potion's attributes
     private String effect;
     private int duration;

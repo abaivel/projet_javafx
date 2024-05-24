@@ -3,17 +3,22 @@ package Classes.NPC;
 import Classes.World.Position;
 import Classes.World.World;
 
+//NPC that is useless... He's nice tho -> Says Welcome and Goodbye
 public class UselessPerson extends NPC{
-    //Constructor with all parameters
+
+    //region Constructor with all parameters
     public UselessPerson(World w,String name, double money, int x, int y, String urlImage) {
         super(w,name, money, x,y, urlImage);
     }
+    //endregion
 
-    //Default constructor
+    //region Default constructor
     public UselessPerson() {
         this(null,"Aurélien",100,0,0,"");      //Because Aurelien is useless :p
     }
+    //endregion
 
+    //region Dialog
     //He welcomes, he doesn't do much more since he's useless
     public String welcome(){
         return "Welcome eheh !";
@@ -23,4 +28,5 @@ public class UselessPerson extends NPC{
     public String goodbye(){
         return "Goodbye eheh !";
     }
+    //endregion
 }

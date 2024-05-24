@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Enemies in game
+//Fight is launched when walking on the 9 cases around the monster
 public abstract class Monster extends GameObject {
+
     //region Monster's Attributes
     private String name;
     private DoubleProperty lifePoints;
@@ -309,10 +312,5 @@ public abstract class Monster extends GameObject {
         }
     }
     //endregion
-
-
-
-
-
 
 }

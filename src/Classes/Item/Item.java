@@ -7,8 +7,11 @@ import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-//TODO destroy potion when used in fights
+//GameObjects usable or not by the Player
+//Can be picked up by walking on them
+//Can be discarded from the inventory by right click on them in the inventory bar -> on player's position
 public abstract class Item extends GameObject {
+
     //region Item's attributes
     private String name;
     private int price;
@@ -56,15 +59,16 @@ public abstract class Item extends GameObject {
     }
     //endregion
 
+    //region Item
     //When an item is picked up by the player
     public void pickedUp(){
         setDropped(false);
     }
 
-
     public void appear(){
         setDropped(true);
     }
+    //endregion
 
 
 }

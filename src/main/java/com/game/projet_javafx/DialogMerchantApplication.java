@@ -11,8 +11,9 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.Optional;
 
-//Handles the front when going near a Merchant
+//Handles the front for dialogs when going near a Merchant
 public class DialogMerchantApplication extends Application {
+
     //region DiagApp's attributes
     private Merchant merchant;
     private Player player;

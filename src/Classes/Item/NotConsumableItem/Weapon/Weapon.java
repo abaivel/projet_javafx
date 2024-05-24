@@ -3,7 +3,10 @@ package Classes.Item.NotConsumableItem.Weapon;
 import Classes.World.World;
 import Classes.Item.Item;
 
+//Item to deal more damage to an enemy
+//Additional damage dealt is automatically added in the fight --> the greatest damage dealer weapon chosen
 public abstract class Weapon extends Item {
+
     //region Weapon's attribute
     private double damage;
     //endregion

@@ -3,7 +3,9 @@ package Classes.Item.NotConsumableItem;
 import Classes.Item.Item;
 import Classes.World.World;
 
+//An item that can be read and sold
 public class Book extends Item {
+
     //region Book's attribute
     private String text;
     //endregion
