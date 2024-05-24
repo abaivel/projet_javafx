@@ -47,11 +47,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,6 +141,18 @@ public class GameApplication extends Application {
         infosBottom.getChildren().add(inventory);
         infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
+
+        /*File file = new File("src\\main\\resources\\game_music.mp3");
+        System.out.println("here");
+        final String MEDIA_URL = file.toURI().toString();
+        System.out.println("here");
+        Media media = new Media(MEDIA_URL);
+        System.out.println("here");
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        System.out.println("here");
+        mediaPlayer.volumeProperty().set(0.1);
+        //mediaPlayer.setStopTime(Duration.seconds(212));
+        mediaPlayer.play();*/
 
         //Scene creation
         Scene scene = new Scene(flowPane);
@@ -409,6 +425,7 @@ public class GameApplication extends Application {
                     }
                     if (p.getNearByMonster().getLifePoints()<=0){
                         world.removeFromWorld(p.getNearByMonster());
+                        p.getNearByMonster().dropItem();
                         p.setNearByMonster(null);
                     }
                     System.out.println(p.getInventory());
@@ -432,12 +449,13 @@ public class GameApplication extends Application {
         Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
         w.addToWorld(trinket);
         Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
-        w.addToWorld(key);
+        //w.addToWorld(key);
         Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
         w.addToWorld(book);
         Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
         w.addToWorld(fouras1);
         Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
+        slime.addToInventory(key);
         w.addToWorld(slime);
         Tree tree = new Tree(w,5,17,"tree.png");
         w.addToWorld(tree);
