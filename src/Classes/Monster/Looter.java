@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+//Enemy that can steal player's item as a special attack
 public class Looter extends Monster{
+
     //region Constructor
     public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y,int cooldown, String urlImage) {
         super(w, name, lifePoints, force, defense, inventory, x, y,cooldown,urlImage);
@@ -20,6 +22,7 @@ public class Looter extends Monster{
     }
     //endregion
 
+    //region Fight functions
     @Override
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack()) {
@@ -51,7 +54,9 @@ public class Looter extends Monster{
             return 1;                                               //returns 1 to do the calculus in attack function
         }
     }
+    //endregion
 
+    //region Item functions
     //To know if looter can use an object : meaning inventory not empty
     public boolean canUseObject(){
         if(!this.getInventory().isEmpty()){
@@ -79,4 +84,5 @@ public class Looter extends Monster{
             player.addStatus(potion.getEffect(), potion.getDuration());
         }
     }
+    //endregion
 }

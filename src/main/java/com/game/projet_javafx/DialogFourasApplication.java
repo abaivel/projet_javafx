@@ -9,8 +9,9 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import java.util.Optional;
 
-//Handles the front when going near a Fouras
+//Handles the front for dialogs when going near a Fouras
 public class DialogFourasApplication extends Application {
+
     //region Attributes
     private Fouras fouras;
     private Player player;
@@ -28,7 +29,7 @@ public class DialogFourasApplication extends Application {
     public Player getPlayer() {return player;}
     //endregion
 
-    //region Start function
+    //region start function
     @Override
     public void start(Stage stage) throws Exception {
         Alert enigmaDialog = new Alert(Alert.AlertType.CONFIRMATION);                           //Alert window

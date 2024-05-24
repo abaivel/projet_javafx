@@ -16,7 +16,11 @@ import javafx.util.Duration;
 
 import java.io.File;
 
+//Window that appears when the player dies
+//Nice sound effect added
 public class DefeatApplication extends Application {
+
+    //region start function
     @Override
     public void start(Stage stage) throws Exception {
         StackPane pane = new StackPane();
@@ -45,6 +49,8 @@ public class DefeatApplication extends Application {
         stage.show();
 
     }
+    //endregion
+
     public static void main(String[] args) {
         launch();
     }

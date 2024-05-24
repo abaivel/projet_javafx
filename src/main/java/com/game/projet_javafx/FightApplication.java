@@ -29,19 +29,26 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+//Front for fight sequences -> triggers when going near a monster
 public class FightApplication extends Application {
+
+    //region Attributes
     private Player player;
     private Monster monster;
     private BooleanProperty playerTurn;
     private Stage primaryStage;
+    //endregion
 
+    //region Constructor
     public FightApplication(Player player, Monster monster, Stage primaryStage) {
         this.player = player;
         this.monster = monster;
         this.playerTurn=new SimpleBooleanProperty(true);
         this.primaryStage=primaryStage;
     }
+    //endregion
 
+    //region start function
     @Override
     public void start(Stage stage) throws Exception {
         FlowPane pane = new FlowPane(Orientation.VERTICAL);
@@ -327,10 +334,9 @@ public class FightApplication extends Application {
 
         stage.showAndWait();
     }
-    public static void main(String[] args) {
-        launch();
-    }
+    //endregion
 
+    //region createLifeBar ; delay
     public GridPane createLifeBar(){
         GridPane lifeBar = new GridPane();
         lifeBar.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px; -fx-max-height: 20");
@@ -356,5 +362,9 @@ public class FightApplication extends Application {
         sleeper.setOnSucceeded(event -> continuation.run());
         new Thread(sleeper).start();
     }
+    //endregion
 
+    public static void main(String[] args) {
+        launch();
+    }
 }

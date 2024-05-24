@@ -9,8 +9,9 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-//Handles the front when going near a UselessPerson
+//Handles the front for dialogs when going near a UselessPerson
 public class DialogUselessApplication extends Application {
+
     //region Attributes
     private UselessPerson uselessPerson;
     private Player player;

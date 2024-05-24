@@ -7,7 +7,9 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
+//Non-Playable Characters -> trigger dialogs when the player is in the 9 cases around the NPC
 public abstract class NPC extends GameObject {
+
     //region NPC's attributes
     private String name;
     private double money;

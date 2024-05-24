@@ -1,6 +1,9 @@
 package Classes.Player;
 
 import Classes.GameObject;
+import Classes.InstantUse.Instant;
+import Classes.InstantUse.InstantHealth;
+import Classes.InstantUse.InstantMoney;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
@@ -28,7 +31,12 @@ import java.util.Map;
 
 import static java.lang.Math.random;
 
+//The main character ! A brave penguin (that deserves a bonus point in itself !!)
+//Goal : reach the MIGHTY HEDGEHOG -> to win pick up Hedgehog item
+//Can die in fights, drowning, being blown up by a bomb
+//Can move in every direction and jump over low decors
 public class Player extends GameObject {
+
     //region Player's attributes
     private final DoubleProperty LP;
     private String name;
@@ -469,10 +477,15 @@ public class Player extends GameObject {
         int y_start = getPosition().getY();
         if (x>=0 && x<=39 && y>=0 && y<=17) {
             if (world.CanGoThere(x,y)) {
+                ArrayList<Instant> listInstants = world.IsThereInstant(x, y);
                 ArrayList<Item> listItems = world.IsThereItem(x, y);
                 for (Item i : listItems) {
                     this.addToInventory(i);
                     world.removeFromWorld(i);
+                }
+                for (Instant inst : listInstants) {
+                    this.useInstant(inst);
+                    world.removeFromWorld(inst);
                 }
                 this.setPosition(x, y);
                 setNearByNPC(world.IsThereNPC(x, y));
@@ -527,10 +540,8 @@ public class Player extends GameObject {
     //endregion
     //endregion
 
-    //TODO
+    //TODO :  a retirer (celles non utilisées)???
     //region Item functions
-    //to pick up items on the floor ? Need to walk on the cell that has an item in it
-    //updates the inventory with adding the new item
     public void pickItem(Item item){
         //faire ajouter à arraylise TO DO
         //verifier si inventaire pas full   --> pour front si inventaire full -> alert de type warning
@@ -579,7 +590,21 @@ public class Player extends GameObject {
     }
     //endregion
 
-    //TODO : savoir ce qu'on en fait
+    //region Instants
+    public void useInstant(Instant instant){
+        if(instant instanceof InstantHealth instH){
+            if(this.getLP() + instH.getValue() > 10){
+                this.setLP(10);
+            }else{
+                this.setLP(this.getLP() + instH.getValue());
+            }
+        }else if(instant instanceof InstantMoney instM){
+            this.setMoney(this.getMoney()+instM.getValue());
+        }
+    }
+    //endregion
+
+    //TODO : A retirer ????
     //region Victory and failure condition
     public boolean victory(){
         return this.contains("Hegdehog");           //if the last picked-up item is Hedgehog -> victory

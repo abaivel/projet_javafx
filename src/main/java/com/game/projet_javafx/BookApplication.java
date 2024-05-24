@@ -5,7 +5,9 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+//For the player to read Books -> open a new window with the Title and text
 public class BookApplication extends Application {
+
     //region Attributes
     private Book book;
     //endregion

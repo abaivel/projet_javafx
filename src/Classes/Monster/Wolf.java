@@ -7,7 +7,9 @@ import Classes.World.World;
 import java.util.ArrayList;
 import java.util.List;
 
+//Enemy that does greater damage as a special attack
 public class Wolf extends Monster{
+
     //region Constructor
     public Wolf(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown, String urlImage) {
         super(w, name, lifePoints, force, defense, inventory, x, y, cooldown, urlImage);
@@ -18,7 +20,7 @@ public class Wolf extends Monster{
     }
     //endregion
 
-
+    //region Fight functions
     @Override
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack()){
@@ -31,4 +33,5 @@ public class Wolf extends Monster{
             return 1;                                   //returns 1 to do the calculus in attack function : normal attack
         }
     }
+    //endregion
 }

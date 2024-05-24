@@ -8,13 +8,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+//Doors have 2 states :
+//  - closed -> the player can't walk through but can open them if they have the corresponding key in their inventory
+//  - opened -> if player walk through, they'll be teleported to the next world
 public class Door extends WalkThroughDecorItem{
 
+    //region Attributes
     private Key key;
     private String color;
     private boolean open;
     private int nextWorld;
+    //endregion
 
+    //region Constructor
     public Door(World w, int x, int y, String color, String urlImage, int nextWorld) {
         super(w,x, y);
         this.color=color;
@@ -23,22 +29,18 @@ public class Door extends WalkThroughDecorItem{
         this.nextWorld = nextWorld;
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
+    }
+    //endregion
 
-
-    }
-    public boolean isOpen() {
-        return open;
-    }
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
-    public Key getKey() {
-        return key;
-    }
-
+    //region Getters
+    public Key getKey() {return key;}
     public String getColor(){return this.color;}
-
     public int getNextWorld(){return nextWorld;}
-    public void setNextWorld(int nextWorld){this.nextWorld = nextWorld;}
+    public boolean isOpen() {return open;}
+    //endregion
 
+    //region Setters
+    public void setOpen(boolean open) {this.open = open;}
+    public void setNextWorld(int nextWorld){this.nextWorld = nextWorld;}
+    //endregion
 }

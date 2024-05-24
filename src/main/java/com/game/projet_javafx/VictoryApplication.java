@@ -14,9 +14,15 @@ import javafx.util.Duration;
 
 import java.io.File;
 
+//Window that appears when the player wins !
 public class VictoryApplication extends Application {
+
+    //region Attributes
     Media media;
     MediaPlayer mediaPlayer;
+    //endregion
+
+    //region Constructor
     public VictoryApplication() {
         File file = new File("src\\main\\resources\\victory_music.m4a");
         System.out.println("here");
@@ -31,7 +37,9 @@ public class VictoryApplication extends Application {
         mediaPlayer.setAutoPlay(true);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
+    //endregion
 
+    //region start function
     @Override
     public void start(Stage stage) throws Exception {
         System.out.println("here");
@@ -60,6 +68,8 @@ public class VictoryApplication extends Application {
         stage.show();
 
     }
+    //endregion
+
     public static void main(String[] args) {
         launch();
     }

@@ -6,16 +6,28 @@ import Classes.World.World;
 
 import java.util.Objects;
 
+//is used to open Door with the same color
+//when linked key in inventory -> left click on door to open it
 public class Key extends Item {
+
+    //region Attributes
     String color;
+    //endregion
+
+    //region Constructor
     public Key(World w, int x, int y, String name, boolean dropped, String color, int price, String urlImage) {
         super(w,x,y, name, dropped, price,urlImage);
         this.color=color;
     }
+    //endregion
+
+    //region Getters
     public String getColor() {
         return color;
     }
+    //endregion
 
+    //region Equals
     @Override
     public boolean equals(Object o) {
         if (o instanceof Key){
@@ -23,4 +35,5 @@ public class Key extends Item {
         }
         return false;
     }
+    //endregion
 }

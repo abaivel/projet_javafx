@@ -1,4 +1,4 @@
-package Fight;
+package Classes.Fight;
 
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
@@ -12,7 +12,11 @@ import javafx.scene.effect.ImageInput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//For monsters and Players to fight
+//Player can use items, use potions, try to dodge and attack
+//Monsters can do special attacks and normal attacks
 public class Fight {
+
     //region Fight's attributes
     Player player;
     Monster monster;
@@ -39,6 +43,7 @@ public class Fight {
     public void setMonsterAttack(double attack){this.monsterAttack = attack;}
     //endregion
 
+    //region Functions that does all the fight sequence
     public void launchFight(){
         System.out.println("Beginning of the fight !");
         int i=1;
@@ -69,30 +74,6 @@ public class Fight {
             System.out.println("Monster has lost");
         }
     }
+    //endregion
 
-    //TODO : pv monstre baisse pas ; sort pas du while ; revoir cooldown monstre
-    //TODO : passer potion en used quand used
-    public static void main(String[] args) {
-        ArrayList<Item> items = new ArrayList<>();
-        ArrayList<Item> itemsMT = new ArrayList<>();
-        Potion potion = new Potion(null,0,0,"WuawPotion",false,"ST+20",10,3,"potion1.png");
-        Potion potion2 = new Potion(null,0,0,"DEFFFFPotion",false,"DE+20",10,3,"potion1.png");
-        Potion potion3 = new Potion(null,0,0,"DEF----Potion",false,"DE-20",10,3,"potion1.png");
-        Potion potion4 = new Potion(null,0,0,"MEGADEFFFPotion",false,"DE+40",10,3,"potion1.png");
-        Potion potion5 = new Potion(null,0,0,"LifePotion",false,"LIFE2",10,3,"potion1.png");
-        Key key = new Key(null,0,0,"Keyyy:0000",false,"GREEN",4,"");
-        items.add(potion);
-        items.add(potion2);
-        items.add(potion3);
-        items.add(key);
-        items.add(potion4);
-        items.add(potion5);
-        Player player = new Player(null, 10,"Mighty fighter",10,5,2,0,0);
-        player.setInventory(items);
-        Slime slime = new Slime(null, "slimy", 8,3,2,itemsMT,0,0,0,"");
-
-        Fight fight = new Fight(player, slime);
-        fight.launchFight();
-    }
-    //TODO : debugg use potion --> doesn't apply any status to player or monster
 }
