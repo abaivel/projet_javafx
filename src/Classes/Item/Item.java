@@ -3,6 +3,7 @@ package Classes.Item;
 import Classes.GameObject;
 import Classes.World.Position;
 import Classes.World.World;
+import com.game.projet_javafx.GameApplication;
 import javafx.scene.image.ImageView;
 
 //GameObjects usable or not by the Player
@@ -28,6 +29,7 @@ public abstract class Item extends GameObject {
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
+        this.node.setOnMouseClicked((w.getGame()).new ClickItemHandler(this));
     }
     //endregion
 
