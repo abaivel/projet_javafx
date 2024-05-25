@@ -33,9 +33,9 @@ public abstract class GameObject {
 
     //region Setters
     public void setPosition(int x, int y) {
+        world.moveGameObject(this,x,y);
         this.position.setX(x);
         this.position.setY(y);
-        world.moveGameObject(this,x,y);
     }
 
     public void setWorld(World world) {

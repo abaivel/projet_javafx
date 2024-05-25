@@ -4,6 +4,7 @@ import Classes.GameObject;
 import Classes.InstantUse.Instant;
 import Classes.InstantUse.InstantHealth;
 import Classes.InstantUse.InstantMoney;
+import Classes.Item.ConsumableItem.Bomb;
 import Classes.Item.ConsumableItem.Key;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
@@ -221,7 +222,10 @@ public class Player extends GameObject {
                             throw new RuntimeException(e);
                         }
                     }
-
+                }
+                if(item instanceof Bomb && mouseEvent.getButton() == MouseButton.PRIMARY && item.isDropped()){  //TODO : merge pour avoir le droppped corrigé sur les items et retester
+                    System.out.println(item.getPosition());
+                    this.world.destroysRadiusBomb(item.getPosition().getX(), item.getPosition().getY());
                 }
             });
         }

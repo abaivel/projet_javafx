@@ -25,13 +25,9 @@ public class VictoryApplication extends Application {
     //region Constructor
     public VictoryApplication() {
         File file = new File("src\\main\\resources\\victory_music.m4a");
-        System.out.println("here");
         final String MEDIA_URL = file.toURI().toString();
-        System.out.println("here");
         media = new Media(MEDIA_URL);
-        System.out.println("here");
         mediaPlayer = new MediaPlayer(media);
-        System.out.println("here");
         mediaPlayer.volumeProperty().set(100);
         mediaPlayer.setStopTime(Duration.seconds(212));
         mediaPlayer.setAutoPlay(true);
