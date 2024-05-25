@@ -782,7 +782,7 @@ public class GameApplication extends Application {
         Potion potion1 = new Potion(w,12,5,"Life potion",true,"LIFE+5",10,0,"potion1.png");
         w.addToWorld(potion1);
 
-        Sword sword = new Sword(w,"Hedgehog",true,37,2,4,25,"sword.png");
+        Sword sword = new Sword(w,"Sword",true,37,2,4,25,"sword.png");
         w.addToWorld(sword);
 
 
