@@ -118,13 +118,11 @@ public class World {
     //region Item : IsThereItem ; destroysRadiusBomb
     public ArrayList<Item> IsThereItem(int x, int y){
         ArrayList<Item> listItems = new ArrayList<>();
-        System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
         for (GameObject g : gridObjects[x][y]){
             if (g instanceof Item){
                 listItems.add((Item)g);
             }
         }
-        System.out.println("listItems="+listItems);
         return listItems;
     }
 
@@ -137,6 +135,9 @@ public class World {
                             this.removeFromWorld(gridObjects[i][j].get(k));         //"detroys" -> removes particular decor items from the world if present in the radius of the bomb's explosion
                         }
                         else if(gridObjects[i][j].get(k) instanceof Player player){
+                            System.out.println(i+" "+j);
+                            System.out.println(gridObjects[i][j].get(0).getClass());
+                            System.out.println(player.getPosition());
                             player.setLP(0);                                        //kills the player if they're in the radius of the bomb's explosion
                         }
                     }
@@ -199,13 +200,11 @@ public class World {
 
     public ArrayList<Instant> IsThereInstant(int x, int y){
         ArrayList<Instant> listInstants = new ArrayList<>();
-        System.out.println("gridObjects[x][y]="+gridObjects[x][y]);
         for (GameObject g : gridObjects[x][y]){
             if (g instanceof Instant){
                 listInstants.add((Instant)g);
             }
         }
-        System.out.println("listInstant="+listInstants);
         return listInstants;
     }
     //endregion
