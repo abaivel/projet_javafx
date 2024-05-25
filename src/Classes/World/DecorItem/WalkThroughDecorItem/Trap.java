@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 //Player looses LP when walking on it : yes the player can be stupid
 //Player can jump over it
 //Can be exploded by a bomb
-public class Trap extends NotWalkThroughDecorItem {
+public class Trap extends WalkThroughDecorItem {
 
     //region Constructor
     public Trap(World w, int x, int y, String urlImage) {

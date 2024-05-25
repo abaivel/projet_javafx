@@ -1,5 +1,6 @@
-package Classes.World.DecorItem.WalkThroughDecorItem;
+package Classes.World.DecorItem.NotWalkThroughDecorItem;
 
+import Classes.World.DecorItem.WalkThroughDecorItem.WalkThroughDecorItem;
 import Classes.World.Position;
 import Classes.World.World;
 import javafx.scene.image.ImageView;
@@ -7,7 +8,7 @@ import javafx.scene.image.ImageView;
 //Doors have 2 states :
 //  - closed -> the player can't walk through but can open them if they have the corresponding key in their inventory
 //  - opened -> if player walk through, they'll be teleported to the next world
-public class Door extends WalkThroughDecorItem{
+public class Door extends NotWalkThroughDecorItem {
 
     //region Attributes
     private final String color;
