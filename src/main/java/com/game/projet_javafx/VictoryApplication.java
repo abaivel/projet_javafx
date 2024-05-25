@@ -41,25 +41,17 @@ public class VictoryApplication extends Application {
         System.out.println("here");
         StackPane pane = new StackPane();
         System.out.println("here");
-        //pane.setStyle("-fx-background-color: black");
         Text text = new Text("You won\n\uD83C\uDFC6");
         text.setStyle("-fx-font-size: 80;-fx-font-family: 'Brush Script MT';");
         text.setFill(Color.FORESTGREEN);
         text.setTextAlignment(TextAlignment.CENTER);
         pane.getChildren().add(text);
-        pane.setAlignment(text, Pos.CENTER);
+        StackPane.setAlignment(text, Pos.CENTER);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setMaximized(true);
         System.out.println("here");
         mediaPlayer.play();
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer.seek(Duration.ZERO);
-                mediaPlayer.play();
-            }
-        });
         System.out.println(mediaPlayer.getCurrentTime());
         stage.show();
 

@@ -1,12 +1,8 @@
 package Classes.World.DecorItem.WalkThroughDecorItem;
 
-import Classes.Item.ConsumableItem.Key;
 import Classes.World.Position;
 import Classes.World.World;
-import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 //Doors have 2 states :
 //  - closed -> the player can't walk through but can open them if they have the corresponding key in their inventory
@@ -14,8 +10,7 @@ import javafx.scene.input.MouseEvent;
 public class Door extends WalkThroughDecorItem{
 
     //region Attributes
-    private Key key;
-    private String color;
+    private final String color;
     private boolean open;
     private int nextWorld;
     //endregion
@@ -33,7 +28,6 @@ public class Door extends WalkThroughDecorItem{
     //endregion
 
     //region Getters
-    public Key getKey() {return key;}
     public String getColor(){return this.color;}
     public int getNextWorld(){return nextWorld;}
     public boolean isOpen() {return open;}

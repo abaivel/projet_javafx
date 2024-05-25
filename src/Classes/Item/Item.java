@@ -3,9 +3,7 @@ package Classes.Item;
 import Classes.GameObject;
 import Classes.World.Position;
 import Classes.World.World;
-import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 //GameObjects usable or not by the Player
 //Can be picked up by walking on them
@@ -56,17 +54,6 @@ public abstract class Item extends GameObject {
     //region toString
     public String toString(){
         return "Name " + getName() + ", Price " + getPrice();
-    }
-    //endregion
-
-    //region Item
-    //When an item is picked up by the player
-    public void pickedUp(){
-        setDropped(false);
-    }
-
-    public void appear(){
-        setDropped(true);
     }
     //endregion
 

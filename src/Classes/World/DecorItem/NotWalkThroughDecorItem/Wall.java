@@ -4,8 +4,6 @@ import Classes.World.Position;
 import Classes.World.World;
 import javafx.scene.shape.Rectangle;
 
-import java.util.ArrayList;
-
 //Decor that
 //Player can't jump over it
 //Can be exploded by a bomb

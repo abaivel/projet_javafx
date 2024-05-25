@@ -7,18 +7,11 @@ import Classes.Player.Player;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,17 +19,16 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 //Front for fight sequences -> triggers when going near a monster
 public class FightApplication extends Application {
 
     //region Attributes
-    private Player player;
-    private Monster monster;
-    private BooleanProperty playerTurn;
-    private Stage primaryStage;
+    private final Player player;
+    private final Monster monster;
+    private final BooleanProperty playerTurn;
+    private final Stage primaryStage;
     //endregion
 
     //region Constructor
@@ -176,15 +168,12 @@ public class FightApplication extends Application {
                 imagePotion.setFitWidth(50);
                 potion.setGraphic(imagePotion);
                 gridPotions.add(potion,i,0);
-                potion.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        double playerAttack = player.attack(0,monster, item);
-                        monster.defend(playerAttack);
-                        gridButtonsChoiceAction.setVisible(false);
-                        textDodgeSuccessfull.setText("");
-                        delay(1000, () -> playerTurn.set(false));
-                    }
+                potion.setOnAction(actionEvent -> {
+                    double playerAttack = player.attack(0,monster, item);
+                    monster.defend(playerAttack);
+                    gridButtonsChoiceAction.setVisible(false);
+                    textDodgeSuccessfull.setText("");
+                    delay(1000, () -> playerTurn.set(false));
                 });
             }
             i++;
@@ -230,70 +219,41 @@ public class FightApplication extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.initOwner(primaryStage);
-        stage.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                double width = stage.getWidth();
-                System.out.println(width);
-                pane.setPrefWidth(width);
-                paneFighters.setPrefWidth(width);
-                buttonUsePotion.setPrefWidth(width/3);
-                buttonDodge.setPrefWidth(width/3);
-                buttonAttack.setPrefWidth(width/3);
-                //TODO To use item in fight - put /4 instead of /3
-                //buttonUseOtherItems.setPrefWidth(width/4);
-            }
+        stage.widthProperty().addListener((observableValue, number, t1) -> {
+            double width = stage.getWidth();
+            System.out.println(width);
+            pane.setPrefWidth(width);
+            paneFighters.setPrefWidth(width);
+            buttonUsePotion.setPrefWidth(width/3);
+            buttonDodge.setPrefWidth(width/3);
+            buttonAttack.setPrefWidth(width/3);
+            //TODO To use item in fight - put /4 instead of /3
+            //buttonUseOtherItems.setPrefWidth(width/4);
         });
-        stage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                pane.setPrefHeight(stage.getHeight());
-            }
-        });
-        /*System.out.println(stage.getWidth());
+        stage.heightProperty().addListener((observableValue, number, t1) -> pane.setPrefHeight(stage.getHeight()));
 
-        //region setHeight and setWidth
-        pane.setPrefWidth(stage.getWidth());
-        pane.setPrefHeight(stage.getHeight());
-        //paneFighters.setPrefWidth(pane.getWidth());
-        buttonUsePotion.setPrefWidth(stage.getWidth()/3);
-        buttonDodge.setPrefWidth(stage.getWidth()/3);
-        buttonAttack.setPrefWidth(stage.getWidth()/3);*/
-        //endregion
-
-        buttonUsePotion.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                scrollGridPotions.setVisible(true);
-                //textDodgeSuccessfull.setVisible(false);
-            }
+        buttonUsePotion.setOnAction(actionEvent -> {
+            scrollGridPotions.setVisible(true);
         });
-        buttonAttack.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //textDodgeSuccessfull.setVisible(false);
-                System.out.println("ici");
-                double playerAttack = player.attack(1,monster,null);
-                monster.defend(playerAttack);
-                gridButtonsChoiceAction.setVisible(false);
-                textDodgeSuccessfull.setText("");
-                delay(2000, () -> playerTurn.set(false));
+        buttonAttack.setOnAction(actionEvent -> {
+            System.out.println("ici");
+            double playerAttack = player.attack(1,monster,null);
+            monster.defend(playerAttack);
+            gridButtonsChoiceAction.setVisible(false);
+            textDodgeSuccessfull.setText("");
+            delay(2000, () -> playerTurn.set(false));
 
-            }
         });
-        buttonDodge.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                double playerAttack = player.attack(2,monster,null);
-                monster.defend(playerAttack);
-                if (player.isDodge()){
-                    textDodgeSuccessfull.setText("You succeeded to dodge the monster 's attack");
-                }else{
-                    textDodgeSuccessfull.setText("You didn't succeed to dodge the monster 's attack");
-                }
-                gridButtonsChoiceAction.setVisible(false);
-                delay(2000, () -> playerTurn.set(false));
+        buttonDodge.setOnAction(actionEvent -> {
+            double playerAttack = player.attack(2,monster,null);
+            monster.defend(playerAttack);
+            if (player.isDodge()){
+                textDodgeSuccessfull.setText("You succeeded to dodge the monster 's attack");
+            }else{
+                textDodgeSuccessfull.setText("You didn't succeed to dodge the monster 's attack");
             }
+            gridButtonsChoiceAction.setVisible(false);
+            delay(2000, () -> playerTurn.set(false));
         });
         //TODO to use items in fight
         /*buttonUseOtherItems.setOnAction(new EventHandler<ActionEvent>() {
@@ -302,38 +262,26 @@ public class FightApplication extends Application {
                 scrollGridItems.setVisible(true);
             }
         });*/
-        playerTurn.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                //System.out.println("Time for the monster to fight");
-                textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
-                gridButtonsChoiceAction.setVisible(playerTurn.get());
-                gridPotions.setVisible(false);
-                //gridItems.setVisible(false); //TODO to use items in fight
-                if (!playerTurn.get() && monster.getLifePoints()>0){
-                    if (!player.isDodge()) {
-                        double attackMonster = monster.attack(player);
-                        player.defend(attackMonster);
-                    }
-                    delay(2000, () -> playerTurn.set(true));
+        playerTurn.addListener((observableValue, aBoolean, t1) -> {
+            textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
+            gridButtonsChoiceAction.setVisible(playerTurn.get());
+            gridPotions.setVisible(false);
+            //gridItems.setVisible(false); //TODO to use items in fight
+            if (!playerTurn.get() && monster.getLifePoints()>0){
+                if (!player.isDodge()) {
+                    double attackMonster = monster.attack(player);
+                    player.defend(attackMonster);
                 }
+                delay(2000, () -> playerTurn.set(true));
             }
         });
 
-        player.getLPProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                lifesPlayer.setWidth(player.getLP()*15);
-            }
-        });
-        monster.lifePointsProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                lifesMonster.setWidth(monster.getLifePoints()*15);
-                if (monster.getLifePoints()<=0) {
-                    System.out.println("Gagné");
-                    stage.close();
-                }
+        player.getLPProperty().addListener((observableValue, number, t1) -> lifesPlayer.setWidth(player.getLP()*15));
+        monster.lifePointsProperty().addListener((observableValue, number, t1) -> {
+            lifesMonster.setWidth(monster.getLifePoints()*15);
+            if (monster.getLifePoints()<=0) {
+                System.out.println("Gagné");
+                stage.close();
             }
         });
         player.numberStatusProperty().addListener((observableValue, number, t1) -> {
@@ -364,24 +312,18 @@ public class FightApplication extends Application {
                 listStatusMonster.getChildren().add(status);
             }
         });
-        monster.messageAttackProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                System.out.println(monster.getMessageAttack());
-                if (!monster.getMessageAttack().isEmpty()) {
-                    System.out.println("hello");
-                    textDodgeSuccessfull.setVisible(true);
-                    textDodgeSuccessfull.setText(monster.getMessageAttack());
-                    monster.setMessageAttack("");
-                }
+        monster.messageAttackProperty().addListener((observableValue, s, t1) -> {
+            System.out.println(monster.getMessageAttack());
+            if (!monster.getMessageAttack().isEmpty()) {
+                System.out.println("hello");
+                textDodgeSuccessfull.setVisible(true);
+                textDodgeSuccessfull.setText(monster.getMessageAttack());
+                monster.setMessageAttack("");
             }
         });
-        textDodgeSuccessfull.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                System.out.println("TEXT="+t1);
-                System.out.println("TEXT CHANGE");
-            }
+        textDodgeSuccessfull.textProperty().addListener((observableValue, s, t1) -> {
+            System.out.println("TEXT="+t1);
+            System.out.println("TEXT CHANGE");
         });
 
         stage.showAndWait();

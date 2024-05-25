@@ -1,6 +1,5 @@
 package Classes.NPC;
 
-import Classes.World.Position;
 import Classes.World.World;
 
 //NPC that is useless... He's nice tho -> Says Welcome and Goodbye
@@ -9,12 +8,6 @@ public class UselessPerson extends NPC{
     //region Constructor with all parameters
     public UselessPerson(World w,String name, double money, int x, int y, String urlImage) {
         super(w,name, money, x,y, urlImage);
-    }
-    //endregion
-
-    //region Default constructor
-    public UselessPerson() {
-        this(null,"Aurélien",100,0,0,"");      //Because Aurelien is useless :p
     }
     //endregion
 

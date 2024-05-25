@@ -13,8 +13,8 @@ import java.util.Optional;
 public class DialogUselessApplication extends Application {
 
     //region Attributes
-    private UselessPerson uselessPerson;
-    private Player player;
+    private final UselessPerson uselessPerson;
+    private final Player player;
     //endregion
 
     //region Constructor

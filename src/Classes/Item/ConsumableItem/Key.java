@@ -1,10 +1,7 @@
 package Classes.Item.ConsumableItem;
 
-import Classes.World.Position;
 import Classes.Item.Item;
 import Classes.World.World;
-
-import java.util.Objects;
 
 //is used to open Door with the same color
 //when linked key in inventory -> left click on door to open it
