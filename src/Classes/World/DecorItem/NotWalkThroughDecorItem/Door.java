@@ -25,6 +25,7 @@ public class Door extends NotWalkThroughDecorItem {
         this.nextWorld = nextWorld;
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
+        this.node.setOnMouseClicked(w.getGame().new ClickDoorHandler(this));
     }
     //endregion
 
