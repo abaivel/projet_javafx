@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 //Front for fight sequences -> triggers when going near a monster
 public class FightApplication extends Application {
@@ -326,7 +327,17 @@ public class FightApplication extends Application {
             System.out.println("TEXT CHANGE");
         });
 
+        stage.setOnCloseRequest(event -> {
+            // Empêcher la fermeture en consommant l'événement
+            if (monster.getLifePoints()>0 && player.getLifePoints()>0) {
+                event.consume();
+            }
+        });
         stage.showAndWait();
+    }
+    private void closeWindowEvent(WindowEvent event) {
+        System.out.println("Window close request ...");
+
     }
     //endregion
 

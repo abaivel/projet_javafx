@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 //Player can jump over hedges
 //Can be exploded by a bomb
-public class Hedge extends WalkThroughDecorItem {
+public class Hedge extends NotWalkThroughDecorItem {
 
     //region Constructor
     public Hedge(World w, int x, int y) {

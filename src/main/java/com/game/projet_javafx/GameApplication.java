@@ -21,33 +21,32 @@ import Classes.Player.Player;
 import Classes.World.DecorItem.WalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
-import Classes.World.DecorItem.WalkThroughDecorItem.Door;
+import Classes.World.DecorItem.NotWalkThroughDecorItem.Door;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Hedge;
 import Classes.World.DecorItem.WalkThroughDecorItem.River;
+import Classes.World.Position;
 import Classes.World.World;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -90,12 +89,13 @@ public class GameApplication extends Application {
         flowPane.getChildren().add(pane);
         p = new Player(world,10,"Bearu",25,4,2,5,5);
         world.addToWorld(p);
-        infosBottom = new FlowPane(Orientation.VERTICAL);
+        infosBottom = new FlowPane(Orientation.HORIZONTAL);
         infosBottom.setHgap(10);
-        FlowPane infosPerso = new FlowPane(Orientation.VERTICAL);
-        infosBottom.getChildren().add(infosPerso);
+        infosBottom.setPrefWidth(Position.WIDTH);
+        infosBottom.setAlignment(Pos.TOP_LEFT);
+        FlowPane infosPerso = new FlowPane(Orientation.HORIZONTAL);
         //endregion
-
+        //region Front : infosPlayer
         //region Front : PLayer's lifebar
         GridPane lifeBar = new GridPane();
         lifeBar.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px; -fx-max-height: 20");
@@ -111,14 +111,32 @@ public class GameApplication extends Application {
         lifes.setWidth(p.getLifePoints()*15);
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
+        infosPerso.setPrefHeight(20);
+        infosPerso.setPrefWidth(220);
         infosPerso.getChildren().add(lifeBar);
         //endregion
-
+        //region Front : Player's money
+        Text moneyLabel = new Text();                                     //creating the label for the front
+        moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
+        moneyLabel.setStyle("-fx-font-size: 15px");
+        ImageView imageMoney = new ImageView(new Image("coin.png"));
+        imageMoney.setFitWidth(25);
+        imageMoney.setFitHeight(25);
+        HBox money = new HBox();
+        money.getChildren().add(imageMoney);
+        money.getChildren().add(moneyLabel);
+        money.setPrefHeight(25);
+        money.setFillHeight(true);
+        money.setAlignment(Pos.CENTER);
+        infosPerso.getChildren().add(money);
+        //endregion
+        //endregion
         //region Front : Player's inventory
         GridPane inventory = new GridPane();
-        inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;");
+        inventory.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 3px;-fx-max-width: 230px;-fx-max-height: 95px");
         inventory.setHgap(5);
         inventory.setVgap(5);
+        inventory.setAlignment(Pos.TOP_LEFT);
         for (int i=0;i<2;i++){
             for (int j=0;j<5;j++) {
                 Region r = new Region();
@@ -134,15 +152,9 @@ public class GameApplication extends Application {
         }
         //endregion
 
-        //region Front : Player's money
-        Label moneyLabel = new Label();                                     //creating the label for the front
-        moneyLabel.textProperty().bind(p.getMoneyProperty().asString());    //binding
-        Pane money = new Pane(moneyLabel);                                  //pane creation
-        //endregion
-
         //region Front : Filling infosBottom FlowPane
+        infosBottom.getChildren().add(infosPerso);
         infosBottom.getChildren().add(inventory);
-        infosBottom.getChildren().add(money);
         flowPane.getChildren().add(infosBottom);
         //endregion
 
@@ -159,7 +171,7 @@ public class GameApplication extends Application {
         mediaPlayer.play();
 
         //region Front : Scene creation
-        Scene scene = new Scene(flowPane);
+        Scene scene = new Scene(new ScrollPane(flowPane));
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setMaximized(true);
