@@ -171,7 +171,7 @@ public class GameApplication extends Application {
         mediaPlayer.play();
 
         //region Front : Scene creation
-        Scene scene = new Scene(new ScrollPane(flowPane));
+        Scene scene = new Scene(flowPane);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setMaximized(true);
@@ -839,25 +839,6 @@ public class GameApplication extends Application {
 
         Door door = new Door(w,18,5,"green","door_closed_green.png",1);
         w.addToWorld(door);
-
-        //Door mouse event
-        door.getNode().setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY){
-                ArrayList<Key> keys = p.containsKey();
-                if(!keys.isEmpty()){
-                    for(Key k : keys){
-                        if(door.getColor().equals(k.getColor())){
-                            door.setOpen(true);
-                            ((ImageView) door.getNode()).setImage(new Image("door_open_green.png"));
-                            p.removeFromInventory(k);
-                        }
-                    }
-                }
-
-            }
-
-        });
-
         return w;
     }
 
@@ -977,7 +958,7 @@ public class GameApplication extends Application {
         //endregion
         //region Item
         w.addToWorld(new Bomb(w,1,9,"Bomb",true,20,"bomb.png"));
-        w.addToWorld(new Key(w,39,5,"Green Key",true,"green",20,"key.png"));
+        w.addToWorld(new Key(w,39,5,"Green Key",true,"blue",20,"key_blue.png"));
         w.addToWorld(new Book(w,"Book", true,"You're searching for a sword or a buoy ? Go see the merchant behind the walls",33,5,7,"book.png"));
         w.addToWorld(new Potion(w,4,5,"Strenght Potion",true,"ST+40",20,3,"potion1.png"));
         w.addToWorld(new Potion(w,0,12,"Defense Potion",true,"DE+20",15,3,"potion2.png"));
@@ -1033,27 +1014,11 @@ public class GameApplication extends Application {
         w.addToWorld(new Trap(w,38,13,"trap.png"));
         //endregion
         //region Door
-        Door doorPreviousWorld = new Door(w,18,5,"blue","door_open.png",0);
+        Door doorPreviousWorld = new Door(w,18,5,"green","door_open_green.png",0);
         doorPreviousWorld.setOpen(true);
         w.addToWorld(doorPreviousWorld);
-        Door doorNextWorld = new Door(w,38,15,"green","door_closed.png",2);
+        Door doorNextWorld = new Door(w,38,15,"blue","door_closed_blue.png",2);
         w.addToWorld(doorNextWorld);
-        doorNextWorld.getNode().setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY){
-                ArrayList<Key> keys = p.containsKey();
-                if(!keys.isEmpty()){
-                    for(Key k : keys){
-                        if(doorNextWorld.getColor().equals(k.getColor())){
-                            doorNextWorld.setOpen(true);
-                            ((ImageView) doorNextWorld.getNode()).setImage(new Image("door_open.png"));
-                            p.removeFromInventory(k);
-                        }
-                    }
-                }
-
-            }
-
-        });
 
         //endregion
 
@@ -1098,6 +1063,29 @@ public class GameApplication extends Application {
             }
             if(item instanceof Bomb && mouseEvent.getButton() == MouseButton.PRIMARY && item.isDropped()){
                 world.destroysRadiusBomb(item.getPosition().getX(), item.getPosition().getY());
+            }
+        }
+    }
+    public class ClickDoorHandler implements EventHandler<MouseEvent> {
+        Door door;
+
+        public ClickDoorHandler(Door door) {
+            this.door=door;
+        }
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            if(mouseEvent.getButton() == MouseButton.PRIMARY && !door.isOpen()) {
+                ArrayList<Key> keys = p.containsKey();
+                if (!keys.isEmpty()) {
+                    for (Key k : keys) {
+                        if (door.getColor().equals(k.getColor())) {
+                            door.setOpen(true);
+                            ((ImageView) door.getNode()).setImage(new Image("door_open_"+door.getColor()+".png"));
+                            p.removeFromInventory(k);
+                        }
+                    }
+                }
             }
         }
     }
