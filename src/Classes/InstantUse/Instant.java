@@ -5,7 +5,6 @@ import Classes.World.Position;
 import Classes.World.World;
 import javafx.scene.image.ImageView;
 
-//TODO : front + image ?
 public abstract class Instant extends GameObject {
     //region Attributes
     private int value;

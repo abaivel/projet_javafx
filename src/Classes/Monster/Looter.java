@@ -79,9 +79,12 @@ public class Looter extends Monster{
         if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect().startsWith("LIFE")) {
-            this.setLifePoints(this.getLifePoints() + Integer.getInteger(potion.getEffect().substring(4)));
+            int value = Integer.parseInt(potion.getEffect().substring(4));
+            this.setLifePoints(this.getLifePoints() + value);
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             player.addStatus(potion.getEffect(), potion.getDuration());
+        }else if(potion.getEffect().equals("DEATH")){
+            player.setLP(0);
         }
     }
     //endregion

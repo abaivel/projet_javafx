@@ -3,7 +3,6 @@ package Classes.World;
 //Position on the grid for all GameObjects
 public class Position {
 
-    //TODO comment the size of the grid
     //region Constants
     public static final Integer HEIGHT = 675;
     public static final Integer WIDTH = 1500;

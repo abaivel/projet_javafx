@@ -468,7 +468,10 @@ public class Player extends GameObject {
         if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect().startsWith("LIFE")){
-            this.setLP(this.getLP() + Integer.parseInt(potion.getEffect().substring(4)));
+            int value = Integer.parseInt(potion.getEffect().substring(4));
+            this.setLP(this.getLP() + value);
+
+
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             monster.addStatus(potion.getEffect(), potion.getDuration());
         }else if (potion.getEffect().equals("DEATH")){
