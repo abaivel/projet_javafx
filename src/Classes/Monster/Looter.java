@@ -76,7 +76,7 @@ public class Looter extends Monster{
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             player.addStatus(potion.getEffect(), potion.getDuration());
         }else if(potion.getEffect().equals("DEATH")){
-            player.setLP(0);
+            player.setLifePoints(0);
         }
     }
     //endregion

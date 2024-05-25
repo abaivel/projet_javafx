@@ -29,13 +29,17 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -104,7 +108,7 @@ public class GameApplication extends Application {
         }
         Rectangle lifes = new Rectangle();
         lifes.setHeight(20);
-        lifes.setWidth(p.getLP()*15);
+        lifes.setWidth(p.getLifePoints()*15);
         lifes.setFill(Color.GREEN);
         lifeBar.add(lifes, 0,0,10,1);
         infosPerso.getChildren().add(lifeBar);
@@ -123,7 +127,7 @@ public class GameApplication extends Application {
                 r.setStyle("-fx-border-color: black;-fx-border-width: 1px;");
                 inventory.add(r, j, i);
                 int index = i*5+j;
-                if (index<p.sizeInventoryProperty().getValue()) {
+                if (index<p.getSizeInventory()) {
                     inventory.add(p.getInventory().get(index).getNode(), j, i);
                 }
             }
@@ -265,8 +269,8 @@ public class GameApplication extends Application {
 
         //region Listeners : Player's attributes
         //listener of the value of life points of the player
-        p.getLPProperty().addListener((observableValue, number, t1) -> {  //function called when Player's LP change
-            if (p.getLP()<=0){                                                                              //verification failure condition
+        p.getLifePointsProperty().addListener((observableValue, number, t1) -> {  //function called when Player's LP change
+            if (p.getLifePoints()<=0){                                                                              //verification failure condition
                 DefeatApplication defeat = new DefeatApplication();
                 try {
                     defeat.start(new Stage());                                                              //launch defeat stage
@@ -275,11 +279,11 @@ public class GameApplication extends Application {
                 }
                 stage.close();
             }                                                                                               //15 is the size of one "life"
-            lifes.setWidth(p.getLP()*15);                                                                   //for the front resizes life bar with LP left
+            lifes.setWidth(p.getLifePoints()*15);                                                                   //for the front resizes life bar with LP left
         });
 
         //listener of the size of the player's inventory
-        p.sizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
+        p.getSizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
             if (p.contains("Hedgehog")){                                                                        //verification of win condition
                 stage.close();
                 VictoryApplication victory = new VictoryApplication();
@@ -295,7 +299,7 @@ public class GameApplication extends Application {
             for (int i=0;i<2;i++){
                 for (int j=0;j<5;j++) {
                     int index = i*5+j;
-                    if (index<p.sizeInventoryProperty().getValue()) {
+                    if (index<p.getSizeInventoryProperty().getValue()) {
                         inventory.add(p.getInventory().get(index).getNode(), j, i);     //add items one by one to the gridpane
                     }
                 }
@@ -378,7 +382,7 @@ public class GameApplication extends Application {
 
     //region World Creation
     public World createWorld1(){
-        World w = new World("#639620");
+        World w = new World(this,"#639620");
 
 
         //region Trees
@@ -846,7 +850,7 @@ public class GameApplication extends Application {
     }
 
     public World createWorld2(){
-        World w = new World("#8e9700");
+        World w = new World(this,"#8e9700");
         //region Trees
         //region forest
         for (int i=0;i<7;i++){
@@ -893,7 +897,7 @@ public class GameApplication extends Application {
         for (int i=0;i<4;i++){
             w.addToWorld(new Wall(w,i,14));
         }
-        for (int i=14;i<18;i++){
+        for (int i=15;i<18;i++){
             w.addToWorld(new Wall(w,3,i));
         }
         for (int i=10;i<18;i++){
@@ -962,7 +966,7 @@ public class GameApplication extends Application {
         //region Item
         w.addToWorld(new Bomb(w,1,9,"Bomb",true,20,"bomb.png"));
         w.addToWorld(new Key(w,39,5,"Green Key",true,"green",20,"key.png"));
-        w.addToWorld(new Book(w,"Book", true,"You're searching for a sword or a buoy ? Go see the merchant behind the walls",15,5,7,"book.png"));
+        w.addToWorld(new Book(w,"Book", true,"You're searching for a sword or a buoy ? Go see the merchant behind the walls",33,5,7,"book.png"));
         w.addToWorld(new Potion(w,4,5,"Strenght Potion",true,"ST+40",20,3,"potion1.png"));
         w.addToWorld(new Potion(w,0,12,"Defense Potion",true,"DE+20",15,3,"potion2.png"));
         w.addToWorld(new Trinket(w,40,1,16,"22's hat",true,"hat.png"));
@@ -974,12 +978,13 @@ public class GameApplication extends Application {
         Trinket painAuChocolat = new Trinket(w,10,38,11,"Pain au chocolat",false,"pain_au_chocolat.png");
         Sword sword = new Sword(w,"Sword",false,5,16,2,20,"sword.png");
         Buoy buoy = new Buoy(w,5,16,"Buoy",false,15,"buoy.png");
+        buoy.getNode().setOnMouseClicked(new ClickItemHandler(buoy));
         //endregion
         //endregion
         //region Monster
         //region Slime
         w.addToWorld(new Slime(w,"Cutie Slime",8,3,2,new ArrayList<>(),5,5,0,"slime2.png"));
-        //w.addToWorld(new Slime(w,"Speaky Slime",9,5,3,new ArrayList<>(),3,9,0,"slime3.png"));
+        w.addToWorld(new Slime(w,"Speaky Slime",9,5,3,new ArrayList<>(),3,9,0,"slime3.png"));
         w.addToWorld(new Slime(w,"Red Slime",10,7,4,new ArrayList<>(List.of(painAuChocolat)),38,11,0,"slime.png"));
         //endregion
         //region Looter
@@ -1045,7 +1050,7 @@ public class GameApplication extends Application {
     }
 
     public World createWorld3(){
-        World w = new World("#611120");
+        World w = new World(this,"#611120");
         Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",false,"hedgehog.png");
         Slime slime = new Slime(w,"Slime",5,4,2,new ArrayList<>(List.of(trinket)),20,15,0,"slime.png");
         w.addToWorld(slime);
@@ -1054,4 +1059,34 @@ public class GameApplication extends Application {
     //endregion
 
     public static void main(String[] args) {launch();}
+
+    public class ClickItemHandler implements EventHandler<MouseEvent> {
+        Item item;
+
+        public ClickItemHandler(Item item) {
+            this.item=item;
+        }
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            if (!item.isDropped() && mouseEvent.getButton() == MouseButton.SECONDARY) {
+                item.setDropped(true);
+                p.removeFromInventory(item);
+                item.setPosition(p.getPosition().getX(), p.getPosition().getY());
+            }
+            if(!item.isDropped() && mouseEvent.getButton() == MouseButton.PRIMARY){
+                if(item instanceof Book){
+                    BookApplication bookApp = new BookApplication((Book) item);
+                    try {
+                        bookApp.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            if(item instanceof Bomb && mouseEvent.getButton() == MouseButton.PRIMARY && item.isDropped()){
+                world.destroysRadiusBomb(item.getPosition().getX(), item.getPosition().getY());
+            }
+        }
+    }
 }

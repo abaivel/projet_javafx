@@ -1,8 +1,7 @@
 package Classes.Monster;
 
-import Classes.GameObject;
 import Classes.Item.Item;
-import Classes.Item.NotConsumableItem.Weapon.Weapon;
+import Classes.Killable;
 import Classes.Player.Player;
 import Classes.World.Position;
 import Classes.World.World;
@@ -10,41 +9,22 @@ import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 //Enemies in game
 //Fight is launched when walking on the 9 cases around the monster
-public abstract class Monster extends GameObject {
+public abstract class Monster extends Killable {
 
     //region Monster's Attributes
-    private String name;
-    private final DoubleProperty lifePoints;
-    private int strength;
-    private int defense;
     private int cooldown;       //number of rounds until special attack ; 3 by default
-
-    private final ArrayList<Item> inventory;
     private boolean alive;
-    private Map<String, Integer> status;
-
-    private final IntegerProperty numberStatus;
-
     private final StringProperty messageAttack;
     //endregion
 
     //region Constructor
-    public Monster(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown,String urlImage) {
-        super(w,x,y);
-        this.name = name;
-        this.lifePoints = new SimpleDoubleProperty(lifePoints);
-        this.strength = force;
-        this.defense = defense;
-        this.inventory = inventory;
+    public Monster(World w, String name, int lifePoints, int strength, int defense, ArrayList<Item> inventory, int x, int y, int cooldown,String urlImage) {
+        super(w,x,y,inventory,lifePoints,strength,defense);
         this.alive=true;
         this.cooldown = cooldown;
-        this.status = new HashMap<String, Integer>();
-        this.numberStatus = new SimpleIntegerProperty(0);
         this.messageAttack = new SimpleStringProperty("");
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
@@ -54,75 +34,14 @@ public abstract class Monster extends GameObject {
     //endregion
 
     //region Getters
-    public String getName() {
-        return name;
-    }
-
-    public double getLifePoints() {
-        return lifePoints.get();
-    }
-    public DoubleProperty lifePointsProperty() {
-        return lifePoints;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public ArrayList<Item> getInventory() {
-        return inventory;
-    }
 
     public boolean isAlive() {
         return alive;
     }
 
-    public HashMap<String, Integer> getStatus() {
-        return (HashMap<String, Integer>) this.status;
-    }
-    public int getNumberStatus() {
-        return numberStatus.get();
-    }
-
-    public IntegerProperty numberStatusProperty() {
-        return numberStatus;
-    }
-
     //endregion
 
     //region Setters
-    public void setNumberStatus(int numberStatus) {
-        this.numberStatus.set(numberStatus);
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLifePoints(double lifePoints) {
-
-        if (lifePoints>=0) {
-            if (lifePoints>10){
-                this.lifePoints.set(10);
-            }else {
-                this.lifePoints.set(lifePoints);
-            }
-        }else{
-            this.lifePoints.set(0);
-        }
-    }
-
-    public void setStrength(int force) {
-        this.strength = force;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
-    }
-
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
@@ -147,99 +66,11 @@ public abstract class Monster extends GameObject {
     //region toString Function
     public String toString(){
         String tmp = "\nName : " + this.getName() + "\nLP : " + this.getLifePoints() + "\nMoney : " + this.getCooldown() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\n";
-        for (Item item : inventory) {
+        for (Item item : this.getInventory()) {
             tmp += item.toString() + "\n";
         }
         return tmp;
     }
-    //endregion
-
-    //region Inventory functions
-    public boolean addToInventory(Item item) {
-        if (this.getInventory().size() < 10) {
-            this.getInventory().add(item);
-            return true;
-        } else {
-            System.out.println("Cannot add element. The inventory is full.");
-            return false;
-        }
-    }
-    public Item removeFromInventory(Item item){
-        int index = this.inventory.indexOf(item);
-        if(index != -1){
-            Item removed = this.inventory.remove(index);        //get the removed item
-            return removed;
-        }else{
-            return null;                                        //if item not in inventory
-        }
-    }
-
-    //Look for all the Weapons in the monster's inventory and chooses the best one
-    public double containsWeapon(){
-        ArrayList<Weapon> w = new ArrayList<Weapon>();     //list of weapons to fill
-        for(int i = 0; i < inventory.size(); i++){
-            if(inventory.get(i) instanceof Weapon){
-                w.add((Weapon) this.getInventory().get(i));                 //Adding the weapons to the list
-            }
-        }
-        if(w.isEmpty()){
-            return 0;
-        }
-        int max=0;
-        double value=0;
-        for(int i = 0; i < w.size(); i++){
-            if(w.get(i).getDamage() > value){
-                value = w.get(i).getDamage();
-                max = i;
-            }
-        }
-        return w.get(max).getDamage();
-    }
-    //endregion
-
-    //region Status functions
-    public void addStatus(String key, int value) {
-        this.getStatus().put(key, value);
-        this.setNumberStatus(this.getNumberStatus()+1);
-    }
-
-    //Removes status from the map when they reach count 0
-    public void statusWornOff(){
-        for(String s : this.status.keySet()){       //loop on the keyset
-            this.status.put(s,this.status.get(s)-1);
-            if(this.status.get(s) == 0){            //verification if value is 0
-                this.status.remove(s);              //removes the status
-                this.setNumberStatus(this.getNumberStatus()-1);
-            }
-        }
-    }
-
-    //Returns the defense status (in percentage) depending on all the potions : buff and debuff
-    public int defenseStatus(){
-        int defense = 0;                                     //a percentage
-        for (String key : this.status.keySet()){
-            if (key.contains("DE+")){ //if the monster is under a potion that boost his defense
-                defense += Integer.parseInt(key.substring(3));
-            }else if (key.contains("DE-")){ //if the monster is under a potion that decreases his defense
-                defense += Integer.parseInt(key.substring(3));
-            }
-        }
-        return defense;
-    }
-
-    //Returns the strength status (in percentage) depending on all the potions : buff and debuff
-    public int strengthStatus(){
-        int strength = 0;                                                       //a percentage
-        for (String key : this.status.keySet()){
-            if (key.contains("ST+")){ //if the monster is under a potion that boost his strength
-                strength +=  Integer.parseInt(key.substring(3));
-            }else if (key.contains("ST-")){ //if the monster is under a potion that decreases his strength
-                strength += Integer.parseInt(key.substring(3));
-            }
-        }
-        return strength;
-    }
-
     //endregion
 
     //region Fight functions
@@ -274,12 +105,12 @@ public abstract class Monster extends GameObject {
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int DEStatus = defenseStatus();
         if(DEStatus > 0){                     //if the monster is under a potion that boost his defense
-            this.setLifePoints((this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 + DEStatus/100)))));    //we had a bonus of strength related to the player's status
+            this.setLifePoints((int) (this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 + DEStatus/100)))));    //we had a bonus of strength related to the player's status
         }else if(DEStatus < 0){               //if the monster is under a potion that decreases this defense
-            this.setLifePoints(this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 - DEStatus/100))));    //we had a bonus of strength related to the player's status
+            this.setLifePoints((int) (this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 - DEStatus/100)))));    //we had a bonus of strength related to the player's status
         }else{
             if(enemyAttack > this.getDefense()){
-                this.setLifePoints(this.getLifePoints()-(enemyAttack - this.getDefense()));    //attack with the flat value of strength ; only deal damage if attack superior to def
+                this.setLifePoints((int) (this.getLifePoints()-(enemyAttack - this.getDefense())));    //attack with the flat value of strength ; only deal damage if attack superior to def
             }
 
         }

@@ -13,6 +13,7 @@ import Classes.World.DecorItem.NotWalkThroughDecorItem.Wall;
 import Classes.World.DecorItem.WalkThroughDecorItem.Door;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Hedge;
 import Classes.World.DecorItem.WalkThroughDecorItem.River;
+import com.game.projet_javafx.GameApplication;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
@@ -23,9 +24,11 @@ import java.util.ArrayList;
 public class World {
 
     //region Attributes
-    public ArrayList<GameObject>[][] gridObjects = new ArrayList[40][18];
-    String color;
-    GridPane pane;
+    private final ArrayList<GameObject>[][] gridObjects = new ArrayList[40][18];
+    private final String color;
+    private final GridPane pane;
+
+    private final GameApplication game;
     //endregion
 
     //region Constants
@@ -40,11 +43,15 @@ public class World {
     public GridPane getPane() {
         return pane;
     }
+    public GameApplication getGame() {
+        return game;
+    }
     //endregion
 
     //region Constructor
-    public World(String color) {
+    public World(GameApplication game, String color) {
         this.color=color;
+        this.game = game;
         pane = new GridPane();
         pane.setPrefHeight(HEIGHT);
         pane.setPrefWidth(WIDTH);
@@ -132,13 +139,15 @@ public class World {
                 if (i>=0 && i<=39 && j>=0 && j<=17) {   //verify if we're in the grid
                     for(int k=0; k<gridObjects[i][j].size();k++){   //parcours des ArrayList de GameObjects pour chaque case i,j, get(k) pour récup le GameObject
                         if(gridObjects[i][j].get(k) instanceof Trap || gridObjects[i][j].get(k) instanceof Hedge || gridObjects[i][j].get(k) instanceof Wall || gridObjects[i][j].get(k) instanceof Tree || gridObjects[i][j].get(k) instanceof Bomb){
+                            System.out.println(gridObjects[i][j]);
                             this.removeFromWorld(gridObjects[i][j].get(k));         //"detroys" -> removes particular decor items from the world if present in the radius of the bomb's explosion
+                            System.out.println(gridObjects[i][j]);
                         }
                         else if(gridObjects[i][j].get(k) instanceof Player player){
                             System.out.println(i+" "+j);
                             System.out.println(gridObjects[i][j].get(0).getClass());
                             System.out.println(player.getPosition());
-                            player.setLP(0);                                        //kills the player if they're in the radius of the bomb's explosion
+                            player.setLifePoints(0);                                        //kills the player if they're in the radius of the bomb's explosion
                         }
                     }
                 }

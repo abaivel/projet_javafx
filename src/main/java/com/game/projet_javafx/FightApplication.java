@@ -49,7 +49,7 @@ public class FightApplication extends Application {
         GridPane lifeBarPlayer = createLifeBar();
         Rectangle lifesPlayer = new Rectangle();
         lifesPlayer.setHeight(20);
-        lifesPlayer.setWidth(player.getLP()*15);
+        lifesPlayer.setWidth(player.getLifePoints()*15);
         lifesPlayer.setFill(Color.GREEN);
         lifeBarPlayer.add(lifesPlayer, 0,0,10,1);
         AnchorPane.setTopAnchor(lifeBarPlayer, 0.0);
@@ -276,15 +276,15 @@ public class FightApplication extends Application {
             }
         });
 
-        player.getLPProperty().addListener((observableValue, number, t1) -> lifesPlayer.setWidth(player.getLP()*15));
-        monster.lifePointsProperty().addListener((observableValue, number, t1) -> {
+        player.getLifePointsProperty().addListener((observableValue, number, t1) -> lifesPlayer.setWidth(player.getLifePoints()*15));
+        monster.getLifePointsProperty().addListener((observableValue, number, t1) -> {
             lifesMonster.setWidth(monster.getLifePoints()*15);
             if (monster.getLifePoints()<=0) {
                 System.out.println("Gagné");
                 stage.close();
             }
         });
-        player.numberStatusProperty().addListener((observableValue, number, t1) -> {
+        player.getNumberStatusProperty().addListener((observableValue, number, t1) -> {
             listStatusPlayer.getChildren().clear();
             for (String s : player.getStatus().keySet()){
                 Text status = new Text();
@@ -298,7 +298,7 @@ public class FightApplication extends Application {
                 listStatusPlayer.getChildren().add(status);
             }
         });
-        monster.numberStatusProperty().addListener((observableValue, number, t1) -> {
+        monster.getNumberStatusProperty().addListener((observableValue, number, t1) -> {
             listStatusMonster.getChildren().clear();
             for (String s : monster.getStatus().keySet()){
                 Text status = new Text();
