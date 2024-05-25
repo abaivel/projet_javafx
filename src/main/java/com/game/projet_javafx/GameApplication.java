@@ -447,6 +447,7 @@ public class GameApplication extends Application {
                     }
                     if (p.getNearByMonster().getLifePoints()<=0){
                         world.removeFromWorld(p.getNearByMonster());
+                        p.getNearByMonster().dropItem();
                         p.setNearByMonster(null);
                     }
                     System.out.println(p.getInventory());
@@ -840,11 +841,11 @@ public class GameApplication extends Application {
         InstantHealth instHealth2 = new InstantHealth(w,38,12,10,"heart.png");
         w.addToWorld(instHealth2);
 
-        Trap trap0 = new Trap(w,4,1,"trap2.png");
+        Trap trap0 = new Trap(w,4,1,"trap.png");
         w.addToWorld(trap0);
-        Trap trap1 = new Trap(w,18,7,"trap2.png");
+        Trap trap1 = new Trap(w,18,7,"trap.png");
         w.addToWorld(trap1);
-        Trap trap2 = new Trap(w,36,13,"trap2.png");
+        Trap trap2 = new Trap(w,36,13,"trap.png");
         w.addToWorld(trap2);
         for (int i=3;i<=4;i++) {
             Trap trap3 = new Trap(w,i,16,"trap.png");
@@ -1127,67 +1128,9 @@ public class GameApplication extends Application {
 
     public World createWorld3(){
         World w = new World("#611120");
-        Wall wall = new Wall(w,2,2);
-        w.addToWorld(wall);
-        Sword sword = new Sword(w,"Sword",true,10,10,4,25,"sword.png");
-        w.addToWorld(sword);
-        Potion potion = new Potion(w,30,2,"Potion de vie",true,"ST+20",10,3,"potion1.png");
-        w.addToWorld(potion);
-        Buoy buoy = new Buoy(w,28,15,"Buoy",true,10,"buoy.png");
-        w.addToWorld(buoy);
-        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",true,"hedgehog.png");
-        w.addToWorld(trinket);
-        Key key = new Key(w,10,15,"Key",true,"BLUE",12,"key.png");
-        w.addToWorld(key);
-        Book book = new Book(w,"Book",true,"This is a book",1,1,14,"book.png");
-        w.addToWorld(book);
-        Fouras fouras1 = new Fouras(w, "Wizard",10,15,2,"fouras.png");
-        w.addToWorld(fouras1);
-        Slime slime = new Slime(w, "Slime", 5, 3, 2, new ArrayList<>(),7,5,0,"slime.png");
+        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",false,"hedgehog.png");
+        Slime slime = new Slime(w,"Slime",5,4,2,new ArrayList<>(List.of(trinket)),20,15,0,"slime.png");
         w.addToWorld(slime);
-        Tree tree = new Tree(w,5,17,"tree.png");
-        w.addToWorld(tree);
-        Hedge hedge = new Hedge(w,12,12);
-        w.addToWorld(hedge);
-        Trap trap = new Trap(w,15,15,"trap.png");
-
-        ArrayList<Item> looterInv = new ArrayList<>();
-        Looter looter = new Looter(w,"méchaant",8,5,2,looterInv,8,8,0,"looter.png");
-        w.addToWorld(looter);
-
-        Wolf wolf = new Wolf(w,"WOUF",15,5,2,looterInv,5,7,0,"vase.png");
-        w.addToWorld(wolf);
-
-        w.addToWorld(trap);
-        for (int i=0;i<5;i++){
-            River r1 = new River(w,i,14);
-            w.addToWorld(r1);
-        }
-        for (int i=15;i<18;i++){
-            River r2 = new River(w,4,i);
-            w.addToWorld(r2);
-        }
-
-        Door door = new Door(w,16,10,"BLUE","door_closed.png",0);
-        w.addToWorld(door);
-
-        door.getNode().setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY){
-                ArrayList<Key> keys = p.containsKey();
-                if(!keys.isEmpty()){
-                    for(Key k : keys){
-                        if(door.getColor().equals(k.getColor())){
-                            door.setOpen(true);
-                            ((ImageView) door.getNode()).setImage(new Image("door_open.png"));
-                            p.removeFromInventory(k);
-                        }
-                    }
-                }
-
-            }
-
-        });
-
         return w;
     }
     //endregion
