@@ -13,8 +13,8 @@ import java.util.Optional;
 public class DialogFourasApplication extends Application {
 
     //region Attributes
-    private Fouras fouras;
-    private Player player;
+    private final Fouras fouras;
+    private final Player player;
     //endregion
 
     //region Constructor

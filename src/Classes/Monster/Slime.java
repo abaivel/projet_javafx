@@ -5,7 +5,6 @@ import Classes.Player.Player;
 import Classes.World.World;
 
 import java.util.ArrayList;
-import java.util.List;
 
 //Enemy that poisons the player as a special attack
 public class Slime extends Monster{
@@ -13,10 +12,6 @@ public class Slime extends Monster{
     //region Constructor
     public Slime(World w, String name, int lifePoints, int strength, int defense, ArrayList<Item> inventory, int x, int y, int cooldown, String urlImage) {
         super(w, name, lifePoints, strength, defense, inventory, x, y,cooldown, urlImage);
-    }
-
-    public Slime(ArrayList<Item> inventory){
-        super(inventory);
     }
     //endregion
 

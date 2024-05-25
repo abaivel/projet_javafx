@@ -6,8 +6,6 @@ import Classes.Player.Player;
 import Classes.World.World;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 //Enemy that can steal player's item as a special attack
@@ -17,9 +15,6 @@ public class Looter extends Monster{
     public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y,int cooldown, String urlImage) {
         super(w, name, lifePoints, force, defense, inventory, x, y,cooldown,urlImage);
     }
-    public Looter(ArrayList<Item> inventory){
-        super(inventory);
-    }
     //endregion
 
     //region Fight functions
@@ -27,7 +22,7 @@ public class Looter extends Monster{
     public int chooseAttack(Player player) {            //returns damage done
         if(super.specialAttack()) {
             this.setCooldown(3);                        //reset cooldown
-            Item itemToSteal = player.removeFromInventory(player.randomItemFromInvetory());
+            Item itemToSteal = player.removeFromInventory(player.randomItemFromInventory());
             if (itemToSteal != null) {
                 this.addToInventory(itemToSteal);   //steals a random object from the player's inventory
                 setMessageAttack("The looter stole "+itemToSteal.getName()+" from your inventory");
@@ -59,10 +54,7 @@ public class Looter extends Monster{
     //region Item functions
     //To know if looter can use an object : meaning inventory not empty
     public boolean canUseObject(){
-        if(!this.getInventory().isEmpty()){
-            return true;
-        }
-        return false;
+        return !this.getInventory().isEmpty();
     }
 
     //returns a random item from the looter's inventory

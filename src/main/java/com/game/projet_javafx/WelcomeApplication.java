@@ -1,8 +1,6 @@
 package com.game.projet_javafx;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,7 +22,6 @@ public class WelcomeApplication extends Application {
         btPlay.setStyle("-fx-font-size: 40;-fx-font-family: 'Brush Script MT';-fx-background-color: white;-fx-border-color: black");
         Text text = new Text("Welcome to this game");
         text.setStyle("-fx-font-size: 80;-fx-font-family: 'Brush Script MT'");
-        //.setMargin(btn1, new Insets(10));
         StackPane pane = new StackPane();
         StackPane.setAlignment(text, Pos.TOP_CENTER);
         pane.getChildren().add(text);
@@ -34,16 +31,13 @@ public class WelcomeApplication extends Application {
         stage.setMaximized(true);
         stage.show();
 
-        btPlay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                GameApplication game = new GameApplication();
-                try {
-                    game.start(new Stage());
-                    stage.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        btPlay.setOnAction(actionEvent -> {
+            GameApplication game = new GameApplication();
+            try {
+                game.start(new Stage());
+                stage.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }

@@ -1,6 +1,5 @@
 package Classes.Item.NotConsumableItem;
 
-import Classes.World.Position;
 import Classes.Item.Item;
 import Classes.World.World;
 

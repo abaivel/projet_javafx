@@ -28,12 +28,6 @@ public abstract class NPC extends GameObject {
     }
     //endregion
 
-    //region Default constructor
-    public NPC(String name) {
-        this(null, "NPC",100,0,0,"");
-    }
-    //endregion
-
     //region Getters and Setters
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
@@ -68,8 +62,8 @@ public abstract class NPC extends GameObject {
     //region ToString function to print
     public String toString() {
         String tmp = "Name :" + this.getName() + "\nMoney :" + this.getMoney() + "\nPosition :" + this.getPosition();
-        for(int i = 0; i < inventory.size(); i++){
-            tmp += inventory.get(i).toString() + "\n";
+        for (Item item : inventory) {
+            tmp += item.toString() + "\n";
         }
         return tmp;
     }

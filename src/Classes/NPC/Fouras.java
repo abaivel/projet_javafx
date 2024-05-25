@@ -25,12 +25,6 @@ public class Fouras extends NPC {
     }
     //endregion
 
-    //region Default constructor
-    public Fouras(String name) {
-        this(null, name,100,0,0,"");
-    }
-    //endregion
-
     //region Getters and Setters
     public Map<String, String> getEnigma() {return enigma;}
     public void setEnigma(Map<String, String> enigma) {this.enigma = enigma;}

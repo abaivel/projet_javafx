@@ -11,7 +11,6 @@ import Classes.Item.NotConsumableItem.Buoy;
 import Classes.Item.NotConsumableItem.Trinket;
 import Classes.Item.NotConsumableItem.Weapon.Sword;
 import Classes.Monster.Looter;
-import Classes.Monster.Monster;
 import Classes.Monster.Slime;
 import Classes.Monster.Wolf;
 import Classes.NPC.Fouras;
@@ -30,21 +29,13 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import Classes.World.World;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -53,13 +44,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GameApplication extends Application {
@@ -75,8 +64,6 @@ public class GameApplication extends Application {
     //region start function
     @Override
     public void start(Stage stage) throws IOException {
-        /*ArrayList<ArrayList<GameObject>> gridObject = new ArrayList<>();
-        gridObject.set(2,new ArrayList<GameObject>())*/
 
         //region Worlds
         //Creations of the 3 worlds
@@ -103,10 +90,6 @@ public class GameApplication extends Application {
         infosBottom.setHgap(10);
         FlowPane infosPerso = new FlowPane(Orientation.VERTICAL);
         infosBottom.getChildren().add(infosPerso);
-        /*ImageView avatar = new ImageView("image_pinguin.png");
-        avatar.setFitWidth(70);
-        avatar.setFitHeight(70);
-        infosPerso.getChildren().add(avatar);*/
         //endregion
 
         //region Front : PLayer's lifebar
@@ -159,7 +142,7 @@ public class GameApplication extends Application {
         flowPane.getChildren().add(infosBottom);
         //endregion
 
-        /*File file = new File("src\\main\\resources\\game_music.mp3");
+        File file = new File("src\\main\\resources\\game_music.mp3");
         System.out.println("here");
         final String MEDIA_URL = file.toURI().toString();
         System.out.println("here");
@@ -169,7 +152,7 @@ public class GameApplication extends Application {
         System.out.println("here");
         mediaPlayer.volumeProperty().set(0.1);
         //mediaPlayer.setStopTime(Duration.seconds(212));
-        mediaPlayer.play();*/
+        mediaPlayer.play();
 
         //region Front : Scene creation
         Scene scene = new Scene(flowPane);
@@ -178,26 +161,6 @@ public class GameApplication extends Application {
         stage.setMaximized(true);
         stage.show();
         //endregion
-
-        /*scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.RIGHT) {
-                if (GridPane.getColumnIndex(p.node)<COLUMNS-1 && IsThereWall(world.gridObjects, GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node))) {
-                    GridPane.setColumnIndex(p.node, GridPane.getColumnIndex(p.node) + 1);
-                }
-            }else if (e.getCode() == KeyCode.LEFT) {
-                if (GridPane.getColumnIndex(p.node)>0 && IsThereWall(world.gridObjects, GridPane.getColumnIndex(p.node) - 1, GridPane.getRowIndex(p.node))) {
-                    GridPane.setColumnIndex(p.node, GridPane.getColumnIndex(p.node) - 1);
-                }
-            }else if (e.getCode() == KeyCode.UP) {
-                if (GridPane.getRowIndex(p.node)>0 && IsThereWall(world.gridObjects, GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node) - 1)) {
-                    GridPane.setRowIndex(p.node, GridPane.getRowIndex(p.node) - 1);
-                }
-            }else if (e.getCode() == KeyCode.DOWN) {
-                if (GridPane.getRowIndex(p.node)<ROWS-1 && IsThereWall(world.gridObjects, GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node) + 1)) {
-                    GridPane.setRowIndex(p.node, GridPane.getRowIndex(p.node) + 1);
-                }
-            }
-        });*/
 
         //region Listener : movement
         final BooleanProperty spacePressed = new SimpleBooleanProperty(false);
@@ -210,86 +173,62 @@ public class GameApplication extends Application {
         final BooleanBinding spaceAndLeftPressed = spacePressed.and(leftPressed);
         final BooleanBinding spaceAndUpPressed = spacePressed.and(upPressed);
         final BooleanBinding spaceAndDownPressed = spacePressed.and(downPressed);
-        spaceAndRightPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (spacePressed.getValue()) {
-                    p.jump(GridPane.getColumnIndex(p.node) + 2, GridPane.getRowIndex(p.node));
-                    spacePressed.set(false);
-                    jumpEffectued.set(true);
-                }
+        spaceAndRightPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (spacePressed.getValue()) {
+                p.jump(GridPane.getColumnIndex(p.node) + 2, GridPane.getRowIndex(p.node));
+                spacePressed.set(false);
+                jumpEffectued.set(true);
             }
         });
-        spaceAndLeftPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (spacePressed.getValue()) {
-                    p.jump(GridPane.getColumnIndex(p.node) - 2, GridPane.getRowIndex(p.node));
-                    spacePressed.set(false);
-                    jumpEffectued.set(true);
-                }
+        spaceAndLeftPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (spacePressed.getValue()) {
+                p.jump(GridPane.getColumnIndex(p.node) - 2, GridPane.getRowIndex(p.node));
+                spacePressed.set(false);
+                jumpEffectued.set(true);
             }
         });
 
-        spaceAndUpPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (spacePressed.getValue()) {
-                    p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-2);
-                    spacePressed.set(false);
-                    jumpEffectued.set(true);
-                }
+        spaceAndUpPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (spacePressed.getValue()) {
+                p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-2);
+                spacePressed.set(false);
+                jumpEffectued.set(true);
             }
         });
 
-        spaceAndDownPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (spacePressed.getValue()) {
-                    p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+2);
-                    spacePressed.set(false);
-                    jumpEffectued.set(true);
-                }
+        spaceAndDownPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (spacePressed.getValue()) {
+                p.jump(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+2);
+                spacePressed.set(false);
+                jumpEffectued.set(true);
             }
         });
 
-        rightPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (!jumpEffectued.getValue() && rightPressed.getValue()){
-                    p.move(GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node));
-                    rightPressed.set(false);
-                }
+        rightPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (!jumpEffectued.getValue() && rightPressed.getValue()){
+                p.move(GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node));
+                rightPressed.set(false);
             }
         });
 
-        leftPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (!jumpEffectued.getValue() && leftPressed.getValue()){
-                    p.move(GridPane.getColumnIndex(p.node) - 1, GridPane.getRowIndex(p.node));
-                    leftPressed.set(false);
-                }
+        leftPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (!jumpEffectued.getValue() && leftPressed.getValue()){
+                p.move(GridPane.getColumnIndex(p.node) - 1, GridPane.getRowIndex(p.node));
+                leftPressed.set(false);
             }
         });
 
-        upPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (!jumpEffectued.getValue() && upPressed.getValue()){
-                    p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-1);
-                    upPressed.set(false);
-                }
+        upPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (!jumpEffectued.getValue() && upPressed.getValue()){
+                p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)-1);
+                upPressed.set(false);
             }
         });
 
-        downPressed.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                if (!jumpEffectued.getValue() && downPressed.getValue()){
-                    p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+1);
-                    downPressed.set(false);
-                }
+        downPressed.addListener((observableValue, aBoolean, t1) -> {
+            if (!jumpEffectued.getValue() && downPressed.getValue()){
+                p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node)+1);
+                downPressed.set(false);
             }
         });
 
@@ -297,16 +236,12 @@ public class GameApplication extends Application {
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.RIGHT) {
                 rightPressed.set(true);
-                //p.move(GridPane.getColumnIndex(p.node) + 1, GridPane.getRowIndex(p.node));
             }else if (e.getCode() == KeyCode.LEFT) {
                 leftPressed.set(true);
-                //p.move(GridPane.getColumnIndex(p.node) - 1,GridPane.getRowIndex(p.node));
             }else if (e.getCode() == KeyCode.UP) {
                 upPressed.set(true);
-                //p.move(GridPane.getColumnIndex(p.node),GridPane.getRowIndex(p.node)-1);
             }else if (e.getCode() == KeyCode.DOWN) {
                 downPressed.set(true);
-                //p.move(GridPane.getColumnIndex(p.node), GridPane.getRowIndex(p.node) + 1);
             }
             if (e.getCode() == KeyCode.SPACE){
                 spacePressed.set(true);
@@ -329,129 +264,112 @@ public class GameApplication extends Application {
         //endregion
 
         //region Listeners : Player's attributes
-        p.getLPProperty().addListener(new ChangeListener<Number>() { //listener of the value of life points of the player
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {  //function called when Player's LP change
-                if (p.getLP()<=0){                                                                              //verification failure condition
-                    DefeatApplication defeat = new DefeatApplication();
-                    try {
-                        defeat.start(new Stage());                                                              //launch defeat stage
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    stage.close();
-                }                                                                                               //15 is the size of one "life"
-                lifes.setWidth(p.getLP()*15);                                                                   //for the front resizes life bar with LP left
-            }
+        //listener of the value of life points of the player
+        p.getLPProperty().addListener((observableValue, number, t1) -> {  //function called when Player's LP change
+            if (p.getLP()<=0){                                                                              //verification failure condition
+                DefeatApplication defeat = new DefeatApplication();
+                try {
+                    defeat.start(new Stage());                                                              //launch defeat stage
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                stage.close();
+            }                                                                                               //15 is the size of one "life"
+            lifes.setWidth(p.getLP()*15);                                                                   //for the front resizes life bar with LP left
         });
 
-        p.sizeInventoryProperty().addListener(new ChangeListener<Number>() { //listener of the size of the player's inventory
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {      //function called when the size of the inventory changes
-                if (p.contains("Hedgehog")){                                                                        //verification of win condition
-                    stage.close();
-                    VictoryApplication victory = new VictoryApplication();
-                    try {
-                        victory.start(new Stage());                                                                 //launch victory stage
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+        //listener of the size of the player's inventory
+        p.sizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
+            if (p.contains("Hedgehog")){                                                                        //verification of win condition
+                stage.close();
+                VictoryApplication victory = new VictoryApplication();
+                try {
+                    victory.start(new Stage());                                                                 //launch victory stage
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                System.out.println("CHANGE");
-                System.out.println(p.getInventory());
-                inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
-                for (int i=0;i<2;i++){
-                    for (int j=0;j<5;j++) {
-                        int index = i*5+j;
-                        if (index<p.sizeInventoryProperty().getValue()) {
-                            inventory.add(p.getInventory().get(index).getNode(), j, i);     //add items one by one to the gridpane
-                        }
+            }
+            System.out.println("CHANGE");
+            System.out.println(p.getInventory());
+            inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
+            for (int i=0;i<2;i++){
+                for (int j=0;j<5;j++) {
+                    int index = i*5+j;
+                    if (index<p.sizeInventoryProperty().getValue()) {
+                        inventory.add(p.getInventory().get(index).getNode(), j, i);     //add items one by one to the gridpane
                     }
                 }
             }
         });
 
-        p.getMoneyProperty().addListener(new ChangeListener<Number>() { //listener of the value of money of the player
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                System.out.println(p.getMoneyProperty());
+        //listener of the value of money of the player
+        p.getMoneyProperty().addListener((observableValue, number, t1) -> System.out.println(p.getMoneyProperty()));
 
+        //listener of the value of indexWorld of the player
+        p.getIndexWorldProperty().addListener((observableValue, number, t1) -> {
+            world.removeFromWorld(p);
+            for (Item item : p.getInventory()){
+                world.removeFromWorld(item);
             }
-        });
-
-        p.getIndexWorldProperty().addListener(new ChangeListener<Number>() { //listener of the value of indexWorld of the player
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                world.removeFromWorld(p);
-                for (Item item : p.getInventory()){
-                    world.removeFromWorld(item);
-                }
-                world = listWorld[p.getIndexWorld()];
-                flowPane.getChildren().clear();
-                pane = world.getPane();
-                flowPane.getChildren().add(pane);
-                flowPane.getChildren().add(infosBottom);
-                p.setWorld(world);
-                world.addToWorld(p);
-                for (Item item : p.getInventory()){
-                    item.setWorld(world);
-                }
-
+            world = listWorld[p.getIndexWorld()];
+            flowPane.getChildren().clear();
+            pane = world.getPane();
+            flowPane.getChildren().add(pane);
+            flowPane.getChildren().add(infosBottom);
+            p.setWorld(world);
+            world.addToWorld(p);
+            for (Item item : p.getInventory()){
+                item.setWorld(world);
             }
+
         });
         //endregion
 
         //region Listener : Player near an NPC
-        p.nearByNPCProperty().addListener(new ChangeListener<NPC>() {
-            @Override
-            public void changed(ObservableValue<? extends NPC> observableValue, NPC npc, NPC t1) {
-                System.out.println("I am near a NPC");
-                NPC npcDiag = p.getNearByNPC();
-                if(npcDiag instanceof Merchant merchantDiag){                                               //If near a merchant
-                    DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
-                    try {
-                        diagApp.start(new Stage());                                                         //starts dialog
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }else if(npcDiag instanceof Fouras fourasDiag){                                             //If near a Fouras
-                    DialogFourasApplication diagFouApp = new DialogFourasApplication(fourasDiag,p);
-                    try {
-                        diagFouApp.start(new Stage());                                                      //starts dialog
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }else if(npcDiag instanceof UselessPerson upDiag){                                          //If near a UselessPerson
-                    DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
-                    try {
-                        diagUseless.start(new Stage());                                                     //starts dialog
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+        p.nearByNPCProperty().addListener((observableValue, npc, t1) -> {
+            System.out.println("I am near a NPC");
+            NPC npcDiag = p.getNearByNPC();
+            if(npcDiag instanceof Merchant merchantDiag){                                               //If near a merchant
+                DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
+                try {
+                    diagApp.start(new Stage());                                                         //starts dialog
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }else if(npcDiag instanceof Fouras fourasDiag){                                             //If near a Fouras
+                DialogFourasApplication diagFouApp = new DialogFourasApplication(fourasDiag,p);
+                try {
+                    diagFouApp.start(new Stage());                                                      //starts dialog
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }else if(npcDiag instanceof UselessPerson upDiag){                                          //If near a UselessPerson
+                DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
+                try {
+                    diagUseless.start(new Stage());                                                     //starts dialog
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
         //endregion
 
         //region Listener : Player near a Monster
-        p.nearByMonsterProperty().addListener(new ChangeListener<Monster>() {
-            @Override
-            public void changed(ObservableValue<? extends Monster> observableValue, Monster monster, Monster t1) {
-                System.out.println("listener");
-                if (p.getNearByMonster()!=null) {
-                    FightApplication fight = new FightApplication(p,t1, stage);
-                    try {
-                        fight.start(new Stage());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (p.getNearByMonster().getLifePoints()<=0){
-                        world.removeFromWorld(p.getNearByMonster());
-                        p.getNearByMonster().dropItem();
-                        p.setNearByMonster(null);
-                    }
-                    System.out.println(p.getInventory());
+        p.nearByMonsterProperty().addListener((observableValue, monster, t1) -> {
+            System.out.println("listener");
+            if (p.getNearByMonster()!=null) {
+                FightApplication fight = new FightApplication(p,t1, stage);
+                try {
+                    fight.start(new Stage());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
+                if (p.getNearByMonster().getLifePoints()<=0){
+                    world.removeFromWorld(p.getNearByMonster());
+                    p.getNearByMonster().dropItem();
+                    p.setNearByMonster(null);
+                }
+                System.out.println(p.getInventory());
             }
         });
         //endregion
@@ -864,7 +782,7 @@ public class GameApplication extends Application {
         Potion potion1 = new Potion(w,12,5,"Life potion",true,"LIFE+5",10,0,"potion1.png");
         w.addToWorld(potion1);
 
-        Sword sword = new Sword(w,"Sword",true,37,2,4,25,"sword.png");
+        Sword sword = new Sword(w,"Hedgehog",true,37,2,4,25,"sword.png");
         w.addToWorld(sword);
 
 

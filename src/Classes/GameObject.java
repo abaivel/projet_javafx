@@ -3,8 +3,6 @@ package Classes;
 import Classes.World.Position;
 import Classes.World.World;
 import javafx.scene.Node;
-import Classes.World.World;
-import javafx.scene.layout.GridPane;
 
 //Everything is a GameObject to be placed on the grid
 public abstract class GameObject {

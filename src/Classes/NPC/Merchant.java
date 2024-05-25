@@ -1,9 +1,7 @@
 package Classes.NPC;
 
-import Classes.NPC.NPC;
 import Classes.Item.Item;
 import Classes.Player.Player;
-import Classes.World.Position;
 import Classes.World.World;
 
 //NPC that can trade with the player : buy, sell and swap items

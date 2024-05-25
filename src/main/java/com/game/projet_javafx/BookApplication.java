@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class BookApplication extends Application {
 
     //region Attributes
-    private Book book;
+    private final Book book;
     //endregion
 
     //region Constructor

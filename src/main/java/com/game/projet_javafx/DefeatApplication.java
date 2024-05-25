@@ -1,10 +1,8 @@
 package com.game.projet_javafx;
 
 import javafx.application.Application;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -30,16 +28,12 @@ public class DefeatApplication extends Application {
         text.setFill(Color.DARKRED);
         text.setTextAlignment(TextAlignment.CENTER);
         pane.getChildren().add(text);
-        pane.setAlignment(text, Pos.CENTER);
+        StackPane.setAlignment(text, Pos.CENTER);
 
-        File file = new File("src\\main\\resources\\death_music.mp3");//"H:\\Documents\\école\\ING1\\POO Java\\Programmes\\tp2 ihm\\tp2\\src\\main\\resources\\ts.mp3");
-        System.out.println("here");
+        File file = new File("src\\main\\resources\\death_music.mp3");
         final String MEDIA_URL = file.toURI().toString();
-        System.out.println("here");
         Media media = new Media(MEDIA_URL);
-        System.out.println("here");
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        System.out.println("here");
         mediaPlayer.volumeProperty().set(100);
         mediaPlayer.setStopTime(Duration.seconds(212));
         mediaPlayer.play();

@@ -15,8 +15,8 @@ import java.util.Optional;
 public class DialogMerchantApplication extends Application {
 
     //region DiagApp's attributes
-    private Merchant merchant;
-    private Player player;
+    private final Merchant merchant;
+    private final Player player;
     //endregion
 
     //region Constructor

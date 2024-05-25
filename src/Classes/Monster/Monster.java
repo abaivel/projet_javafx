@@ -11,7 +11,6 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 //Enemies in game
@@ -20,12 +19,12 @@ public abstract class Monster extends GameObject {
 
     //region Monster's Attributes
     private String name;
-    private DoubleProperty lifePoints;
+    private final DoubleProperty lifePoints;
     private int strength;
     private int defense;
     private int cooldown;       //number of rounds until special attack ; 3 by default
 
-    private ArrayList<Item> inventory;
+    private final ArrayList<Item> inventory;
     private boolean alive;
     private Map<String, Integer> status;
 
@@ -50,11 +49,6 @@ public abstract class Monster extends GameObject {
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
-    }
-
-    public Monster(ArrayList<Item> inventory){
-        this(null, "Monster",5,4,3,inventory,0,0,0,"");
-        this.status = new HashMap<String, Integer>();                  //No status at first
     }
 
     //endregion
@@ -153,8 +147,8 @@ public abstract class Monster extends GameObject {
     //region toString Function
     public String toString(){
         String tmp = "\nName : " + this.getName() + "\nLP : " + this.getLifePoints() + "\nMoney : " + this.getCooldown() + "\nStrength : " + this.getStrength() + "\nDefense : " + this.getDefense() + "\n";
-        for(int i = 0; i < inventory.size(); i++){
-            tmp += inventory.get(i).toString() + "\n";
+        for (Item item : inventory) {
+            tmp += item.toString() + "\n";
         }
         return tmp;
     }
@@ -224,19 +218,12 @@ public abstract class Monster extends GameObject {
     public int defenseStatus(){
         int defense = 0;                                     //a percentage
         for (String key : this.status.keySet()){
-            if (key.contains("DE+")){
+            if (key.contains("DE+")){ //if the monster is under a potion that boost his defense
                 defense += Integer.parseInt(key.substring(3));
-            }else if (key.contains("DE-")){
+            }else if (key.contains("DE-")){ //if the monster is under a potion that decreases his defense
                 defense += Integer.parseInt(key.substring(3));
             }
         }
-        /*if(this.status.containsKey("DE+")){                     //if the player is under a potion that boost his defense
-            this.status.put("DE+",this.status.get("DE+")-1);
-            defense += Integer.parseInt("DE+".substring(3));    //we had a bonus of strength related to the player's status
-        } else if(this.status.containsKey("DE-")){               //if the player is under a potion that decreases this defense
-            this.status.put("DE-",this.status.get("DE-")-1);
-            defense += Integer.parseInt("DE-".substring(3));    //we had a bonus of strength related to the player's status
-        }*/
         return defense;
     }
 
@@ -244,19 +231,12 @@ public abstract class Monster extends GameObject {
     public int strengthStatus(){
         int strength = 0;                                                       //a percentage
         for (String key : this.status.keySet()){
-            if (key.contains("ST+")){
+            if (key.contains("ST+")){ //if the monster is under a potion that boost his strength
                 strength +=  Integer.parseInt(key.substring(3));
-            }else if (key.contains("ST-")){
+            }else if (key.contains("ST-")){ //if the monster is under a potion that decreases his strength
                 strength += Integer.parseInt(key.substring(3));
             }
         }
-        /*if(this.status.containsKey("ST+")){                                     //if the player is under a potion that boost his defense
-            this.status.put("ST+",this.status.get("ST+")-1);
-            strength += Integer.parseInt("ST+".substring(3));          //we had a bonus of strength related to the player's status
-        } else if(this.status.containsKey("ST-")){                              //if the player is under a potion that decreases this defense
-            this.status.put("ST-",this.status.get("ST-")-1);
-            strength -= Integer.parseInt("ST-".substring(3));          //we had a bonus of strength related to the player's status
-        }*/
         return strength;
     }
 
@@ -279,27 +259,27 @@ public abstract class Monster extends GameObject {
         double weaponDamage = this.containsWeapon();            //Getting the damage from the best weapon on the Player ; 0 if they don't own any
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int STStatus = strengthStatus();
-        if(STStatus > 0){                     //If Strengh+ status -> add it to damage done
+        if(STStatus > 0){                     //If Strength + status -> add it to damage done
             return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 + STStatus/100);    //we had a bonus of strength related to the player's status
-        }else if(STStatus < 0){             //If Strengh- status -> remove it to damage done
+        }else if(STStatus < 0){             //If Strength - status -> remove it to damage done
             return (this.chooseAttack(player) * this.getStrength() + weaponDamage)*(1 - (STStatus/100));    //we had a bonus of strength related to the player's status
         }else{
             return this.chooseAttack(player) * (this.getStrength() + weaponDamage);                                                                                          //attack with the flat value of strength
         }
     }
 
-    public void defend(double ennemyAttack){
+    public void defend(double enemyAttack){
         System.out.println(this.getName() + " defends !");
-        System.out.println(ennemyAttack);
+        System.out.println(enemyAttack);
         this.statusWornOff();                                   //At the beginning of the round, removes worn off effects from the Map
         int DEStatus = defenseStatus();
         if(DEStatus > 0){                     //if the monster is under a potion that boost his defense
-            this.setLifePoints((this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 + DEStatus/100)))));    //we had a bonus of strength related to the player's status
+            this.setLifePoints((this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 + DEStatus/100)))));    //we had a bonus of strength related to the player's status
         }else if(DEStatus < 0){               //if the monster is under a potion that decreases this defense
-            this.setLifePoints(this.getLifePoints() - (ennemyAttack - ((this.getDefense()) * (1 - DEStatus/100))));    //we had a bonus of strength related to the player's status
+            this.setLifePoints(this.getLifePoints() - (enemyAttack - ((this.getDefense()) * (1 - DEStatus/100))));    //we had a bonus of strength related to the player's status
         }else{
-            if(ennemyAttack > this.getDefense()){
-                this.setLifePoints(this.getLifePoints()-(ennemyAttack - this.getDefense()));    //attack with the flat value of strength ; only deal damage if attack superior to def
+            if(enemyAttack > this.getDefense()){
+                this.setLifePoints(this.getLifePoints()-(enemyAttack - this.getDefense()));    //attack with the flat value of strength ; only deal damage if attack superior to def
             }
 
         }
@@ -308,11 +288,6 @@ public abstract class Monster extends GameObject {
     //endregion
 
     //region death functions
-    public void die(){
-        this.setAlive(false);
-        //TODO Faire disparaitre le monstre en le faisant clignoter par exemple -> front
-    }
-
     public void dropItem(){
         ArrayList<Item> copyInventory = (ArrayList<Item>) getInventory().clone();
         for (Item item : copyInventory) {
