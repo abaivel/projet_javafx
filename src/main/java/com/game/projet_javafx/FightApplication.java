@@ -7,6 +7,8 @@ import Classes.Player.Player;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -159,8 +161,10 @@ public class FightApplication extends Application {
         //endregion
         //region gridPotions
         GridPane gridPotions = new GridPane();
+        ScrollPane scrollGridPotions = new ScrollPane(gridPotions);
         int i=0;
         for (Item item : player.getInventory()){
+            System.out.println(player.getInventory());
             if (item instanceof Potion){
                 Button potion = new Button(item.getName());
                 potion.setStyle("-fx-font-size: 20px;-fx-font-family: 'Brush Script MT'");
@@ -172,14 +176,13 @@ public class FightApplication extends Application {
                 potion.setOnAction(actionEvent -> {
                     double playerAttack = player.attack(0,monster, item);
                     monster.defend(playerAttack);
-                    gridButtonsChoiceAction.setVisible(false);
+                    scrollGridPotions.setVisible(false);
                     textDodgeSuccessfull.setText("");
                     delay(1000, () -> playerTurn.set(false));
                 });
             }
             i++;
         }
-        ScrollPane scrollGridPotions = new ScrollPane(gridPotions);
         scrollGridPotions.setVisible(false);
         pane.getChildren().add(scrollGridPotions);
         //endregion
@@ -187,6 +190,7 @@ public class FightApplication extends Application {
         //region gridItems
         //TODO To use item in fight
         /*GridPane gridItems = new GridPane();
+        ScrollPane scrollGridItems = new ScrollPane(gridItems);
         int j=0;
         for (Item item : player.getInventory()){
             if (item instanceof Item){
@@ -202,7 +206,7 @@ public class FightApplication extends Application {
                     public void handle(ActionEvent actionEvent) {
                         double playerAttack = player.attack(3,monster, item);
                         monster.defend(playerAttack);
-                        gridButtonsChoiceAction.setVisible(false);
+                        scrollGridItems.setVisible(false);
                         textDodgeSuccessfull.setText("");
                         delay(1000, () -> playerTurn.set(false));
                     }
@@ -237,7 +241,7 @@ public class FightApplication extends Application {
             scrollGridPotions.setVisible(true);
         });
         buttonAttack.setOnAction(actionEvent -> {
-            System.out.println("ici");
+            scrollGridPotions.setVisible(false);
             double playerAttack = player.attack(1,monster,null);
             monster.defend(playerAttack);
             gridButtonsChoiceAction.setVisible(false);
@@ -246,6 +250,7 @@ public class FightApplication extends Application {
 
         });
         buttonDodge.setOnAction(actionEvent -> {
+            scrollGridPotions.setVisible(false);
             double playerAttack = player.attack(2,monster,null);
             monster.defend(playerAttack);
             if (player.isDodge()){
@@ -266,7 +271,7 @@ public class FightApplication extends Application {
         playerTurn.addListener((observableValue, aBoolean, t1) -> {
             textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
             gridButtonsChoiceAction.setVisible(playerTurn.get());
-            gridPotions.setVisible(false);
+            scrollGridPotions.setVisible(false);
             //gridItems.setVisible(false); //TODO to use items in fight
             if (!playerTurn.get() && monster.getLifePoints()>0){
                 if (!player.isDodge()) {
@@ -297,6 +302,58 @@ public class FightApplication extends Application {
                     status.setText("Poisoned : "+player.getStatus().get(s)+" rounds left");
                 }
                 listStatusPlayer.getChildren().add(status);
+            }
+        });
+        player.getSizeInventoryProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                gridPotions.getChildren().clear();
+                int i=0;
+                for (Item item : player.getInventory()){
+                    System.out.println(player.getInventory());
+                    if (item instanceof Potion){
+                        Button potion = new Button(item.getName());
+                        potion.setStyle("-fx-font-size: 20px;-fx-font-family: 'Brush Script MT'");
+                        ImageView imagePotion = new ImageView(((ImageView)(item.getNode())).getImage().getUrl());
+                        imagePotion.setFitHeight(50);
+                        imagePotion.setFitWidth(50);
+                        potion.setGraphic(imagePotion);
+                        gridPotions.add(potion,i,0);
+                        potion.setOnAction(actionEvent -> {
+                            double playerAttack = player.attack(0,monster, item);
+                            monster.defend(playerAttack);
+                            scrollGridPotions.setVisible(false);
+                            textDodgeSuccessfull.setText("");
+                            delay(1000, () -> playerTurn.set(false));
+                        });
+                    }
+                    i++;
+                }
+                //TODO To use item in fight
+                /*gridItems.getChildren().clear();
+                int j=0;
+                for (Item item : player.getInventory()){
+                    if (item instanceof Item){
+                        Button buttonItem = new Button(item.getName());
+                        buttonItem.setStyle("-fx-font-size: 20px;-fx-font-family: 'Brush Script MT'");
+                        ImageView imageItem = new ImageView(((ImageView)(item.getNode())).getImage().getUrl());
+                        imageItem.setFitHeight(50);
+                        imageItem.setFitWidth(50);
+                        buttonItem.setGraphic(imageItem);
+                        gridItems.add(buttonItem,j,0);
+                        buttonItem.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+                                double playerAttack = player.attack(3,monster, item);
+                                monster.defend(playerAttack);
+                                scrollGridItems.setVisible(false);
+                                textDodgeSuccessfull.setText("");
+                                delay(1000, () -> playerTurn.set(false));
+                            }
+                        });
+                    }
+                    j++;
+                }*/
             }
         });
         monster.getNumberStatusProperty().addListener((observableValue, number, t1) -> {
