@@ -801,7 +801,7 @@ public class GameApplication extends Application {
         Sword sword = new Sword(w,37,2,"Sword",25,true,"sword.png",4);
         w.addToWorld(sword);
 
-        Potion potion2 = new Potion(w,15,6,"Defense potion",10,true,"potion2.png","DE+20",0);
+        Potion potion2 = new Potion(w,15,6,"Defense potion",10,true,"potion2.png","DE+20",3);
 
         Trinket roller = new Trinket(w, 11,7,"Roller",20,false,"roller.png");
         Trinket camera = new Trinket(w, 11,7,"Camera",20,false,"camera.png");
