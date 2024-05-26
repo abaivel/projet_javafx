@@ -16,8 +16,8 @@ public abstract class NPC extends Character {
     //endregion
 
     //region Constructor with all parameters
-    public NPC(World w, String name, double money, int x, int y, String urlImage) {
-        super(w,x,y,new ArrayList<>());
+    public NPC(World w, int x, int y, String name, double money, String urlImage) {
+        super(w,x,y,name,new ArrayList<>());
         this.money = money;
         this.node = new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);

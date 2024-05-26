@@ -12,8 +12,8 @@ import java.util.Random;
 public class Looter extends Monster{
 
     //region Constructor
-    public Looter(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y,int cooldown, String urlImage) {
-        super(w, name, lifePoints, force, defense, inventory, x, y,cooldown,urlImage);
+    public Looter(World w, int x, int y, String name, ArrayList<Item> inventory, int lifePoints, int strength, int defense,int cooldown, String urlImage) {
+        super(w, x, y, name,inventory, lifePoints, strength, defense,cooldown,urlImage);
     }
     //endregion
 
@@ -70,8 +70,8 @@ public class Looter extends Monster{
 
         if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
-        }else if(potion.getEffect().startsWith("LIFE")) {
-            int value = Integer.parseInt(potion.getEffect().substring(4));
+        }else if(potion.getEffect().startsWith("LIFE+")) {
+            int value = Integer.parseInt(potion.getEffect().substring(5));
             this.setLifePoints(this.getLifePoints() + value);
         }else if(potion.getEffect().charAt(2) == '-'){     //if the potion is a malus, looter applies it to the player
             player.addStatus(potion.getEffect(), potion.getDuration());

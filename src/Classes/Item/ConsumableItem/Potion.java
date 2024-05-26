@@ -7,7 +7,7 @@ import Classes.World.World;
 //  ST+20 --> means strength +20%
 //  DE-40 --> means defense -40%
 
-//  LIFE10 --> regenerate 10 life points -> duration = 0
+//  LIFE+10 --> regenerate 10 life points -> duration = 0
 //  DEATH --> kills an enemy
 public class Potion extends Item{
 
@@ -24,8 +24,8 @@ public class Potion extends Item{
     }
 
     //endregion
-    public Potion(World w, int x, int y, String name, boolean dropped, String effect, int price,int duration, String urlImage) {
-        super(w,x, y, name, dropped, price,urlImage);
+    public Potion(World w, int x, int y, String name, int price, boolean dropped, String urlImage, String effect,int duration) {
+        super(w,x, y, name, price, dropped,urlImage);
         this.effect = effect;
         this.duration = duration;
     }

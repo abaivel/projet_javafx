@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class Wolf extends Monster{
 
     //region Constructor
-    public Wolf(World w, String name, int lifePoints, int force, int defense, ArrayList<Item> inventory, int x, int y, int cooldown, String urlImage) {
-        super(w, name, lifePoints, force, defense, inventory, x, y, cooldown, urlImage);
+    public Wolf(World w, int x, int y, String name, ArrayList<Item> inventory, int lifePoints, int strength, int defense, int cooldown, String urlImage) {
+        super(w, x, y, name, inventory, lifePoints, strength, defense, cooldown, urlImage);
     }
     //endregion
 

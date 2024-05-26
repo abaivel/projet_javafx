@@ -5,8 +5,8 @@ import Classes.World.World;
 public class Sword extends Weapon{
 
     //region Constructor
-    public Sword(World w, String name, boolean dropped, int x, int y, double damage, int price, String urlImage) {
-        super(w, name, dropped,x, y,damage, price,urlImage);
+    public Sword(World w, int x, int y, String name, int price, boolean dropped, String urlImage, double damage) {
+        super(w,x, y, name, price, dropped,urlImage,damage);
     }
     //endregion
 }
