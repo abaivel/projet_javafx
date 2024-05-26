@@ -62,6 +62,7 @@ public class GameApplication extends Application {
     GridPane pane;
     FlowPane flowPane;
     FlowPane infosBottom;
+    MediaPlayer mediaPlayer;
     //endregion
 
     //region start function
@@ -158,18 +159,21 @@ public class GameApplication extends Application {
         flowPane.getChildren().add(infosBottom);
         //endregion
 
-        File file = new File("src\\main\\resources\\game_music.mp3");
-        System.out.println("here");
-        final String MEDIA_URL = file.toURI().toString();
-        System.out.println("here");
-        Media media = new Media(MEDIA_URL);
-        System.out.println("here");
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        System.out.println("here");
-        mediaPlayer.volumeProperty().set(0.1);
-        //mediaPlayer.setStopTime(Duration.seconds(212));
-        mediaPlayer.play();
-
+        /*try {
+            File file = new File("src\\main\\resources\\game_music.mp3");
+            System.out.println("here");
+            final String MEDIA_URL = file.toURI().toString();
+            System.out.println("here");
+            Media media = new Media(MEDIA_URL);
+            System.out.println("here");
+            mediaPlayer = new MediaPlayer(media);
+            System.out.println("here");
+            mediaPlayer.volumeProperty().set(0.1);
+            //mediaPlayer.setStopTime(Duration.seconds(212));
+            mediaPlayer.play();
+        }catch (Exception e){
+            System.out.println("Music is not supported by the jar");
+        }*/
         //region Front : Scene creation
         Scene scene = new Scene(flowPane);
         stage.setTitle("Hello!");
@@ -282,7 +286,11 @@ public class GameApplication extends Application {
         //region Listeners : Player's attributes
         //listener of the value of life points of the player
         p.getLifePointsProperty().addListener((observableValue, number, t1) -> {  //function called when Player's LP change
-            if (p.getLifePoints()<=0){                                                                              //verification failure condition
+            if (p.getLifePoints()<=0){
+                if (mediaPlayer!=null) {
+                    mediaPlayer.pause();
+                }
+                //verification failure condition
                 DefeatApplication defeat = new DefeatApplication();
                 try {
                     defeat.start(new Stage());                                                              //launch defeat stage
@@ -296,7 +304,11 @@ public class GameApplication extends Application {
 
         //listener of the size of the player's inventory
         p.getSizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
-            if (p.contains("Hedgehog")){                                                                        //verification of win condition
+            if (p.contains("Hedgehog")){
+                if (mediaPlayer!=null) {
+                    mediaPlayer.pause();
+                }
+                //verification of win condition
                 stage.close();
                 VictoryApplication victory = new VictoryApplication();
                 try {

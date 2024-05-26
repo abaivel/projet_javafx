@@ -22,19 +22,6 @@ public class VictoryApplication extends Application {
     MediaPlayer mediaPlayer;
     //endregion
 
-    //region Constructor
-    public VictoryApplication() {
-        File file = new File("src\\main\\resources\\victory_music.m4a");
-        final String MEDIA_URL = file.toURI().toString();
-        media = new Media(MEDIA_URL);
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.volumeProperty().set(100);
-        mediaPlayer.setStopTime(Duration.seconds(212));
-        mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    }
-    //endregion
-
     //region start function
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,7 +38,19 @@ public class VictoryApplication extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         System.out.println("here");
-        mediaPlayer.play();
+        /*try {
+            File file = new File("src\\main\\resources\\victory_music.m4a");
+            final String MEDIA_URL = file.toURI().toString();
+            media = new Media(MEDIA_URL);
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.volumeProperty().set(100);
+            mediaPlayer.setStopTime(Duration.seconds(212));
+            mediaPlayer.setAutoPlay(true);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+        }catch (Exception e){
+            System.out.println("Music is not supported by the jar");
+        }*/
         System.out.println(mediaPlayer.getCurrentTime());
         stage.show();
 
