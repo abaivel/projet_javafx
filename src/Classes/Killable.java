@@ -52,6 +52,7 @@ public abstract class Killable extends Character {
     }
 
     public void setLifePoints(int lifePoints) {
+        System.out.println("LP="+lifePoints);
         this.lifePoints.set(lifePoints);
     }
 
