@@ -30,13 +30,17 @@ public class DefeatApplication extends Application {
         pane.getChildren().add(text);
         StackPane.setAlignment(text, Pos.CENTER);
 
-        File file = new File("src\\main\\resources\\death_music.mp3");
-        final String MEDIA_URL = file.toURI().toString();
-        Media media = new Media(MEDIA_URL);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.volumeProperty().set(100);
-        mediaPlayer.setStopTime(Duration.seconds(212));
-        mediaPlayer.play();
+        /*try {
+            File file = new File("src\\main\\resources\\death_music.mp3");
+            final String MEDIA_URL = file.toURI().toString();
+            Media media = new Media(MEDIA_URL);
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.volumeProperty().set(100);
+            mediaPlayer.setStopTime(Duration.seconds(212));
+            mediaPlayer.play();
+        }catch (Exception e){
+            System.out.println("Music is not supported by the jar");
+        }*/
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setMaximized(true);
