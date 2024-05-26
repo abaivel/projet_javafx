@@ -795,7 +795,7 @@ public class GameApplication extends Application {
         Trinket vase = new Trinket(w,38,13,"Cute vase",10,true,"vase.png");
         w.addToWorld(vase);
 
-        Potion potion1 = new Potion(w,12,5,"Life potion",10,true,"potion1.png","LIFE+5",0);
+        Potion potion1 = new Potion(w,12,5,"Life potion",10,true,"potion1.png","DE+20",3);
         w.addToWorld(potion1);
 
         Sword sword = new Sword(w,37,2,"Sword",25,true,"sword.png",4);

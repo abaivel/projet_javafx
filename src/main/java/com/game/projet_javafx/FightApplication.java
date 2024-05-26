@@ -276,7 +276,9 @@ public class FightApplication extends Application {
             if (!playerTurn.get() && monster.getLifePoints()>0){
                 if (!player.isDodge()) {
                     double attackMonster = monster.attack(player);
-                    player.defend(attackMonster);
+                    if (attackMonster>0) {
+                        player.defend(attackMonster);
+                    }
                 }
                 delay(2000, () -> playerTurn.set(true));
             }
