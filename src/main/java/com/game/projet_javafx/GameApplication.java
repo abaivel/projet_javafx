@@ -770,9 +770,9 @@ public class GameApplication extends Application {
         InstantMoney instMoney5 = new InstantMoney(w,2,16,10,"coin.png");
         w.addToWorld(instMoney5);
 
-        InstantHealth instHealth1 = new InstantHealth(w,19,14,10,"heart.png");
+        InstantHealth instHealth1 = new InstantHealth(w,19,14,5,"heart.png");
         w.addToWorld(instHealth1);
-        InstantHealth instHealth2 = new InstantHealth(w,38,12,10,"heart.png");
+        InstantHealth instHealth2 = new InstantHealth(w,38,12,5,"heart.png");
         w.addToWorld(instHealth2);
 
         Trap trap0 = new Trap(w,4,1,"trap.png");
