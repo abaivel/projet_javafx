@@ -19,8 +19,8 @@ public abstract class Killable extends Character {
     private Map<String, Integer> status;
 
     private final IntegerProperty numberStatus;
-    public Killable(World w, int x, int y, ArrayList<Item> inventory, int lifePoints, int strength, int defense) {
-        super(w, x, y, inventory);
+    public Killable(World w, int x, int y, String name, ArrayList<Item> inventory, int lifePoints, int strength, int defense) {
+        super(w, x, y,name, inventory);
         this.lifePoints = new SimpleIntegerProperty(lifePoints);
         this.strength = strength;
         this.defense = defense;

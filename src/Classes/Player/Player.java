@@ -46,14 +46,14 @@ public class Player extends Killable {
     //endregion
 
     //region Constructor with all parameters
-    public Player(World w, int LP, String name, double money, int strength, int defense, int x, int y) {
-        super(w,x,y,new ArrayList<>(),LP,strength,defense);
+    public Player(World w, int x, int y, String name, int LP, int strength, int defense, double money, String urlImage) {
+        super(w,x,y,name,new ArrayList<>(),LP,strength,defense);
         this.money = new SimpleDoubleProperty(money);
         this.nearByNPC=new SimpleObjectProperty<>(null);
         this.nearByMonster=new SimpleObjectProperty<>(null);
         this.dodge=false;
         this.indexWorld = new SimpleIntegerProperty(0);
-        node=new ImageView("image_penguin.png");
+        node=new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
 
@@ -248,8 +248,8 @@ public class Player extends Killable {
         System.out.println(potion.getEffect().charAt(2));
         if(potion.getEffect().charAt(2) == '+'){           //if the potion is a bonus, looter applies to himself
             this.addStatus(potion.getEffect(), potion.getDuration());
-        }else if(potion.getEffect().startsWith("LIFE")){
-            int value = Integer.parseInt(potion.getEffect().substring(4));
+        }else if(potion.getEffect().startsWith("LIFE+")){
+            int value = Integer.parseInt(potion.getEffect().substring(5));
             this.setLifePoints(this.getLifePoints() + value);
 
 

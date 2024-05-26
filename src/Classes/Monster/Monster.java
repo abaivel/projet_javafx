@@ -21,8 +21,8 @@ public abstract class Monster extends Killable {
     //endregion
 
     //region Constructor
-    public Monster(World w, String name, int lifePoints, int strength, int defense, ArrayList<Item> inventory, int x, int y, int cooldown,String urlImage) {
-        super(w,x,y,inventory,lifePoints,strength,defense);
+    public Monster(World w, int x, int y, String name, ArrayList<Item> inventory, int lifePoints, int strength, int defense, int cooldown,String urlImage) {
+        super(w,x,y,name,inventory,lifePoints,strength,defense);
         this.alive=true;
         this.cooldown = cooldown;
         this.messageAttack = new SimpleStringProperty("");

@@ -12,8 +12,8 @@ public class Key extends Item {
     //endregion
 
     //region Constructor
-    public Key(World w, int x, int y, String name, boolean dropped, String color, int price, String urlImage) {
-        super(w,x,y, name, dropped, price,urlImage);
+    public Key(World w, int x, int y, String name, int price, boolean dropped, String urlImage, String color) {
+        super(w,x,y, name, price, dropped,urlImage);
         this.color=color;
     }
     //endregion

@@ -11,8 +11,8 @@ public class Book extends Item {
     //endregion
 
     //region Constructor
-    public Book(World w, String name, boolean dropped, String text, int x, int y, int price, String urlImage) {
-        super(w,x, y, name, dropped, price,urlImage);
+    public Book(World w, int x, int y, String name, int price, boolean dropped, String urlImage, String text) {
+        super(w,x, y, name, price, dropped,urlImage);
         this.text = text;
     }
     //endregion

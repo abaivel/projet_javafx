@@ -6,8 +6,8 @@ import Classes.World.World;
 public class UselessPerson extends NPC{
 
     //region Constructor with all parameters
-    public UselessPerson(World w,String name, double money, int x, int y, String urlImage) {
-        super(w,name, money, x,y, urlImage);
+    public UselessPerson(World w, int x, int y,String name, double money, String urlImage) {
+        super(w, x,y,name, money, urlImage);
     }
     //endregion
 

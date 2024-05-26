@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class World {
     //region Attributes
     private final ArrayList<GameObject>[][] gridObjects = new ArrayList[40][18];
-    private final String color;
     private final GridPane pane;
 
     private final GameApplication game;
@@ -37,20 +36,18 @@ public class World {
     //endregion
 
     //region Constructor
-    public World(GameApplication game, String color) {
-        this.color=color;
+    public World(GameApplication game, String backgroundColor, String borderColor) {
         this.game = game;
         pane = new GridPane();
         pane.setPrefHeight(Position.HEIGHT);
         pane.setPrefWidth(Position.WIDTH);
-        pane.setStyle("-fx-background-color: "+color+";");
+        pane.setStyle("-fx-background-color: "+backgroundColor+";");
         pane.setVgap(-1);
         pane.setHgap(-1);
         for (int row = 0; row < Position.ROWS; row++) {
             for (int col = 0; col < Position.COLUMNS; col++) {
                 Rectangle cell = new Rectangle((double) Position.WIDTH/Position.COLUMNS, (double) Position.HEIGHT /Position.ROWS );
-                cell.setStyle("-fx-stroke: #507a1a;-fx-fill: none");
-                //cell.setViewOrder(-1.0);
+                cell.setStyle("-fx-stroke: "+borderColor+";-fx-fill: none");
                 pane.add(cell, col, row);
             }
         }

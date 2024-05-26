@@ -87,7 +87,7 @@ public class GameApplication extends Application {
         flowPane.setStyle("-fx-background-color: white");
         pane = world.getPane();
         flowPane.getChildren().add(pane);
-        p = new Player(world,10,"Bearu",25,4,2,5,5);
+        p = new Player(world,7,9,"Bearu",10,4,2,25,"penguin.png");
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.HORIZONTAL);
         infosBottom.setHgap(10);
@@ -394,7 +394,7 @@ public class GameApplication extends Application {
 
     //region World Creation
     public World createWorld1(){
-        World w = new World(this,"#639620");
+        World w = new World(this,"#639620","#507a1a");
 
 
         //region Trees
@@ -743,16 +743,16 @@ public class GameApplication extends Application {
         //endregion
 
         //region items
-        Key key_green = new Key(w,1,2,"green key",true,"green",5,"key_green.png");
+        Key key_green = new Key(w,1,2,"green key",5,true,"key_green.png","green");
         w.addToWorld(key_green);
 
 
 
-        Bomb bomb1 = new Bomb(w,4,0,"boum",true,10,"bomb.png");
+        Bomb bomb1 = new Bomb(w,4,0,"boum",10,true,"bomb.png");
         w.addToWorld(bomb1);
-        Bomb bomb2 = new Bomb(w,6,16,"BOUUUUM eheh",true,10,"bomb.png");
+        Bomb bomb2 = new Bomb(w,6,16,"BOUUUUM eheh",10,true,"bomb.png");
         w.addToWorld(bomb2);
-        Bomb bomb3 = new Bomb(w,17,5,"boum",true,10,"bomb.png");
+        Bomb bomb3 = new Bomb(w,17,5,"boum",10,true,"bomb.png");
         w.addToWorld(bomb3);
 
 
@@ -786,20 +786,25 @@ public class GameApplication extends Application {
             w.addToWorld(trap3);
         }
 
-        Buoy buoy = new Buoy(w,14,6,"Buoyyyyyy",true,8,"buoy.png");
+        Buoy buoy = new Buoy(w,14,6,"Buoyyyyyy",8,true,"buoy.png");
         w.addToWorld(buoy);
 
-        Book book = new Book(w,"Nice book",true,"I am a nice book eheh",37,12,7,"book.png");
+        Book book = new Book(w,37,12,"Nice book",7,true,"book.png","I am a nice book eheh");
         w.addToWorld(book);
 
-        Trinket vase = new Trinket(w,10,38,13,"Cute vase",true,"vase.png");
+        Trinket vase = new Trinket(w,38,13,"Cute vase",10,true,"vase.png");
         w.addToWorld(vase);
 
-        Potion potion1 = new Potion(w,12,5,"Life potion",true,"LIFE+5",10,0,"potion1.png");
+        Potion potion1 = new Potion(w,12,5,"Life potion",10,true,"potion1.png","LIFE+5",0);
         w.addToWorld(potion1);
 
-        Sword sword = new Sword(w,"Sword",true,37,2,4,25,"sword.png");
+        Sword sword = new Sword(w,37,2,"Sword",25,true,"sword.png",4);
         w.addToWorld(sword);
+
+        Potion potion2 = new Potion(w,15,6,"Defense potion",10,true,"potion2.png","DE+20",0);
+
+        Trinket roller = new Trinket(w, 11,7,"Roller",20,false,"roller.png");
+        Trinket camera = new Trinket(w, 11,7,"Camera",20,false,"camera.png");
 
 
 
@@ -807,33 +812,36 @@ public class GameApplication extends Application {
         //endregion
 
         //region NPC
-        Fouras fouras1 = new Fouras(w,"Grand Fouras Suprême",50,5,4,"fouras.png");
+        Fouras fouras1 = new Fouras(w,5,4,"Grand Fouras Suprême",50,"fouras.png");
         w.addToWorld(fouras1);
 
-        Fouras fouras2 = new Fouras(w,"Magicien",30,0,8,"fouras2.png");
+        Fouras fouras2 = new Fouras(w,0,8,"Magicien",30,"fouras2.png");
         w.addToWorld(fouras2);
 
-        Merchant merchant1 = new Merchant(w,"Bob the merchant",40,11,7,"merchant.png");
+        Merchant merchant1 = new Merchant(w,11,7,"Bob the merchant",40,"merchant.png");
+        merchant1.addToInventory(roller);
+        merchant1.addToInventory(camera);
         w.addToWorld(merchant1);
 
-        Merchant merchant2 = new Merchant(w,"Patrick the merchant",30,15,6,"merchant.png");
+        Merchant merchant2 = new Merchant(w,15,6,"Patrick the merchant",30,"merchant.png");
+        merchant2.addToInventory(potion2);
         w.addToWorld(merchant2);
         //endregion
 
         //region Monsters
-        Looter looter = new Looter(w,"Mwahaha I loot",10,5,2,new ArrayList<Item>(),4,15,0,"looter.png");
+        Looter looter = new Looter(w,4,15,"Mwahaha I loot",new ArrayList<Item>(),10,5,2,0,"looter.png");
         w.addToWorld(looter);
 
-        Wolf wolf1 = new Wolf(w,"agrougrou",10,4,3,new ArrayList<Item>(),2,0,0,"wolf.png");
+        Wolf wolf1 = new Wolf(w,2,0,"agrougrou",new ArrayList<Item>(),10,4,3,0,"wolf.png");
         w.addToWorld(wolf1);
 
-        Wolf wolf2 = new Wolf(w,"ahouuuuuuu",10,4,3,new ArrayList<Item>(),1,1,0,"wolf.png");
+        Wolf wolf2 = new Wolf(w,1,1,"ahouuuuuuu",new ArrayList<Item>(),10,4,3,0,"wolf.png");
         w.addToWorld(wolf2);
 
-        Slime slime1 = new Slime(w,"slimeyyy",10,3,2,new ArrayList<Item>(),15,0,0,"slime.png");
+        Slime slime1 = new Slime(w,15,0,"slimeyyy",new ArrayList<Item>(),10,3,2,0,"slime.png");
         w.addToWorld(slime1);
 
-        Slime slime2 = new Slime(w,"slimeuuuh",10,3,2,new ArrayList<Item>(),17,0,0,"slime2.png");
+        Slime slime2 = new Slime(w,17,0,"slimeuuuh",new ArrayList<Item>(),10,3,2,0,"slime2.png");
         w.addToWorld(slime2);
         //endregion
 
@@ -843,7 +851,7 @@ public class GameApplication extends Application {
     }
 
     public World createWorld2(){
-        World w = new World(this,"#8e9700");
+        World w = new World(this,"#2e9b48","#1e6730");
         //region Trees
         //region forest
         for (int i=0;i<7;i++){
@@ -872,6 +880,12 @@ public class GameApplication extends Application {
         for (int i=14;i<18;i++){
             w.addToWorld(new Tree(w,35,i,"tree.png"));
         }
+        w.addToWorld(new Tree(w,19,5,"tree.png"));
+        w.addToWorld(new Tree(w,10,7,"tree.png"));
+        w.addToWorld(new Tree(w,12,12,"tree.png"));
+        w.addToWorld(new Tree(w,21,15,"tree.png"));
+        w.addToWorld(new Tree(w,28,9,"tree.png"));
+        w.addToWorld(new Tree(w,15,1,"tree.png"));
         //endregion
         //region Walls
         for (int i=0;i<3;i++){
@@ -896,7 +910,7 @@ public class GameApplication extends Application {
         for (int i=10;i<18;i++){
             w.addToWorld(new Wall(w,36,i));
         }
-        for (int i=21;i<30;i++){
+        for (int i=18;i<30;i++){
             w.addToWorld(new Wall(w,i,3));
         }
         for (int i=0;i<3;i++){
@@ -932,6 +946,9 @@ public class GameApplication extends Application {
         w.addToWorld(new River(w,39,7));
         //endregion
         //region Hedge
+        for (int i=18;i<30;i++){
+            w.addToWorld(new Hedge(w,i,4));
+        }
         w.addToWorld(new Hedge(w,8,15));
         w.addToWorld(new Hedge(w,9,14));
         w.addToWorld(new Hedge(w,9,16));
@@ -957,56 +974,56 @@ public class GameApplication extends Application {
         w.addToWorld(new InstantHealth(w,0,17,1,"heart.png"));
         //endregion
         //region Item
-        w.addToWorld(new Bomb(w,1,9,"Bomb",true,20,"bomb.png"));
-        w.addToWorld(new Key(w,39,5,"Green Key",true,"blue",20,"key_blue.png"));
-        w.addToWorld(new Book(w,"Book", true,"You're searching for a sword or a buoy ? Go see the merchant behind the walls",33,5,7,"book.png"));
-        w.addToWorld(new Potion(w,4,5,"Strenght Potion",true,"ST+40",20,3,"potion1.png"));
-        w.addToWorld(new Potion(w,0,12,"Defense Potion",true,"DE+20",15,3,"potion2.png"));
-        w.addToWorld(new Trinket(w,40,1,16,"22's hat",true,"hat.png"));
-        w.addToWorld(new Trinket(w,20,15,17,"Heart glasses",true,"glasses.png"));
+        w.addToWorld(new Bomb(w,1,9,"Bomb",20,true,"bomb.png"));
+        w.addToWorld(new Key(w,39,5,"Green Key",20,true,"key_blue.png","blue"));
+        w.addToWorld(new Book(w,33,5,"Book",7, true,"book.png","You're searching for a sword or a buoy ? Go see the merchant behind the walls"));
+        w.addToWorld(new Potion(w,4,5,"Strenght Potion",20,true,"potion1.png","ST+40",3));
+        w.addToWorld(new Potion(w,0,12,"Defense Potion",15,true,"potion2.png","DE+20",3));
+        w.addToWorld(new Trinket(w,1,16,"22's hat",40,true,"hat.png"));
+        w.addToWorld(new Trinket(w,15,17,"Heart glasses",20,true,"glasses.png"));
         //region Item in inventory
-        Trinket scarf = new Trinket(w,7,1,5,"Red Scarf",false,"scarf.png");
-        Trinket guitar = new Trinket(w,15,1,5,"Guitar",false,"guitar.png");
-        Trinket micro = new Trinket(w,15,29,1,"Micro",false,"micro.png");
-        Trinket painAuChocolat = new Trinket(w,10,38,11,"Pain au chocolat",false,"pain_au_chocolat.png");
-        Sword sword = new Sword(w,"Sword",false,5,16,2,20,"sword.png");
-        Buoy buoy = new Buoy(w,5,16,"Buoy",false,15,"buoy.png");
+        Trinket scarf = new Trinket(w,1,5,"Red Scarf",7,false,"scarf.png");
+        Trinket guitar = new Trinket(w,1,5,"Guitar",15,false,"guitar.png");
+        Trinket micro = new Trinket(w,29,1,"Micro",15,false,"micro.png");
+        Trinket painAuChocolat = new Trinket(w,38,11,"Pain au chocolat",10,false,"pain_au_chocolat.png");
+        Sword sword = new Sword(w,5,16,"Sword",20,false,"sword.png",2);
+        Buoy buoy = new Buoy(w,5,16,"Buoy",15,false,"buoy.png");
         buoy.getNode().setOnMouseClicked(new ClickItemHandler(buoy));
         //endregion
         //endregion
         //region Monster
         //region Slime
-        w.addToWorld(new Slime(w,"Cutie Slime",8,3,2,new ArrayList<>(),5,5,0,"slime2.png"));
-        w.addToWorld(new Slime(w,"Speaky Slime",9,5,3,new ArrayList<>(),3,9,0,"slime3.png"));
-        w.addToWorld(new Slime(w,"Red Slime",10,7,4,new ArrayList<>(List.of(painAuChocolat)),38,11,0,"slime.png"));
+        w.addToWorld(new Slime(w,5,5,"Cutie Slime",new ArrayList<>(),8,3,2,0,"slime2.png"));
+        w.addToWorld(new Slime(w,3,9,"Speaky Slime",new ArrayList<>(),9,5,3,0,"slime3.png"));
+        w.addToWorld(new Slime(w,38,11,"Red Slime",new ArrayList<>(List.of(painAuChocolat)),10,7,4,0,"slime.png"));
         //endregion
         //region Looter
-        w.addToWorld(new Looter(w,"Scooter",7,4,1,new ArrayList<>(List.of(micro)),29,1,0,"looter.png"));
-        w.addToWorld(new Looter(w,"Kanye",5,3,2,new ArrayList<>(),14,17,0,"looter2.png"));
+        w.addToWorld(new Looter(w,29,1,"Scooter",new ArrayList<>(List.of(micro)),7,4,1,0,"looter.png"));
+        w.addToWorld(new Looter(w,14,17,"Kanye",new ArrayList<>(),5,3,2,0,"looter2.png"));
         //endregion
         //region Wolf
-        w.addToWorld(new Wolf(w,"Meredith the Wolf", 8,4,3,new ArrayList<>(),2,12,0,"wolf.png"));
-        w.addToWorld(new Wolf(w,"Olivia the Wolf", 8,6,4,new ArrayList<>(),24,1,0,"wolf.png"));
+        w.addToWorld(new Wolf(w,2,12,"Meredith the Wolf",new ArrayList<>(), 8,4,3,0,"wolf.png"));
+        w.addToWorld(new Wolf(w,24,1,"Olivia the Wolf",new ArrayList<>(), 8,6,4,0,"wolf.png"));
         //endregion
         //endregion
         //region NPC
         //region Fouras
-        w.addToWorld(new Fouras(w,"Willow",10,7,3,"fouras2.png"));
-        w.addToWorld(new Fouras(w,"Dumbledore",20,33,16,"fouras.png"));
+        w.addToWorld(new Fouras(w,7,3,"Willow",10,"fouras2.png"));
+        w.addToWorld(new Fouras(w,33,16,"Dumbledore",20,"fouras.png"));
         //endregion
         //region Merchant
-        Merchant forestMerchant = new Merchant(w,"Forest Merchant",30,1,5,"merchant.png");
+        Merchant forestMerchant = new Merchant(w,1,5,"Forest Merchant",30,"merchant.png");
         forestMerchant.addToInventory(scarf);
         forestMerchant.addToInventory(guitar);
         w.addToWorld(forestMerchant);
-        Merchant hiddenMerchant = new Merchant(w,"Hidden Merchant",25,5,16,"merchant.png");
+        Merchant hiddenMerchant = new Merchant(w,5,16,"Hidden Merchant",25,"merchant.png");
         hiddenMerchant.addToInventory(sword);
         hiddenMerchant.addToInventory(buoy);
         w.addToWorld(hiddenMerchant);
         //endregion
         //region Useless
-        w.addToWorld(new UselessPerson(w, "TayTay",100,36,2,"useless1.png"));
-        w.addToWorld(new UselessPerson(w, "Knight",10,8,10,"useless2.png"));
+        w.addToWorld(new UselessPerson(w,36,2, "TayTay",100,"useless1.png"));
+        w.addToWorld(new UselessPerson(w,8,10, "Knight",10,"useless2.png"));
         //endregion
         //endregion
         //region Trap
@@ -1027,10 +1044,13 @@ public class GameApplication extends Application {
     }
 
     public World createWorld3(){
-        World w = new World(this,"#611120");
-        Trinket trinket = new Trinket(w,10,20,15,"Hedgehog",false,"hedgehog.png");
-        Slime slime = new Slime(w,"Slime",5,4,2,new ArrayList<>(List.of(trinket)),20,15,0,"slime.png");
+        World w = new World(this,"#244200","#1b3100");
+        Trinket trinket = new Trinket(w,20,15,"Hedgehog",10,false,"hedgehog.png");
+        Slime slime = new Slime(w,20,15,"Slime",new ArrayList<>(List.of(trinket)),5,4,2,0,"slime.png");
         w.addToWorld(slime);
+        Door doorPreviousWorld = new Door(w,38,15,"blue","door_open_blue.png",1);
+        doorPreviousWorld.setOpen(true);
+        w.addToWorld(doorPreviousWorld);
         return w;
     }
     //endregion
@@ -1077,7 +1097,7 @@ public class GameApplication extends Application {
         public void handle(MouseEvent mouseEvent) {
             if(mouseEvent.getButton() == MouseButton.PRIMARY && !door.isOpen()) {
                 ArrayList<Key> keys = p.containsKey();
-                if (!keys.isEmpty()) {
+                if (keys!=null && !keys.isEmpty()) {
                     for (Key k : keys) {
                         if (door.getColor().equals(k.getColor())) {
                             door.setOpen(true);

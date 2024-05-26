@@ -12,19 +12,13 @@ public class Merchant extends NPC {
     //endregion
 
     //region Constructor with all parameters
-    public Merchant(World w,String name, double money, int x, int y, String urlImage) {
-        super(w,name, money, x,y,urlImage);
+    public Merchant(World w, int x, int y,String name, double money, String urlImage) {
+        super(w, x,y,name, money,urlImage);
         this.dialogues = new String[5];
         this.dialogues[0] = "Can I see your wares?\n";
         this.dialogues[1] = "Can i sell something?\n";
         this.dialogues[2] = "Would you like to swap one of your item for one of mine ?\n";
         this.dialogues[3] = "Goodbye !\n";
-    }
-    //endregion
-
-    //region Default constructor
-    public Merchant(String name) {
-        this(null,name,100,0,0,"");
     }
     //endregion
 

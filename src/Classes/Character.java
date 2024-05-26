@@ -12,8 +12,9 @@ public abstract class Character extends GameObject {
     private String name;
     private ArrayList<Item> inventory;
     private final IntegerProperty sizeInventory;
-    public Character(World w, int x, int y, ArrayList<Item> inventory) {
+    public Character(World w, int x, int y, String name, ArrayList<Item> inventory) {
         super(w, x, y);
+        this.name=name;
         this.inventory = inventory;
         this.sizeInventory = new SimpleIntegerProperty(inventory.size());
     }
