@@ -18,6 +18,8 @@ public abstract class Character extends GameObject {
         this.inventory = inventory;
         this.sizeInventory = new SimpleIntegerProperty(inventory.size());
     }
+
+    //region Getters and Setters
     public String getName() {
         return name;
     }
@@ -45,7 +47,9 @@ public abstract class Character extends GameObject {
     public void setSizeInventory(int sizeInventory) {
         this.sizeInventory.set(sizeInventory);
     }
+    //endregion
 
+    //region inventory functions
     public void addToInventory(Item item){
         if (this.getInventory().size()<10) {
             this.getInventory().add(item);
@@ -73,4 +77,5 @@ public abstract class Character extends GameObject {
         }
         return null;
     }
+    //endregion
 }

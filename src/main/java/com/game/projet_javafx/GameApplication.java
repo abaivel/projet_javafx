@@ -305,6 +305,7 @@ public class GameApplication extends Application {
         //listener of the size of the player's inventory
         p.getSizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
             if (p.contains("Hedgehog")){
+                //VICTORY CONDITION
                 if (mediaPlayer!=null) {
                     mediaPlayer.pause();
                 }
@@ -1067,8 +1068,6 @@ public class GameApplication extends Application {
     }
     //endregion
 
-    public static void main(String[] args) {launch();}
-
     public class ClickItemHandler implements EventHandler<MouseEvent> {
         Item item;
 
@@ -1098,6 +1097,7 @@ public class GameApplication extends Application {
             }
         }
     }
+
     public class ClickDoorHandler implements EventHandler<MouseEvent> {
         Door door;
 
@@ -1121,4 +1121,6 @@ public class GameApplication extends Application {
             }
         }
     }
+
+    public static void main(String[] args) {launch();}
 }
