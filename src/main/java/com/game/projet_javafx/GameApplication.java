@@ -2,9 +2,7 @@ package com.game.projet_javafx;
 
 import Classes.InstantUse.InstantHealth;
 import Classes.InstantUse.InstantMoney;
-import Classes.Item.ConsumableItem.Bomb;
-import Classes.Item.ConsumableItem.Key;
-import Classes.Item.ConsumableItem.Potion;
+import Classes.Item.ConsumableItem.*;
 import Classes.Item.Item;
 import Classes.Item.NotConsumableItem.Book;
 import Classes.Item.NotConsumableItem.Buoy;
@@ -13,10 +11,7 @@ import Classes.Item.NotConsumableItem.Weapon.Sword;
 import Classes.Monster.Looter;
 import Classes.Monster.Slime;
 import Classes.Monster.Wolf;
-import Classes.NPC.Fouras;
-import Classes.NPC.Merchant;
-import Classes.NPC.NPC;
-import Classes.NPC.UselessPerson;
+import Classes.NPC.*;
 import Classes.Player.Player;
 import Classes.World.DecorItem.WalkThroughDecorItem.Trap;
 import Classes.World.DecorItem.NotWalkThroughDecorItem.Tree;
@@ -34,22 +29,18 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +54,12 @@ public class GameApplication extends Application {
     FlowPane flowPane;
     FlowPane infosBottom;
     MediaPlayer mediaPlayer;
+    Stage stage;
     //endregion
 
     //region start function
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage primaryStage) throws IOException {
 
         //region Worlds
         //Creations of the 3 worlds
@@ -89,6 +81,16 @@ public class GameApplication extends Application {
         pane = world.getPane();
         flowPane.getChildren().add(pane);
         p = new Player(world,7,9,"Bearu",10,4,2,25,"penguin.png");
+        Portkey portkey = new Portkey(world,7,9,"Portkey",40,false,"boot.png");
+        p.addToInventory(portkey);
+        CrystalBall crystalBall = new CrystalBall(world,7,9,"Crystal Ball",15,false,"crystal_ball.png");
+        p.addToInventory(crystalBall);
+        Mask mask = new Mask(world,7,9,"Thief's mask",15,false,"mask.png");
+        p.addToInventory(mask);
+        AbsorberLifePoints abs = new AbsorberLifePoints(world,7,9,"Absorber of Life Points",15,false,"vacuum.png");
+        p.addToInventory(abs);
+        Trophee trophee = new Trophee(world,7,9,"Hedgehog",15,false,"hedgehog.png");
+        p.addToInventory(trophee);
         world.addToWorld(p);
         infosBottom = new FlowPane(Orientation.HORIZONTAL);
         infosBottom.setHgap(10);
@@ -176,6 +178,7 @@ public class GameApplication extends Application {
         }*/
         //region Front : Scene creation
         Scene scene = new Scene(flowPane);
+        this.stage = primaryStage;
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setMaximized(true);
@@ -304,21 +307,6 @@ public class GameApplication extends Application {
 
         //listener of the size of the player's inventory
         p.getSizeInventoryProperty().addListener((observableValue, number, t1) -> {      //function called when the size of the inventory changes
-            if (p.contains("Hedgehog")){
-                if (mediaPlayer!=null) {
-                    mediaPlayer.pause();
-                }
-                //verification of win condition
-                stage.close();
-                VictoryApplication victory = new VictoryApplication();
-                try {
-                    victory.start(new Stage());                                                                 //launch victory stage
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.println("CHANGE");
-            System.out.println(p.getInventory());
             inventory.getChildren().removeIf(n -> n instanceof ImageView);              //removes everything from the gridpane
             for (int i=0;i<2;i++){
                 for (int j=0;j<5;j++) {
@@ -357,6 +345,9 @@ public class GameApplication extends Application {
         p.nearByNPCProperty().addListener((observableValue, npc, t1) -> {
             System.out.println("I am near a NPC");
             NPC npcDiag = p.getNearByNPC();
+            if (npcDiag!=null){
+                p.addMetNPC(p.getNearByNPC());
+            }
             if(npcDiag instanceof Merchant merchantDiag){                                               //If near a merchant
                 DialogMerchantApplication diagApp = new DialogMerchantApplication(merchantDiag,p);
                 try {
@@ -375,6 +366,13 @@ public class GameApplication extends Application {
                 DialogUselessApplication diagUseless = new DialogUselessApplication(upDiag,p);
                 try {
                     diagUseless.start(new Stage());                                                     //starts dialog
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }else if (npcDiag instanceof Speaker speakerDiag){
+                DialogNewNPCApplication dialogNewNPCApplication = new DialogNewNPCApplication(speakerDiag);
+                try {
+                    dialogNewNPCApplication.start(new Stage());                                                     //starts dialog
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -462,10 +460,8 @@ public class GameApplication extends Application {
 
         //column7
         Tree tree76 = new Tree(w,7,6,"tree.png");
-        Tree tree77 = new Tree(w,7,7,"tree.png");
         Tree tree716 = new Tree(w,7,16,"tree.png");
         w.addToWorld(tree76);
-        w.addToWorld(tree77);
         w.addToWorld(tree716);
 
         //column9
@@ -812,11 +808,23 @@ public class GameApplication extends Application {
 
         Sword sword = new Sword(w,37,2,"Sword",25,true,"sword.png",4);
         w.addToWorld(sword);
+        CrystalBall crystalBall1 = new CrystalBall(w, 9,8,"Crystal Ball",20,true,"crystal_ball.png");
+        w.addToWorld(crystalBall1);
+        CrystalBall crystalBall2 = new CrystalBall(w, 13,9,"Crystal Ball",20,true,"crystal_ball.png");
+        w.addToWorld(crystalBall2);
+
+        Mask mask1 = new Mask(w, 10,11,"Mask",20,true,"mask.png");
+        w.addToWorld(mask1);
+        Mask mask2 = new Mask(w, 3,7,"Mask",20,true,"mask.png");
+        w.addToWorld(mask2);
 
         Potion potion2 = new Potion(w,15,6,"Defense potion",10,true,"potion2.png","DE+20",3);
+        Potion potion3 = new Potion(w,15,6,"Death potion",10,true,"potion1.png","DEATH",0);
 
         Trinket roller = new Trinket(w, 11,7,"Roller",20,false,"roller.png");
         Trinket camera = new Trinket(w, 11,7,"Camera",20,false,"camera.png");
+        Trinket vase2 = new Trinket(w,38,13,"Roman vase",10,true,"vase.png");
+        Book book2 = new Book(w,37,12,"Fight Book",7,true,"book.png","You most certainly need a sword to kill those wolfes");
 
 
 
@@ -832,12 +840,21 @@ public class GameApplication extends Application {
 
         Merchant merchant1 = new Merchant(w,11,7,"Bob the merchant",40,"merchant.png");
         merchant1.addToInventory(roller);
-        merchant1.addToInventory(camera);
         w.addToWorld(merchant1);
 
         Merchant merchant2 = new Merchant(w,15,6,"Patrick the merchant",30,"merchant.png");
         merchant2.addToInventory(potion2);
         w.addToWorld(merchant2);
+
+        Speaker speaker1 = new Speaker(w,5,9,"Aurélien",10,"newnpc.png");
+        speaker1.addToInventory(potion3);
+        speaker1.addToInventory(camera);
+        w.addToWorld(speaker1);
+
+        Speaker speaker2 = new Speaker(w,7,7,"David",10,"newnpc2.png");
+        speaker2.addToInventory(vase2);
+        speaker2.addToInventory(book2);
+        w.addToWorld(speaker2);
         //endregion
 
         //region Monsters
@@ -1092,6 +1109,30 @@ public class GameApplication extends Application {
                         throw new RuntimeException(e);
                     }
                 }
+                else if (item instanceof Portkey){
+                    Position newPos = ((Portkey)item).getRandomPosition();
+                    p.move(newPos.getX(),newPos.getY());
+                }else if (item instanceof CrystalBall && !p.getMetNPCs().isEmpty()){
+                    DialogListMetNPC dialogListMetNPC = new DialogListMetNPC(p,false);
+                    try {
+                        dialogListMetNPC.start();
+                        item.setUsed(true);
+                        p.removeFromInventory(item);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if (item instanceof Mask && !p.getMetNPCs().isEmpty()){
+                    DialogListMetNPC dialogListMetNPC = new DialogListMetNPC(p,true);
+                    try {
+                        dialogListMetNPC.start();
+                        item.setUsed(true);
+                        p.removeFromInventory(item);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if (item instanceof Trophee){
+                    victory();
+                }
             }
             if(item instanceof Bomb && mouseEvent.getButton() == MouseButton.PRIMARY && item.isDropped()){
                 world.destroysRadiusBomb(item.getPosition().getX(), item.getPosition().getY());
@@ -1119,6 +1160,19 @@ public class GameApplication extends Application {
                     }
                 }
             }
+        }
+    }
+
+    public void victory(){
+        if (mediaPlayer!=null) {
+            mediaPlayer.pause();
+        }
+        stage.close();
+        VictoryApplication victory = new VictoryApplication();
+        try {
+            victory.start(new Stage());                                                                 //launch victory stage
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.game.projet_javafx;
 
+import Classes.Item.ConsumableItem.AbsorberLifePoints;
 import Classes.Item.ConsumableItem.Potion;
 import Classes.Item.Item;
 import Classes.Monster.Monster;
@@ -10,6 +11,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -146,17 +149,17 @@ public class FightApplication extends Application {
         Button buttonDodge = new Button("Dodge");
         Button buttonAttack = new Button("Attack");
         //TODO To use item in fight
-        //Button buttonUseOtherItems = new Button("Use other items");
+        Button buttonUseOtherItems = new Button("Use other items");
         buttonUsePotion.setStyle("-fx-font-size: 30px;-fx-font-family: 'Brush Script MT'");
         buttonDodge.setStyle("-fx-font-size: 30px;-fx-font-family: 'Brush Script MT'");
         buttonAttack.setStyle("-fx-font-size: 30px;-fx-font-family: 'Brush Script MT'");
         //TODO To use item in fight
-        //buttonUseOtherItems.setStyle("-fx-font-size: 30px;-fx-font-family: 'Brush Script MT'");
+        buttonUseOtherItems.setStyle("-fx-font-size: 30px;-fx-font-family: 'Brush Script MT'");
         gridButtonsChoiceAction.add(buttonUsePotion,1,0);
         gridButtonsChoiceAction.add(buttonDodge,2,0);
         gridButtonsChoiceAction.add(buttonAttack,3,0);
         //TODO To use item in fight
-        //gridButtonsChoiceAction.add(buttonUseOtherItems,4,0);
+        gridButtonsChoiceAction.add(buttonUseOtherItems,4,0);
         pane.getChildren().add(gridButtonsChoiceAction);
         //endregion
         //region gridPotions
@@ -189,11 +192,11 @@ public class FightApplication extends Application {
 
         //region gridItems
         //TODO To use item in fight
-        /*GridPane gridItems = new GridPane();
+        GridPane gridItems = new GridPane();
         ScrollPane scrollGridItems = new ScrollPane(gridItems);
         int j=0;
         for (Item item : player.getInventory()){
-            if (item instanceof Item){
+            if (item instanceof AbsorberLifePoints){
                 Button buttonItem = new Button(item.getName());
                 buttonItem.setStyle("-fx-font-size: 20px;-fx-font-family: 'Brush Script MT'");
                 ImageView imageItem = new ImageView(((ImageView)(item.getNode())).getImage().getUrl());
@@ -214,9 +217,8 @@ public class FightApplication extends Application {
             }
             j++;
         }
-        ScrollPane scrollGridItems = new ScrollPane(gridItems);
         scrollGridItems.setVisible(false);
-        pane.getChildren().add(scrollGridItems);*/
+        pane.getChildren().add(scrollGridItems);
         //endregion
 
         Scene scene = new Scene(new ScrollPane(pane));
@@ -229,19 +231,21 @@ public class FightApplication extends Application {
             System.out.println(width);
             pane.setPrefWidth(width);
             paneFighters.setPrefWidth(width);
-            buttonUsePotion.setPrefWidth(width/3);
-            buttonDodge.setPrefWidth(width/3);
-            buttonAttack.setPrefWidth(width/3);
+            buttonUsePotion.setPrefWidth(width/4);
+            buttonDodge.setPrefWidth(width/4);
+            buttonAttack.setPrefWidth(width/4);
             //TODO To use item in fight - put /4 instead of /3
-            //buttonUseOtherItems.setPrefWidth(width/4);
+            buttonUseOtherItems.setPrefWidth(width/4);
         });
         stage.heightProperty().addListener((observableValue, number, t1) -> pane.setPrefHeight(stage.getHeight()));
 
         buttonUsePotion.setOnAction(actionEvent -> {
             scrollGridPotions.setVisible(true);
+            scrollGridItems.setVisible(false);
         });
         buttonAttack.setOnAction(actionEvent -> {
             scrollGridPotions.setVisible(false);
+            scrollGridItems.setVisible(false);
             double playerAttack = player.attack(1,monster,null);
             monster.defend(playerAttack);
             gridButtonsChoiceAction.setVisible(false);
@@ -251,6 +255,7 @@ public class FightApplication extends Application {
         });
         buttonDodge.setOnAction(actionEvent -> {
             scrollGridPotions.setVisible(false);
+            scrollGridItems.setVisible(false);
             double playerAttack = player.attack(2,monster,null);
             monster.defend(playerAttack);
             if (player.isDodge()){
@@ -262,17 +267,18 @@ public class FightApplication extends Application {
             delay(2000, () -> playerTurn.set(false));
         });
         //TODO to use items in fight
-        /*buttonUseOtherItems.setOnAction(new EventHandler<ActionEvent>() {
+        buttonUseOtherItems.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 scrollGridItems.setVisible(true);
+                scrollGridPotions.setVisible(false);
             }
-        });*/
+        });
         playerTurn.addListener((observableValue, aBoolean, t1) -> {
             textwhoattacks.setText(playerTurn.get()?"Your turn":"Monster's turn");
             gridButtonsChoiceAction.setVisible(playerTurn.get());
             scrollGridPotions.setVisible(false);
-            //gridItems.setVisible(false); //TODO to use items in fight
+            scrollGridItems.setVisible(false);
             if (!playerTurn.get() && monster.getLifePoints()>0){
                 if (!player.isDodge()) {
                     double attackMonster = monster.attack(player);
@@ -332,10 +338,10 @@ public class FightApplication extends Application {
                     i++;
                 }
                 //TODO To use item in fight
-                /*gridItems.getChildren().clear();
+                gridItems.getChildren().clear();
                 int j=0;
                 for (Item item : player.getInventory()){
-                    if (item instanceof Item){
+                    if (item instanceof AbsorberLifePoints){
                         Button buttonItem = new Button(item.getName());
                         buttonItem.setStyle("-fx-font-size: 20px;-fx-font-family: 'Brush Script MT'");
                         ImageView imageItem = new ImageView(((ImageView)(item.getNode())).getImage().getUrl());
@@ -355,7 +361,7 @@ public class FightApplication extends Application {
                         });
                     }
                     j++;
-                }*/
+                }
             }
         });
         monster.getNumberStatusProperty().addListener((observableValue, number, t1) -> {

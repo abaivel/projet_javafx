@@ -46,12 +46,14 @@ public abstract class Character extends GameObject {
         this.sizeInventory.set(sizeInventory);
     }
 
-    public void addToInventory(Item item){
-        if (this.getInventory().size()<10) {
+    public boolean addToInventory(Item item){
+        if (this.getInventory().size()<5) {
             this.getInventory().add(item);
             item.setDropped(false);
             this.setSizeInventory(this.getSizeInventory()+1);
+            return true;
         }
+        return false;
     }
     public Item removeFromInventory(Item item){
         int index = this.getInventory().indexOf(item);
@@ -64,7 +66,7 @@ public abstract class Character extends GameObject {
         }
     }
     public boolean inventoryIsFull() {
-        return this.getInventory().size() == 10;
+        return this.getInventory().size() == 5;
     }
     public Item randomItemFromInventory() {
         if (!this.getInventory().isEmpty()) {

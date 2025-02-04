@@ -51,7 +51,6 @@ public class VictoryApplication extends Application {
         }catch (Exception e){
             System.out.println("Music is not supported by the jar");
         }*/
-        System.out.println(mediaPlayer.getCurrentTime());
         stage.show();
 
     }

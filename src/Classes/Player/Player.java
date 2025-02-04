@@ -4,9 +4,7 @@ import Classes.GameObject;
 import Classes.InstantUse.Instant;
 import Classes.InstantUse.InstantHealth;
 import Classes.InstantUse.InstantMoney;
-import Classes.Item.ConsumableItem.Bomb;
-import Classes.Item.ConsumableItem.Key;
-import Classes.Item.ConsumableItem.Potion;
+import Classes.Item.ConsumableItem.*;
 import Classes.Item.Item;
 import Classes.Item.NotConsumableItem.Book;
 import Classes.Killable;
@@ -43,6 +41,7 @@ public class Player extends Killable {
     private final ObjectProperty<NPC> nearByNPC;
 
     private final ObjectProperty<Monster> nearByMonster;
+    private final List<NPC> metNPCs;
     //endregion
 
     //region Constructor with all parameters
@@ -53,6 +52,7 @@ public class Player extends Killable {
         this.nearByMonster=new SimpleObjectProperty<>(null);
         this.dodge=false;
         this.indexWorld = new SimpleIntegerProperty(0);
+        this.metNPCs = new ArrayList<>();
         node=new ImageView(urlImage);
         ((ImageView)node).setFitHeight((double) Position.HEIGHT /Position.ROWS);
         ((ImageView)node).setFitWidth((double) Position.WIDTH/Position.COLUMNS);
@@ -108,6 +108,15 @@ public class Player extends Killable {
         this.indexWorld.set(indexWorld);
     }
 
+    public List<NPC> getMetNPCs() {
+        return metNPCs;
+    }
+    public void addMetNPC(NPC npc){
+        if (!this.metNPCs.contains(npc)) {
+            this.metNPCs.add(npc);
+        }
+    }
+
     //endregion
 
     //region ToString function to print
@@ -128,14 +137,6 @@ public class Player extends Killable {
     //endregion
 
     //region Inventory functions
-    public void addToInventory(Item item){
-        if (this.getInventory().size()<10) {
-            this.getInventory().add(item);
-            item.setDropped(false);
-            this.setSizeInventory(this.getSizeInventory()+1);
-        }
-    }
-
     public boolean contains(String item){
         for (Item value : this.getInventory()) {
             if (value.getName().equals(item)) {
@@ -174,9 +175,9 @@ public class Player extends Killable {
             this.dodge();
         }
         //TODO to use items in fight
-        /*else if (action==3){
+        else if (action==3){
             this.useItem(monster, item);
-        }*/
+        }
         //this.statusWornOff();                                   //At the end of the round, removes worn off effects from the Map
         return doDamages;
     }
@@ -262,11 +263,15 @@ public class Player extends Killable {
     }
 
     //TODO to use items in fight
-    /*public void useItem(Monster monster, Item item){
+    public void useItem(Monster monster, Item item){
         item.setUsed(true);                                           //set used to true because potions are single use
         //Comportement item
+        if (item instanceof AbsorberLifePoints){
+            this.setLifePoints(this.getLifePoints()+monster.getLifePoints());
+            monster.setLifePoints(0);
+        }
         this.removeFromInventory(item);                             //removing the potion from the inventory
-    }*/
+    }
     //endregion
 
     //region Move
@@ -276,8 +281,9 @@ public class Player extends Killable {
                 ArrayList<Instant> listInstants = world.IsThereInstant(x, y);
                 ArrayList<Item> listItems = world.IsThereItem(x, y);
                 for (Item i : listItems) {
-                    this.addToInventory(i);
-                    world.removeFromWorld(i);
+                    if (this.addToInventory(i)) {
+                        world.removeFromWorld(i);
+                    }
                 }
                 for (Instant inst : listInstants) {
                     this.useInstant(inst);

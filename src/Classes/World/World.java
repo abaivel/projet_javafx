@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //World contains is a matrix where in each square there's an Array of GameObjects
 //We can have multiple GamoObjects on a square exemple : PLayer and river ; PLayer and item (when player discard an object on the floor)
@@ -214,6 +215,21 @@ public class World {
 
     }
     //endregion
+
+    public List<Door> getListDoor(){
+        List<Door> listDoors = new ArrayList<>();
+        Class<?>[] listClasses = new Class[1];
+        listClasses[0]=Door.class;
+        for (int i=0;i<Position.COLUMNS;i++){
+            for (int j=0;j<Position.ROWS;j++){
+                Door d = (Door) instanceOf(gridObjects[i][j],listClasses);
+                if (d!=null){
+                    listDoors.add(d);
+                }
+            }
+        }
+        return listDoors;
+    }
 
 
 
